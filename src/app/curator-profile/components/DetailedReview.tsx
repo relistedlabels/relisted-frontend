@@ -47,7 +47,7 @@ const FullReviewItem: React.FC<DetailedReview> = ({
       <div className="flex justify-between items-start mb-2">
         <div className="flex items-start space-x-3">
           {/* Avatar */}
-          <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 shrink-0">
+          <div className="sm:w-16 w-12 h-12 sm:h-16 rounded-full overflow-hidden bg-gray-200 shrink-0">
             <img
               src={avatarSrc}
               alt={`${name} avatar`}

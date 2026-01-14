@@ -17,7 +17,7 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
 }) => {
   return (
     <div
-      className={`relative w-full group overflow-hidden cursor-pointer h-[150px] sm:h-auto`}
+      className={`relative w-full group overflow-hidden cursor-pointer h-[200px] sm:h-auto`}
       style={{ height: undefined, ...(height && { ["--h"]: height }) }}
     >
       <div className="hidden sm:block" style={{ height }}></div>
@@ -37,8 +37,8 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
       {/* Text content */}
       <div className="absolute sm:bottom-[35px] bottom-4 left-4 sm:left-[34px] text-white z-10">
         <Header2 className="text-lg font-bold">{title}</Header2>
-        <Paragraph1 className="text-sm">{description}</Paragraph1>
-        <Link href={link}>
+        <Paragraph1 className="text-sm hidden sm:flex">{description}</Paragraph1>
+        <Link className=" hidden sm:block" href={link}>
           <button className="mt-2 py-1 text-white border-b font-semibold">
             <Paragraph1>Shop Now</Paragraph1>
           </button>
@@ -67,9 +67,9 @@ const PopularCategorySection = () => {
           Explore categories curated for every season, mood, and moment.
         </Paragraph1>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-[23px]">
+      <div className="grid grid-cols-1  xl:grid-cols-3 gap-2 sm:gap-[23px]">
         {columns.map((col, colIndex) => (
-          <div key={colIndex} className="flex flex-col gap-2 sm:gap-[23px]">
+          <div key={colIndex} className="flex flex-row xl:flex-col gap-2 sm:gap-[23px]">
             {col.map((box, idx) => (
               <CategoryBox key={idx} {...box} />
             ))}

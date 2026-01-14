@@ -56,7 +56,7 @@ const CuratorProfileCard: React.FC<CuratorProfileCardProps> = ({
       <div className="flex items-center justify-between mb-4 ">
         <div className="flex items-center space-x-2">
           <BackButton />
-          <Paragraph3 className="text-[30px] font-bold text-gray-900">
+          <Paragraph3 className=" font-bold text-gray-900">
             Curator's Profile
           </Paragraph3>
         </div>
@@ -68,7 +68,7 @@ const CuratorProfileCard: React.FC<CuratorProfileCardProps> = ({
       {/* Profile Details */}
       <div className="flex space-x-4">
         {/* Avatar */}
-        <div className="w-20 h-20 sm:w-30 sm:h-30 rounded-full overflow-hidden bg-gray-200 shrink-0">
+        <div className="w-12 h-12 sm:w-30 sm:h-30 rounded-full overflow-hidden bg-gray-200 shrink-0">
           {/* Replace with actual image tag using avatarUrl */}
           {avatarUrl ? (
             <img
@@ -132,11 +132,15 @@ const CuratorProfileCard: React.FC<CuratorProfileCardProps> = ({
 
           <hr className=" text-gray-200 pb-4" />
           {/* Stats */}
-          <div className="flex items-center space-x-4 text-sm">
-            {renderStars(rating)}
-            <Paragraph1 className="text-sm font-semibold text-gray-900">
-              {rating}
-            </Paragraph1>
+          <div className="flex flex-wrap items-center gap-4 text-sm">
+            {" "}
+            <div className=" items-center flex gap-1">
+              {" "}
+              {renderStars(rating)}
+              <Paragraph1 className="text-sm font-semibold text-gray-900">
+                {rating}
+              </Paragraph1>
+            </div>
             <Paragraph1 className="text-sm text-gray-500">
               ({reviewCount} reviews)
             </Paragraph1>

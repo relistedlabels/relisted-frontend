@@ -34,7 +34,7 @@ export default function MainCategorySection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="relative h-[150px] md:h-[650px] group overflow-hidden  cursor-pointer"
+          className="relative h-[250px] md:h-[650px] group overflow-hidden  cursor-pointer"
         >
           <Image
             src="/images/womansec.jpg"
@@ -52,7 +52,7 @@ export default function MainCategorySection() {
             <HeaderAny className=" text-[14px] sm:text-[28px] font-semibold mb-1 sm:mb-4">
               Women’s Collections
             </HeaderAny>
-            <div className=" hidden sm:block">
+            <div className=" hidden- sm: block">
               <Button
                 text="Shop Now"
                 isLink={true}
@@ -71,7 +71,7 @@ export default function MainCategorySection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="relative h-[150px] md:h-[650px] group overflow-hidden  cursor-pointer"
+          className="relative h-[250px] md:h-[650px] group overflow-hidden  cursor-pointer"
         >
           <Image
             src="/images/mensec.jpg"
@@ -87,7 +87,7 @@ export default function MainCategorySection() {
             <HeaderAny className=" text-[14px] sm:text-[28px] font-semibold mb-2 sm:mb-4">
               Men's Collections
             </HeaderAny>
-            <div className=" hidden sm:block">
+            <div className=" hidden- sm: block">
               <Button
                 text="Shop Now"
                 isLink={true}
