@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Header1Plus, Paragraph1, Paragraph3 } from "@/common/ui/Text";
+import { Header1, Header1Plus, Header2, Paragraph1, Paragraph3 } from "@/common/ui/Text";
 import { Lock, ShieldCheck, KeyRound } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -85,9 +85,9 @@ export default function DevAccessPage() {
 
         {/* Hero */}
         <div className="text-center max-w-2xl mb-10">
-          <Header1Plus className="text-4xl md:text-6xl mb-6 leading-[1.1]">
+          <Header1 className="text-4xl md:text-6xl mb-6 leading-[1.1]">
             Restricted <br /> Environment
-          </Header1Plus>
+          </Header1>
           <Paragraph1 className="text-gray-300 md:text-lg max-w-md mx-auto">
             Enter your access code to continue, or join the waitlist for public
             launch.

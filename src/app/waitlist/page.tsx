@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Header1Plus, Paragraph1, Paragraph3 } from "@/common/ui/Text";
+import { Header1, Header1Plus, Paragraph1, Paragraph3 } from "@/common/ui/Text";
 import { Star, Menu, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
@@ -74,9 +74,9 @@ export default function WaitlistPage() {
 
         {/* Hero Text */}
         <div className="text-center max-w-2xl mb-10">
-          <Header1Plus className="text-4xl md:text-6xl mb-6 leading-[1.1]">
+          <Header1 className="text-4xl md:text-6xl mb-6 leading-[1.1]">
             Get Early Access to <br /> the Future of Fashion
-          </Header1Plus>
+          </Header1>
           <Paragraph1 className="text-gray-300 md:text-lg max-w-md mx-auto">
             Access exceptional fashion for moments that matter thoughtfully and
             effortlessly
