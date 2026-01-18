@@ -35,7 +35,7 @@ export const Header1: React.FC<{
   className?: string;
 }> = ({ children, className = "" }) => (
   <h1
-    className={`text-[40px] sm:text-[100px] leading-12 sm:leading-7 ${body_Font_Regular.className} ${className}`}
+    className={`text-[40px] sm:text-[100px] leading-12 sm:leading-14 ${body_Font_Regular.className} ${className}`}
   >
     {children}
   </h1>
