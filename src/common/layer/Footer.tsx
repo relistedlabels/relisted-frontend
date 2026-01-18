@@ -8,7 +8,13 @@ export default function Footer() {
   const pathname = usePathname();
 
   
-if (pathname.includes("/auth") || pathname.includes("/curators")) return null;
+if (
+  pathname.includes("/auth") ||
+  pathname.includes("/curators") ||
+  // pathname.startsWith("/waitlist") ||
+  pathname.startsWith("/dev")
+)
+  return null;
 
   return (
     <footer className="w-full bg-black text-white py-14 px-4 sm:px-0  font-light tracking-wide">

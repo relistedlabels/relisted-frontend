@@ -17,7 +17,13 @@ export default function DesktopNavbar() {
   const pathname = usePathname();
   
     
-if (pathname.includes("/auth") || pathname.includes("/curators")) return null;
+if (
+  pathname.includes("/auth") ||
+  pathname.includes("/curators") ||
+  pathname.startsWith("/waitlist") ||
+  pathname.startsWith("/dev")
+)
+  return null;
   
   return (
     <nav className="bg-black/95  backdrop-blur-md hidden xl:block text-white fixed w-full z-50">

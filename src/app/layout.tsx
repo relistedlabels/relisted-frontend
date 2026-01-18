@@ -3,6 +3,8 @@ import "./globals.css";
 import DesktopNavbar from "@/common/layer/DesktopNavbar";
 import Footer from "@/common/layer/Footer";
 import MobileNavbar from "@/common/layer/MobileNavbar";
+import QueryProvider from "@/lib/providers/query-provider";
+import DevGuard from "@/common/ui/DevGuard";
 
 export const metadata: Metadata = {
   title: "Relisted — Global Fashion, Rooted in Heritage",
@@ -54,12 +56,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className=" " >
+      <body className=" ">
         {" "}
-        <DesktopNavbar />
-        <MobileNavbar />
-        {children}
-        <Footer />
+        <DevGuard>
+          <QueryProvider>
+            <DesktopNavbar />
+            <MobileNavbar />
+            {children}
+            <Footer />
+          </QueryProvider>
+        </DevGuard>
       </body>
     </html>
   );

@@ -10,44 +10,49 @@ export interface Category {
 export const categories: Category[] = [
   {
     image: "/category/c1.jpg",
-    title: "The Dress Edit",
-    description: "From chic minis to elegant gowns discover ",
+    title: "Date Night",
+    description:
+      "Irresistible looks designed to turn heads, spark chemistry, and leave a lasting impression.",
     link: "/shop",
     height: "463px",
   },
   {
     image: "/category/c2.jpg",
-    title: "Modern Knitwear",
-    description: "Soft textures, sculpted shapes, and cozy sophistication",
-    link: "/electronics",
+    title: "Brunch Outfits",
+    description:
+      "Effortlessly chic styles made for slow mornings, good vibes, and Instagram-worthy moments.",
+    link: "/shop",
     height: "477px",
   },
   {
     image: "/category/c3.jpg",
-    title: "Step in Style",
-    description: "Discover footwear designed to make an impression.",
+    title: "Special Occasions",
+    description:
+      "Elevated pieces crafted for moments that matter — when looking unforgettable is non-negotiable.",
     link: "/shop",
     height: "333px",
   },
   {
     image: "/category/c4.jpg",
-    title: "Statement Layers",
-    description: "Wrap yourself in luxury designed for timeless comfort.",
+    title: "Corporate Closet",
+    description:
+      "Power dressing redefined. Polished, confident silhouettes for the modern professional woman.",
     link: "/shop",
     height: "607px",
   },
   {
     image: "/category/c5.jpg",
-    title: "The Denim Drop",
-    description: "Everyday classics redefined made to move with you",
+    title: "Red Carpet",
+    description:
+      "Bold, dramatic, and statement-making designs inspired by celebrity moments and grand entrances.",
     link: "/shop",
     height: "414px",
   },
   {
     image: "/category/c6.jpg",
-    title: "Finishing Touches",
+    title: "Vacation Mode",
     description:
-      "Complete your look with accessories that elevate your outfit ",
+      "Relaxed yet refined pieces perfect for getaways, beach days, and sun-soaked adventures.",
     link: "/shop",
     height: "526px",
   },

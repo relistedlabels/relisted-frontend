@@ -28,7 +28,7 @@ const navItems: NavItem[] = [
     id: "overview",
     label: "Overview",
     icon: HiOutlineHome,
-    href: "/admin",
+    href: "/admin/dashboard",
   },
   { id: "users", label: "Users", icon: HiOutlineUsers, href: "/admin/users" },
   {
