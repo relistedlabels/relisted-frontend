@@ -11,7 +11,7 @@ export default function Footer() {
 if (
   pathname.includes("/auth") ||
   pathname.includes("/curators") ||
-  // pathname.startsWith("/waitlist") ||
+  pathname.startsWith("/waitlist") ||
   pathname.startsWith("/dev")
 )
   return null;
