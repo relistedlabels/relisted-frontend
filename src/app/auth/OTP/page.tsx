@@ -3,7 +3,7 @@
 import React from "react";
 import AccountRoleSelector from "../components/AccountRoleSelector";
 import { motion } from "framer-motion";
-import ForgotPasswordOTP from "../components/ForgotPasswordOTP";
+import VerifyOTP from "../components/VerifyOTP";
 
 function Page() {
   return (
@@ -38,7 +38,7 @@ function Page() {
             },
           }}
         >
-          <ForgotPasswordOTP />
+          <VerifyOTP />
         </motion.div>
       </motion.div>
     </div>

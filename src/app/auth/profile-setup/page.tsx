@@ -1,29 +1,29 @@
 "use client";
 
-import React from "react";
-import AccountRoleSelector from "../components/AccountRoleSelector";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
-import ForgotPasswordOTP from "../components/ForgotPasswordOTP";
+import { useRouter } from "next/navigation";
+
+import { useUserStore } from "@/store/useUserStore";
+
 import CompleteProfileFlow from "../components/CompleteProfileFlow";
 import CompleteBusinessProfileFlow from "../components/CompleteBusinessProfileFlow";
 
 function Page() {
-  return (
-    <div
-      className="relative w-full bg-gray-100 bg-cover bg-center"
-      // style={{ backgroundImage: "url('/images/authbg.jpg')" }}
-    >
-      {/* Dark Overlay */}
-      {/* <motion.div
-        className="absolute inset-0 bg-black/10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      /> */}
+  const router = useRouter();
+  const role = useUserStore((s) => s.role);
 
-      {/* Center Content */}
+  // Safety: no role selected → go back
+  useEffect(() => {
+    if (!role) {
+      router.replace("/auth/create-account");
+    }
+  }, [role, router]);
+
+  return (
+    <div className="relative w-full bg-gray-100 bg-cover bg-center">
       <motion.div
-        className="relative flex flex-col items-center justify-center  text-white sm:px-6 sm:py-20"
+        className="relative flex flex-col items-center justify-center sm:px-6 sm:py-20"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.1, ease: "easeOut" }}
@@ -40,11 +40,9 @@ function Page() {
             },
           }}
         >
-          <div
-            // className="max-w-xl  w-full bg-white p-8 min-h-screen sm:rounded-3xl text-gray-600 shadow-md"
-          >
-            <CompleteProfileFlow />
-            <CompleteBusinessProfileFlow />
+          <div>
+            {role === "DRESSER" && <CompleteProfileFlow />}
+            {role === "CURATOR" && <CompleteBusinessProfileFlow />}
           </div>
         </motion.div>
       </motion.div>

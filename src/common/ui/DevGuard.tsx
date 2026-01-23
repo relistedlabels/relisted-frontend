@@ -12,9 +12,17 @@ export default function DevGuard({ children }: { children: React.ReactNode }) {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    // ✅ If user is on root, send to waitlist
+    const hasAccess = devAuth.hasAccess();
+
+    // 🏠 Root path logic
     if (pathname === "/") {
-      router.replace("/waitlist");
+      if (!hasAccess) {
+        router.replace("/waitlist");
+        return;
+      }
+
+      // ✅ Has access → stay on /
+      setChecked(true);
       return;
     }
 
@@ -22,14 +30,14 @@ export default function DevGuard({ children }: { children: React.ReactNode }) {
       (path) => pathname === path || pathname.startsWith(`${path}/`),
     );
 
-    // ✅ Public routes: allow immediately
+    // ✅ Public routes are always allowed
     if (isPublic) {
       setChecked(true);
       return;
     }
 
     // 🔒 Protected routes
-    if (!devAuth.hasAccess()) {
+    if (!hasAccess) {
       router.replace("/dev");
       return;
     }
@@ -38,10 +46,8 @@ export default function DevGuard({ children }: { children: React.ReactNode }) {
     setChecked(true);
   }, [pathname, router]);
 
-  // ⛔ Block rendering until checks are done
-  if (!checked) {
-    return null; // or a loader
-  }
+  // ⛔ Block rendering until checks are complete
+  if (!checked) return null;
 
   return <>{children}</>;
 }

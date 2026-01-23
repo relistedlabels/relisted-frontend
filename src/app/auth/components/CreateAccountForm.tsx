@@ -1,4 +1,8 @@
+"use client";
+
 import React, { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import { Paragraph1, Paragraph3 } from "@/common/ui/Text";
 import {
   HiOutlineUser,
@@ -8,146 +12,207 @@ import {
   HiEyeSlash,
 } from "react-icons/hi2";
 import SocialSignInOptions from "./SocialSignInOptions";
+import { useSignup } from "@/lib/queries/auth/useSignup";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/useUserStore"; // ✅ add
+
+const CreateAccountSchema = Yup.object({
+  fullName: Yup.string().required("Full name is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "Passwords do not match")
+    .required("Confirm your password"),
+  terms: Yup.boolean().oneOf(
+    [true],
+    "You must agree to the terms and privacy policy",
+  ),
+});
 
 const CreateAccountForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!agreedToTerms) {
-      alert("You must agree to the Terms of use and Privacy Policy.");
-      return;
-    }
-    console.log("Submitting account creation...");
-  };
+  const signup = useSignup();
+  const router = useRouter();
+  const setUser = useUserStore((s) => s.setUser); 
 
   return (
     <div className="font-sans">
-      <div className="max-w- w-full bg-white p-4 md:p-8 pb-[100px] sm:pb-0 sm:rounded-3xl text-gray-900">
+      <div className="w-full sm:w-[600px] bg-white p-4 md:p-8 pb-[100px] sm:pb-0 sm:rounded-3xl text-gray-900">
         {/* Header */}
-        <div className="mb-8 text-center flex-col items-center flex justify-center">
+        <div className="mb-8 text-center flex-col items-center flex">
           <img src="/images/logo1.svg" alt="" className="h-10 w-10 mb-4" />
-          <Paragraph3 className="text-2xl font-bold text-gray-900 mb-1">
+          <Paragraph3 className="text-2xl font-bold mb-1">
             Create an account
           </Paragraph3>
-          <Paragraph1 className="text-sm text-gray-600 max-w-[300px] leading-relaxed">
+          <Paragraph1 className="text-sm text-gray-600 max-w-[300px]">
             Join the Relisted community and unlock endless wardrobe
             possibilities.
           </Paragraph1>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Full Name */}
-          <div>
-            <label htmlFor="full-name" className="block mb-2">
-              <Paragraph1 className="text-sm font-medium text-gray-900">
-                Full Name
-              </Paragraph1>
-            </label>
-            <div className="relative">
-              <HiOutlineUser className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                id="full-name"
-                required
-                placeholder="Enter your full name"
-                className="w-full  p-4 pl-12 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-black focus:border-black"
-              />
-            </div>
-          </div>
+        <Formik
+          initialValues={{
+            fullName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            terms: false,
+          }}
+          validationSchema={CreateAccountSchema}
+          onSubmit={(values, { setSubmitting }) => {
+            setUser({
+              name: values.fullName,
+              email: values.email,
+            });
+            signup.mutate(
+              {
+                name: values.fullName,
+                email: values.email,
+                password: values.password,
+              },
+              {
+                onSuccess: () => {
+                  router.push("/auth/OTP");
+                },
+                onSettled: () => setSubmitting(false),
+              },
+            );
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form className="space-y-5">
+              {/* Full Name */}
+              <div>
+                <Paragraph1 className="text-sm font-medium mb-2">
+                  Full Name
+                </Paragraph1>
+                <div className="relative">
+                  <HiOutlineUser className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Field
+                    name="fullName"
+                    placeholder="Enter your full name"
+                    className="w-full p-4 pl-12 border rounded-lg"
+                  />
+                </div>
+                <ErrorMessage
+                  name="fullName"
+                  component="p"
+                  className="text-sm text-red-500 mt-1"
+                />
+              </div>
 
-          {/* Email */}
-          <div>
-            <label htmlFor="email" className="block mb-2">
-              <Paragraph1 className="text-sm font-medium text-gray-900">
-                Email Address
-              </Paragraph1>
-            </label>
-            <div className="relative">
-              <HiOutlineEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="email"
-                id="email"
-                required
-                placeholder="Enter your email"
-                className="w-full p-4 pl-12 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-black focus:border-black"
-              />
-            </div>
-          </div>
+              {/* Email */}
+              <div>
+                <Paragraph1 className="text-sm font-medium mb-2">
+                  Email Address
+                </Paragraph1>
+                <div className="relative">
+                  <HiOutlineEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Field
+                    name="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full p-4 pl-12 border rounded-lg"
+                  />
+                </div>
+                <ErrorMessage
+                  name="email"
+                  component="p"
+                  className="text-sm text-red-500 mt-1"
+                />
+              </div>
 
-          {/* Password */}
-          <div>
-            <label htmlFor="password" className="block mb-2">
-              <Paragraph1 className="text-sm font-medium text-gray-900">
-                Password
-              </Paragraph1>
-            </label>
-            <div className="relative">
-              <HiOutlineLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                required
-                placeholder="Enter your password"
-                className="w-full p-4 pl-12 pr-12 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-black focus:border-black"
+              {/* Password */}
+              <div>
+                <Paragraph1 className="text-sm font-medium mb-2">
+                  Password
+                </Paragraph1>
+                <div className="relative">
+                  <HiOutlineLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Field
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    className="w-full p-4 pl-12 pr-12 border rounded-lg"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2"
+                  >
+                    {showPassword ? (
+                      <HiEyeSlash className="w-5 h-5" />
+                    ) : (
+                      <HiOutlineEye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+                <ErrorMessage
+                  name="password"
+                  component="p"
+                  className="text-sm text-red-500 mt-1"
+                />
+              </div>
+
+              {/* Confirm Password */}
+              <div>
+                <Paragraph1 className="text-sm font-medium mb-2">
+                  Confirm Password
+                </Paragraph1>
+                <div className="relative">
+                  <HiOutlineLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Field
+                    name="confirmPassword"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Re-enter your password"
+                    className="w-full p-4 pl-12 border rounded-lg"
+                  />
+                </div>
+                <ErrorMessage
+                  name="confirmPassword"
+                  component="p"
+                  className="text-sm text-red-500 mt-1"
+                />
+              </div>
+
+              {/* Terms */}
+              <div className="flex items-start gap-3">
+                <Field type="checkbox" name="terms" className="mt-1 w-4 h-4" />
+                <Paragraph1 className="text-sm">
+                  I agree to the{" "}
+                  <span className="underline font-medium">Terms of use</span>{" "}
+                  and{" "}
+                  <span className="underline font-medium">Privacy Policy</span>.
+                </Paragraph1>
+              </div>
+              <ErrorMessage
+                name="terms"
+                component="p"
+                className="text-sm text-red-500"
               />
+
+              {/* Submit */}
               <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                type="submit"
+                disabled={isSubmitting || signup.isPending}
+                className="w-full py-4 font-semibold text-white bg-black rounded-lg disabled:opacity-50"
               >
-                {showPassword ? (
-                  <HiEyeSlash className="w-5 h-5" />
-                ) : (
-                  <HiOutlineEye className="w-5 h-5" />
-                )}
+                {signup.isPending ? "Creating account..." : "Create account"}
               </button>
-            </div>
-          </div>
 
-          {/* Terms */}
-          <div className="flex items-start gap-3 pt-1">
-            <input
-              type="checkbox"
-              id="terms"
-              checked={agreedToTerms}
-              onChange={(e) => setAgreedToTerms(e.target.checked)}
-              className="mt-1 w-4 h-4 border-gray-300 rounded focus:ring-black cursor-pointer"
-            />
-            <label htmlFor="terms" className="leading-relaxed">
-              <Paragraph1 className="text-sm text-gray-700">
-                By creating an account, I agree to the{" "}
-                <a
-                  href="#"
-                  className="underline font-medium hover:text-gray-900"
-                >
-                  Terms of use
-                </a>{" "}
-                and{" "}
-                <a
-                  href="#"
-                  className="underline font-medium hover:text-gray-900"
-                >
-                  Privacy Policy
-                </a>
-                .
-              </Paragraph1>
-            </label>
-          </div>
+              {signup.error && (
+                <p className="text-sm text-red-500">
+                  {(signup.error as Error).message}
+                </p>
+              )}
+            </Form>
+          )}
+        </Formik>
 
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={!agreedToTerms}
-            className="w-full py-4 text-base font-semibold text-white bg-black rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Create account
-          </button>
-        </form>
-
-        {/* Social Login */}
         <div className="mt-8">
           <SocialSignInOptions />
         </div>

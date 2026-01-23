@@ -1,16 +1,18 @@
 "use client";
 
 import React from "react";
-import { Paragraph1, Paragraph2, Paragraph3 } from "@/common/ui/Text";
-import { RiBaseStationLine } from "react-icons/ri";
+import { Paragraph1, Paragraph3 } from "@/common/ui/Text";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/useUserStore";
+
+type Role = "DRESSER" | "CURATOR";
 
 interface RoleOptionProps {
   title: string;
   description: string;
   imageUrl: string;
-  onContinue: (role: "dresser" | "curator") => void;
-  roleKey: "dresser" | "curator";
+  onContinue: (role: Role) => void;
+  roleKey: Role;
 }
 
 const RoleOption: React.FC<RoleOptionProps> = ({
@@ -21,7 +23,7 @@ const RoleOption: React.FC<RoleOptionProps> = ({
   roleKey,
 }) => {
   return (
-    <div className="w-full p-4 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-lg flex flex-col transition duration-300 hover:shadow-xl">
+    <div className="w-full p-4 bg-white border border-gray-200 rounded-xl shadow-lg flex flex-col transition hover:shadow-xl">
       <div className="h-64 overflow-hidden">
         <img
           src={imageUrl}
@@ -42,9 +44,9 @@ const RoleOption: React.FC<RoleOptionProps> = ({
       <div className="p-4 border-t border-gray-100">
         <button
           onClick={() => onContinue(roleKey)}
-          className="w-full py-3 text-sm font-semibold text-white bg-[#231F20] rounded-lg hover:bg-gray-800 transition duration-150"
+          className="w-full py-3 text-sm font-semibold text-white bg-[#231F20] rounded-lg hover:bg-gray-800 transition"
         >
-          <Paragraph1> Continue as a {title}</Paragraph1>
+          <Paragraph1>Continue as a {title}</Paragraph1>
         </button>
       </div>
     </div>
@@ -53,25 +55,20 @@ const RoleOption: React.FC<RoleOptionProps> = ({
 
 const AccountRoleSelector: React.FC = () => {
   const router = useRouter();
+  const setUser = useUserStore((s) => s.setUser); // ✅ correct API
 
-  const handleRoleSelection = (role: "dresser" | "curator") => {
-    console.log(`User selected to continue as a ${role}`);
+  const handleRoleSelection = (role: Role) => {
+    // Persist role using existing store API
+    setUser({ role });
 
-    // Save role in localStorage or global state if needed
-    localStorage.setItem("selectedRole", role);
-
-    // Redirect user
     router.push("/auth/create-account/sign-up");
   };
 
-  const dresserImageUrl = "/images/sin1.jpg";
-  const curatorImageUrl = "/images/sin2.jpg";
-
   return (
-    <div className="font-sans sm:py-[11px] min-h-screen- flex items-center sm:justify-center sm:p-4">
-      <div className="max-w-4xl w-full bg-white py-16 sm:py-0 p-6 md:p-10 sm:rounded-xl shadow-2xl text-center">
-        <div className="mb-6 flex w-full justify-center">
-          <img src="/images/logo1.svg" alt="" />{" "}
+    <div className="font-sans min-h-screen flex items-center justify-center p-4">
+      <div className="max-w-4xl w-full bg-white p-10 rounded-xl shadow-2xl text-center">
+        <div className="mb-6 flex justify-center">
+          <img src="/images/logo1.svg" alt="Logo" />
         </div>
 
         <Paragraph3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -86,17 +83,17 @@ const AccountRoleSelector: React.FC = () => {
           <RoleOption
             title="Dresser"
             description="I want to rent stylish, quality pieces for events, everyday wear, or content creation."
-            imageUrl={dresserImageUrl}
+            imageUrl="/images/sin1.jpg"
             onContinue={handleRoleSelection}
-            roleKey="dresser"
+            roleKey="DRESSER"
           />
 
           <RoleOption
             title="Curator"
             description="I want to list my fashion pieces and earn by sharing my wardrobe with others."
-            imageUrl={curatorImageUrl}
+            imageUrl="/images/sin2.jpg"
             onContinue={handleRoleSelection}
-            roleKey="curator"
+            roleKey="CURATOR"
           />
         </div>
       </div>

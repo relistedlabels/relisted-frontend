@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Paragraph1, Paragraph3 } from "@/common/ui/Text";
 import {
@@ -8,18 +10,24 @@ import {
 } from "react-icons/hi2";
 import SocialSignInOptions from "./SocialSignInOptions";
 import Link from "next/link";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useLogin } from "@/lib/queries/auth/useLogin";
+import { useRouter } from "next/navigation";
+
+const LoginSchema = Yup.object({
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string().required("Password is required"),
+});
 
 const SignInForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Submitting sign in...");
-  };
+  const login = useLogin();
+  const router = useRouter();
 
   return (
     <div className="font-sans">
-      <div className="max-w-xl w-full bg-white p-4 md:p-8 pb-[100px] sm:pb-0 sm:rounded-3xl text-gray-600">
+      <div className="max- sm:w-[500px] w-full bg-white p-4 md:p-8 pb-[100px] sm:pb-0 sm:rounded-3xl text-gray-600">
         {/* Header */}
         <div className="mb-8 text-center flex-col items-center flex justify-center">
           <img src="/images/logo1.svg" alt="" className="h-10 w-10 mb-4" />
@@ -33,78 +41,104 @@ const SignInForm: React.FC = () => {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email */}
-          <div>
-            <label htmlFor="email" className="block mb-2">
-              <Paragraph1 className="text-sm font-medium text-gray-600">
-                Email Address
-              </Paragraph1>
-            </label>
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          validationSchema={LoginSchema}
+          onSubmit={(values) => {
+            login.mutate(values, {
+              onSuccess: () => {
+                router.replace("/");
+              },
+            });
+          }}
+        >
+          {() => (
+            <Form className="space-y-5">
+              {/* Email */}
+              <div>
+                <Paragraph1 className="text-sm font-medium mb-2">
+                  Email Address
+                </Paragraph1>
 
-            <div className="relative">
-              <HiOutlineEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="email"
-                id="email"
-                required
-                placeholder="Enter your email"
-                className="w-full sm:w-[450px] p-4 pl-12 border border-gray-300 rounded-lg bg-white text-gray-600 placeholder-gray-400 focus:ring-black focus:border-black"
-              />
-            </div>
-          </div>
+                <div className="relative">
+                  <HiOutlineEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Field
+                    name="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full p-4 pl-12 border border-gray-300 rounded-lg"
+                  />
+                </div>
 
-          {/* Password */}
-          <div>
-            <label htmlFor="password" className="block mb-2">
-              <Paragraph1 className="text-sm font-medium text-gray-600">
-                Password
-              </Paragraph1>
-            </label>
+                <ErrorMessage
+                  name="email"
+                  component="p"
+                  className="text-sm text-red-500 mt-1"
+                />
+              </div>
 
-            <div className="relative">
-              <HiOutlineLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              {/* Password */}
+              <div>
+                <Paragraph1 className="text-sm font-medium mb-2">
+                  Password
+                </Paragraph1>
 
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                required
-                placeholder="Enter your password"
-                className="w-full p-4 pl-12 pr-12 border border-gray-300 rounded-lg bg-white text-gray-600 placeholder-gray-400 focus:ring-black focus:border-black"
-              />
+                <div className="relative">
+                  <HiOutlineLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
 
+                  <Field
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    className="w-full p-4 pl-12 pr-12 border border-gray-300 rounded-lg"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2"
+                  >
+                    {showPassword ? (
+                      <HiEyeSlash className="w-5 h-5" />
+                    ) : (
+                      <HiOutlineEye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+
+                <ErrorMessage
+                  name="password"
+                  component="p"
+                  className="text-sm text-red-500 mt-1"
+                />
+
+                <div className="flex justify-end mt-2">
+                  <Link
+                    href="/auth/forgot-password"
+                    className="text-sm font-medium"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+              </div>
+
+              {/* Submit */}
               <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                type="submit"
+                disabled={login.isPending}
+                className="w-full py-4 font-semibold text-white bg-black rounded-lg disabled:opacity-50"
               >
-                {showPassword ? (
-                  <HiEyeSlash className="w-5 h-5" />
-                ) : (
-                  <HiOutlineEye className="w-5 h-5" />
-                )}
+                {login.isPending ? "Signing in..." : "Sign in"}
               </button>
-            </div>
 
-            {/* Forgot Password Link */}
-            <div className="flex justify-end mt-2">
-              <Link
-                href="/auth/forgot-password"
-                className="text-sm text-gray-700 hover:text-black font-medium"
-              >
-                Forgot password?
-              </Link>
-            </div>
-          </div>
-
-          {/* Submit */}
-          <button
-            type="submit"
-            className="w-full py-4 text-base font-semibold text-white bg-black rounded-lg hover:bg-gray-800"
-          >
-            Log in{" "}
-          </button>
-        </form>
+              {login.error && (
+                <p className="text-sm text-red-500">
+                  {(login.error as Error).message}
+                </p>
+              )}
+            </Form>
+          )}
+        </Formik>
 
         {/* Social Login */}
         <div className="mt-8">
