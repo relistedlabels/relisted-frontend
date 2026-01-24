@@ -7,27 +7,34 @@ export default async function CuratorsLayout({
 }: {
   children: ReactNode;
 }) {
-  const cookieStore = cookies();
+  // ✅ cookies() is async in your setup
+  const cookieStore = await cookies();
+
+  // ✅ serialize cookies correctly
+  const cookieHeader = cookieStore
+    .getAll()
+    .map((c) => `${c.name}=${c.value}`)
+    .join("; ");
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`, {
     headers: {
-      cookie: cookieStore.toString(),
+      cookie: cookieHeader,
     },
     cache: "no-store",
   });
 
-  // ❌ Not logged in
+  // ❌ not authenticated
   if (res.status === 401) {
     redirect("/");
   }
 
   const user = await res.json();
 
-  // ❌ Logged in but not curator
+  // ❌ not a curator
   if (user.role !== "CURATOR") {
     redirect("/");
   }
 
-  // ✅ Authorized
+  // ✅ authorized
   return <>{children}</>;
 }
