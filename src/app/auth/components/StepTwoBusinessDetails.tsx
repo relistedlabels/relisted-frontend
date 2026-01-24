@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Paragraph1 } from "@/common/ui/Text";
 // Importing icons needed for the form fields
 import { User, Mail, Hash, MapPin, ChevronDown } from "lucide-react";
+import { useProfileStore } from "@/store/useProfileStore";
 
 interface StepTwoBusinessDetailsProps {
   onNext: () => void; // Function to move to the next step (or final submission)
@@ -19,27 +20,31 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+const setProfile = useProfileStore((s) => s.setProfile);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation check (excluding optional email)
     if (!businessName || !registrationNumber || !address || !city || !state) {
       alert("Please fill in all required Business details.");
       return;
     }
 
-    console.log("Business Details Collected:", {
-      businessName,
-      businessEmail,
-      registrationNumber,
-      address,
-      city,
-      state,
+    // ✅ Store ONLY business-related data
+    setProfile({
+      businessInfo: {
+        businessName,
+        businessEmail,
+        businessRegistrationNumber: registrationNumber,
+        businessAddress: address,
+        businessCity: city,
+        businessState: state,
+      },
     });
-    // Trigger the continuation action (e.g., move to Step 3 or finalize)
+
     onNext();
   };
+
 
   return (
     <form onSubmit={handleFormSubmit} className="space-y-6">

@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 function Page() {
   return (
     <div
-      className="relative w-full bg-black bg-cover bg-center"
+      className="relative w-full h-full bg-black bg-cover bg-center"
       style={{ backgroundImage: "url('/images/authbg.jpg')" }}
     >
       {/* Dark Overlay */}
@@ -20,7 +20,7 @@ function Page() {
 
       {/* Center Content */}
       <motion.div
-        className="relative flex flex-col items-center justify-center text-center text-white sm:px-6 sm:py-20"
+        className="relative flex flex-col sm:items-center justify-center text-center text-white sm:px-6 sm:py-20"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.1, ease: "easeOut" }}

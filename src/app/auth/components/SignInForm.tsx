@@ -26,7 +26,7 @@ const SignInForm: React.FC = () => {
   const router = useRouter();
 
   return (
-    <div className="font-sans">
+    <div className="font-sans-">
       <div className="max- sm:w-[500px] w-full bg-white p-4 md:p-8 pb-[100px] sm:pb-0 sm:rounded-3xl text-gray-600">
         {/* Header */}
         <div className="mb-8 text-center flex-col items-center flex justify-center">

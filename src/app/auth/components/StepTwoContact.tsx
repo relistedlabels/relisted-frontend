@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Paragraph1 } from "@/common/ui/Text";
 // Importing icons needed for the form fields
 import { User, Users, MapPin, ChevronDown } from "lucide-react";
+import { PhoneInput } from "./PhoneInput";
+import { useProfileStore } from "@/store/useProfileStore";
+import { useUpdateProfile } from "@/lib/queries/user/useUpdateProfile";
+import { useRouter } from "next/navigation";
 
 interface StepTwoContactProps {
   onSubmit: () => void; // Function to handle final submission
@@ -19,34 +23,38 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+ const setProfile = useProfileStore((s) => s.setProfile);
+  const updateProfile = useUpdateProfile();
+  const router = useRouter();
+  
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation check
-    if (
-      !fullName ||
-      !relationship ||
-      !phoneNumber ||
-      !address ||
-      !city ||
-      !state
-    ) {
+    if (!fullName || !relationship || !phoneNumber || !city || !state) {
       alert("Please fill in all Emergency Contact details.");
       return;
     }
 
-    console.log("Emergency Contact Details Collected:", {
-      fullName,
-      relationship,
-      phoneNumber,
-      address,
-      city,
-      state,
+    // 1️⃣ Store step-two data
+    setProfile({
+      emergencyContacts: {
+        name: fullName,
+        relationship,
+        phoneNumber,
+        city,
+        state,
+      },
     });
-    // Trigger the final submission action
-    onSubmit();
+
+    // 2️⃣ Commit profile
+    updateProfile.mutate(undefined, {
+      onSuccess: () => {
+        router.replace("/shop"); // ✅ redirect on success
+      },
+    });
   };
+
 
   return (
     <form onSubmit={handleFormSubmit} className="space-y-6">
@@ -101,34 +109,7 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({
       </div>
 
       {/* 3. Phone Number Input (Same format as Step 1) */}
-      <div>
-        <label htmlFor="phone-number" className="block mb-2">
-          <Paragraph1 className="text-sm font-medium text-gray-800">
-            Phone Number
-          </Paragraph1>
-        </label>
-        <div className="relative">
-          <div className="flex items-center w-full border border-gray-300 rounded-lg bg-white overflow-hidden focus-within:ring-2 focus-within:ring-black focus-within:border-black">
-            {/* Static Country Code Area */}
-            <div className="flex items-center px-4 py-4 text-gray-600 border-r border-gray-300">
-              <Paragraph1 className="mr-2">{phoneNumber}</Paragraph1>
-              <ChevronDown className="w-4 h-4 text-gray-500" />
-            </div>
-
-            {/* Actual Input Field */}
-            <input
-              type="tel"
-              id="phone-number-contact" // Different ID to avoid collision
-              required
-              placeholder="Enter number"
-              onChange={(e) => {
-                // In a real app, you would handle the number input separately from the country code
-              }}
-              className="w-full p-4 border-none outline-none bg-transparent text-gray-600 placeholder-gray-400"
-            />
-          </div>
-        </div>
-      </div>
+      <PhoneInput value={phoneNumber} onChange={(val) => setPhoneNumber(val)} />
 
       {/* 4. Address Input */}
       <div>
@@ -217,9 +198,14 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({
         {/* Submit Button (Black Background, White Text) */}
         <button
           type="submit"
-          className="w-1/2 py-3 text-base font-semibold text-white bg-black rounded-lg hover:bg-gray-800 transition duration-150"
+          disabled={updateProfile.isPending}
+          className="w-1/2 py-3 text-base font-semibold text-white bg-black rounded-lg
+             hover:bg-gray-800 transition duration-150
+             disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <Paragraph1>Submit</Paragraph1>
+          <Paragraph1>
+            {updateProfile.isPending ? "Submitting..." : "Submit"}
+          </Paragraph1>
         </button>
       </div>
     </form>

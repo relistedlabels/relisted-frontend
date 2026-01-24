@@ -34,8 +34,6 @@ export const login = (data: {
     body: JSON.stringify(data),
   });
 
-
-
 export const forgotPassword = (data: { email: string }) =>
   apiFetch("/auth/forgot-password", {
     method: "POST",

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Paragraph1 } from "@/common/ui/Text";
 // Importing icons needed for the form fields
 import { Banknote, CreditCard, User, ChevronDown } from "lucide-react";
+import { useProfileStore } from "@/store/useProfileStore";
+import { useRouter } from "next/navigation";
+import { useUpdateProfile } from "@/lib/queries/user/useUpdateProfile";
 
 interface StepFourPaymentProps {
   onSubmit: () => void; // Function to handle final submission
@@ -16,30 +19,40 @@ const StepFourPayment: React.FC<StepFourPaymentProps> = ({
   const [bankName, setBankName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [nameOnAccount, setNameOnAccount] = useState("");
+  const setProfile = useProfileStore((s) => s.setProfile);
+  const updateProfile = useUpdateProfile();
+
+  const router = useRouter();
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation check
     if (!bankName || !accountNumber || !nameOnAccount) {
       alert("Please fill in all bank details.");
       return;
     }
 
-    // Simple account number validation (e.g., length check)
     if (accountNumber.length < 10) {
       alert("Account Number seems too short.");
       return;
     }
 
-    console.log("Payment Details Collected:", {
-      bankName,
-      accountNumber,
-      nameOnAccount,
+    // ✅ Store ONLY bank-related data
+    setProfile({
+      bankAccounts: {
+        bankName,
+        accountNumber,
+        nameOfAccount: nameOnAccount,
+      },
     });
-    // Trigger the final submission action
-    onSubmit();
-  };
+
+    // 2️⃣ Commit profile
+    updateProfile.mutate(undefined, {
+      onSuccess: () => {
+        router.replace("/shop"); // ✅ redirect on success
+      },
+    });
+  };;
 
   return (
     <form onSubmit={handleFormSubmit} className="space-y-6">

@@ -12,6 +12,7 @@ import ShopDropdown from "./ShopDropdown";
 import RentalCartView from "./RentalCartView";
 import { usePathname } from "next/navigation";
 import SearchModal from "./SearchModal";
+import { AuthActions } from "./AuthActions";
 
 export default function DesktopNavbar() {
   const pathname = usePathname();
@@ -58,8 +59,9 @@ if (
           </Link>
 
           <RentalCartView />
+          <AuthActions />
 
-          <div className="flex gap-[9px] items-center">
+          {/* <div className="flex gap-[9px] items-center">
             <Button
               text="Sign In"
               isLink={true}
@@ -76,7 +78,7 @@ if (
               color="text-black hover:text-white"
               border="border border-white"
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </nav>

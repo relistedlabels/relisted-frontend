@@ -5,6 +5,7 @@ import Footer from "@/common/layer/Footer";
 import MobileNavbar from "@/common/layer/MobileNavbar";
 import QueryProvider from "@/lib/providers/query-provider";
 import DevGuard from "@/common/ui/DevGuard";
+import { Header } from "./Header";
 
 export const metadata: Metadata = {
   title: "Relisted — Global Fashion, Rooted in Heritage",
@@ -49,6 +50,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -57,12 +60,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className=" ">
-        {" "}
         <DevGuard>
           <QueryProvider>
             <DesktopNavbar />
             <MobileNavbar />
+            <Header />
+
             {children}
+
             <Footer />
           </QueryProvider>
         </DevGuard>

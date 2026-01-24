@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { Paragraph1 } from "@/common/ui/Text";
 // Importing icons needed for the form fields
 import { User, Users, MapPin, ChevronDown } from "lucide-react";
+import { PhoneInput } from "./PhoneInput";
+import { useProfileStore } from "@/store/useProfileStore";
+import { useUpdateProfile } from "@/lib/queries/user/useUpdateProfile";
 
 interface StepTwoContactProps {
   onNext: () => void; // Function to handle final submission
   onBack: () => void; // Function to move to the previous step
 }
 
-const StepTwoContact: React.FC<StepTwoContactProps> = ({
-  onNext,
-  onBack,
-}) => {
+const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
   // State for all form fields
   const [fullName, setFullName] = useState("");
   const [relationship, setRelationship] = useState("");
@@ -19,34 +19,39 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const setProfile = useProfileStore((s) => s.setProfile);
+  const updateProfile = useUpdateProfile();
+
 
   const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+      e.preventDefault();
+  
+      if (!fullName || !relationship || !phoneNumber || !city || !state) {
+        alert("Please fill in all Emergency Contact details.");
+        return;
+      }
+  
+      // 1️⃣ Store step-two data
+      setProfile({
+        emergencyContacts: {
+          name: fullName,
+          relationship,
+          phoneNumber,
+          city,
+          state,
+        },
+      });
+  
+      // 2️⃣ Commit profile
+      updateProfile.mutate(undefined, {
+        onSuccess: () => {
+          // Trigger the final submission action
+          onNext()
+        },
+      });
+    };
 
-    // Basic validation check
-    if (
-      !fullName ||
-      !relationship ||
-      !phoneNumber ||
-      !address ||
-      !city ||
-      !state
-    ) {
-      alert("Please fill in all Emergency Contact details.");
-      return;
-    }
-
-    console.log("Emergency Contact Details Collected:", {
-      fullName,
-      relationship,
-      phoneNumber,
-      address,
-      city,
-      state,
-    });
-    // Trigger the final submission action
-    onNext();
-  };
+  
 
   return (
     <form onSubmit={handleFormSubmit} className="space-y-6">

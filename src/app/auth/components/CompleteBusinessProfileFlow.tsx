@@ -45,7 +45,7 @@ const CompleteBusinessProfileFlow: React.FC = () => {
         );
       case 4:
         return (
-          <StepFourPayment
+          <StepFourPayment 
             onSubmit={() => alert("Business Profile Completed!")}
             onBack={handlePrevStep}
           />
