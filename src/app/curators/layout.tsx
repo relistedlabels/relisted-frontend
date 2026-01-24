@@ -1,32 +1,33 @@
-"use client";
+import { ReactNode } from "react";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-import { ReactNode, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useMe } from "@/lib/queries/auth/useMe";
+export default async function CuratorsLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const cookieStore = cookies();
 
-export default function CuratorsLayout({ children }: { children: ReactNode }) {
-  const { data: user, isLoading } = useMe();
-  const router = useRouter();
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`, {
+    headers: {
+      cookie: cookieStore.toString(),
+    },
+    cache: "no-store",
+  });
 
-  useEffect(() => {
-    if (isLoading) return;
-
-    // Not logged in → home
-    if (!user) {
-      router.replace("/");
-      return;
-    }
-
-    // Logged in but not a curator → home
-    if (user.role !== "CURATOR") {
-      router.replace("/");
-    }
-  }, [user, isLoading, router]);
-
-  // Prevent flash / render until auth is resolved
-  if (isLoading || !user || user.role !== "CURATOR") {
-    return null;
+  // ❌ Not logged in
+  if (res.status === 401) {
+    redirect("/");
   }
 
+  const user = await res.json();
+
+  // ❌ Logged in but not curator
+  if (user.role !== "CURATOR") {
+    redirect("/");
+  }
+
+  // ✅ Authorized
   return <>{children}</>;
 }
