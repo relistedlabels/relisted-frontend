@@ -24,16 +24,16 @@ export default async function CuratorsLayout({
   });
 
   // ❌ not authenticated
-  if (res.status === 401) {
-    redirect("/");
-  }
+//   if (res.status === 401) {
+//     redirect("/auth/sign-in");
+//   }
 
   const user = await res.json();
 
   // ❌ not a curator
-  if (user.role !== "CURATOR") {
-    redirect("/");
-  }
+//   if (user.role !== "CURATOR") {
+//     redirect("/");
+//   }
 
   // ✅ authorized
   return <>{children}</>;

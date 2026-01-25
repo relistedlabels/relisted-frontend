@@ -191,10 +191,13 @@ const InventoryList: React.FC = () => {
         <Paragraph3 className="text-2xl font-semibold text-black">
           Inventory
         </Paragraph3>
-        <button className="flex items-center space-x-2 px-4 py-2 text-sm font-semibold text-white bg-black rounded-lg hover:bg-gray-800 transition duration-150">
+        <Link
+          href="/curators/inventory/product-upload"
+          className="flex items-center space-x-2 px-4 py-2 text-sm font-semibold text-white bg-black rounded-lg hover:bg-gray-800 transition duration-150"
+        >
           <Plus className="w-4 h-4" />
           <Paragraph1>Add New Item</Paragraph1>
-        </button>
+        </Link>
       </div>
 
       {/* Tab Switcher with Shared Layout Animation */}
