@@ -1,40 +1,28 @@
-import { ReactNode } from "react";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+"use client";
 
-export default async function CuratorsLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  // ✅ cookies() is async in your setup
-  const cookieStore = await cookies();
+import { ReactNode, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useMe } from "@/lib/queries/auth/useMe";
 
-  // ✅ serialize cookies correctly
-  const cookieHeader = cookieStore
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join("; ");
+export default function CuratorsLayout({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  const { data: user, isLoading } = useMe();
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`, {
-    headers: {
-      cookie: cookieHeader,
-    },
-    cache: "no-store",
-  });
+  // ⛔ absolutely nothing renders until check finishes
+  if (isLoading) return null;
 
-  // ❌ not authenticated
-//   if (res.status === 401) {
-//     redirect("/auth/sign-in");
-//   }
+  // ⛔ unauthenticated → redirect before render
+  if (!user) {
+    router.replace("/auth/sign-in");
+    return null;
+  }
 
-  const user = await res.json();
+  // optional role gate
+  // if (user.role !== "CURATOR") {
+  //   router.replace("/");
+  //   return null;
+  // }
 
-  // ❌ not a curator
-//   if (user.role !== "CURATOR") {
-//     redirect("/");
-//   }
-
-  // ✅ authorized
+  // ✅ safe: checks completed, authorized
   return <>{children}</>;
 }

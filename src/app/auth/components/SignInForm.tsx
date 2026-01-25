@@ -14,6 +14,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useLogin } from "@/lib/queries/auth/useLogin";
 import { useRouter } from "next/navigation";
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 
 const LoginSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -24,6 +25,7 @@ const SignInForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const login = useLogin();
   const router = useRouter();
+  const authRedirect = useAuthRedirect();
 
   return (
     <div className="font-sans-">
@@ -47,7 +49,7 @@ const SignInForm: React.FC = () => {
           onSubmit={(values) => {
             login.mutate(values, {
               onSuccess: () => {
-                router.replace("/");
+                authRedirect.redirect();
               },
             });
           }}

@@ -80,13 +80,27 @@ const AccountRoleSelector: React.FC = () => {
         </Paragraph1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <RoleOption
-            title="Dresser"
-            description="I want to rent stylish, quality pieces for events, everyday wear, or content creation."
-            imageUrl="/images/sin1.jpg"
-            onContinue={handleRoleSelection}
-            roleKey="DRESSER"
-          />
+          <div className="relative">
+            {/* coming soon label */}
+            <div
+              className="absolute top-10 left-1/2 -translate-x-1/2 z-20 font-semibold tracking-wide text-white text-2xl"   >
+              <Paragraph1> Coming soon</Paragraph1>
+            </div>
+
+            {/* overlay */}
+            <div className="absolute inset-0 rounded-2xl bg-black/30 z-10 cursor-not-allowed" />
+
+            {/* content */}
+            <div className="pointer-events-none">
+              <RoleOption
+                title="Dresser"
+                description="I want to rent stylish, quality pieces for events, everyday wear, or content creation."
+                imageUrl="/images/sin1.jpg"
+                onContinue={handleRoleSelection}
+                roleKey="DRESSER"
+              />
+            </div>
+          </div>
 
           <RoleOption
             title="Curator"

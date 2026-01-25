@@ -4,7 +4,7 @@ import DesktopNavbar from "@/common/layer/DesktopNavbar";
 import Footer from "@/common/layer/Footer";
 import MobileNavbar from "@/common/layer/MobileNavbar";
 import QueryProvider from "@/lib/providers/query-provider";
-import DevGuard from "@/common/ui/DevGuard";
+import DevGuard from "@/common/layer/DevGuard";
 import { Header } from "./Header";
 
 export const metadata: Metadata = {
@@ -64,7 +64,7 @@ export default function RootLayout({
           <QueryProvider>
             <DesktopNavbar />
             <MobileNavbar />
-            <Header />
+            {/* <Header /> */}
 
             {children}
 

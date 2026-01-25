@@ -76,7 +76,8 @@ const CreateAccountForm: React.FC = () => {
               },
               {
                 onSuccess: () => {
-                  router.push("/auth/OTP");
+                  // router.push("/auth/OTP");
+                  router.push("/auth/sign-in");
                 },
                 onSettled: () => setSubmitting(false),
               },

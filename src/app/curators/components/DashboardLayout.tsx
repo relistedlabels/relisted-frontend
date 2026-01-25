@@ -123,37 +123,37 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   // Centralized navigation (NOT passed from parents)
   const navItems: NavItem[] = [
-    {
-      name: "Overview",
-      href: "/curators/dashboard",
-      icon: LayoutDashboard,
-      isActive: pathname === "/curators/dashboard",
-    },
+    // {
+    //   name: "Overview",
+    //   href: "/curators/dashboard",
+    //   icon: LayoutDashboard,
+    //   isActive: pathname === "/curators/dashboard",
+    // },
     {
       name: "Inventory",
       href: "/curators/inventory",
       icon: Package,
       isActive: pathname.startsWith("/curators/inventory"),
     },
-    {
-      name: "Orders",
-      href: "/curators/orders",
-      icon: ShoppingCart,
-      isActive: pathname.startsWith("/curators/orders"),
-    },
-    {
-      name: "Wallet",
-      href: "/curators/wallet",
-      icon: Wallet,
-      isActive: pathname.startsWith("/curators/wallet"),
-    },
+    // {
+    //   name: "Orders",
+    //   href: "/curators/orders",
+    //   icon: ShoppingCart,
+    //   isActive: pathname.startsWith("/curators/orders"),
+    // },
+    // {
+    //   name: "Wallet",
+    //   href: "/curators/wallet",
+    //   icon: Wallet,
+    //   isActive: pathname.startsWith("/curators/wallet"),
+    // },
 
-    {
-      name: "Dispute",
-      href: "/curators/dispute",
-      icon: FileText,
-      isActive: pathname.startsWith("/curators/dispute"),
-    },
+    // {
+    //   name: "Dispute",
+    //   href: "/curators/dispute",
+    //   icon: FileText,
+    //   isActive: pathname.startsWith("/curators/dispute"),
+    // },
   ];
 
   const [mobileOpen, setMobileOpen] = useState(false);
