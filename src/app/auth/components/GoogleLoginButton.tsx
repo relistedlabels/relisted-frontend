@@ -5,6 +5,7 @@ export function GoogleLoginButton() {
 
   return (
     <button
+      disabled
       onClick={handleGoogleLogin}
       className="w-full flex items-center justify-center space-x-3 py-3 px-4 border  rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 transition duration-150 "
     >

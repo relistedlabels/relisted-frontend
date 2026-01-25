@@ -39,6 +39,7 @@ const SocialSignInOptions: React.FC = () => {
         <GoogleLoginButton />
 
         <button
+          disabled
           onClick={handleAppleSignIn}
           className="w-full flex items-center justify-center space-x-3 py-3 px-4 border rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 transition"
         >
@@ -50,7 +51,7 @@ const SocialSignInOptions: React.FC = () => {
       <div className="text-center mt-6">
         <Paragraph1 className="text-sm text-gray-600">
           {isLoginPage ? "Don’t have an account?" : "Already have an account?"}{" "}
-          <button
+          <button 
             type="button"
             onClick={handleLoginRedirect}
             className="font-bold text-black hover:underline"
