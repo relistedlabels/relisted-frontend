@@ -8,6 +8,10 @@ import { useProductDraftStore } from "@/store/useProductDraftStore";
 const SIZES = ["6", "7", "8", "9", "10", "11", "12"];
 const UNITS = ["UK", "US", "EU"];
 
+type SizeSelectorProps = {
+  value: string;
+  onChange: (value: string) => void;
+};
 export const SizeSelector: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [size, setSize] = useState<string | null>(null);

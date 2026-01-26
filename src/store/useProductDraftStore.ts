@@ -1,6 +1,16 @@
 // lib/stores/productDraftStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+export type Attachment = {
+  id: string;
+  url: string;
+  name: string;
+  progress:number
+  type?:string
+  slotId?:string
+};
+
+
 
 export type ProductDraft = {
   name: string;
@@ -10,12 +20,13 @@ export type ProductDraft = {
   composition: string;
   measurement: string;
   originalValue: number;
-  color: string[];
+  color: string;
   warning: string;
   careInstruction: string;
-  careSteps: string[];
+  
+  careSteps: string;
   stylingTip: string;
-  attachments: string[];
+  attachments: Attachment[];
   categoryId: string;
   brandId: string;
 };
@@ -38,10 +49,10 @@ const initialState: ProductDraft = {
   composition: "",
   measurement: "",
   originalValue: 0,
-  color: [],
+  color: "",
   warning: "",
   careInstruction: "",
-  careSteps: [],
+  careSteps: "",
   stylingTip: "",
   attachments: [],
   categoryId: "",

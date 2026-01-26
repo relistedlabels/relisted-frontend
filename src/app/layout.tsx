@@ -6,6 +6,7 @@ import MobileNavbar from "@/common/layer/MobileNavbar";
 import QueryProvider from "@/lib/providers/query-provider";
 import DevGuard from "@/common/layer/DevGuard";
 import { Header } from "./Header";
+import { UploaderProvider } from "@/context/UploaderProvider"
 
 export const metadata: Metadata = {
   title: "Relisted — Global Fashion, Rooted in Heritage",
@@ -62,13 +63,17 @@ export default function RootLayout({
       <body className=" ">
         <DevGuard>
           <QueryProvider>
-            <DesktopNavbar />
-            <MobileNavbar />
-            {/* <Header /> */}
 
-            {children}
+            <UploaderProvider >
+              <DesktopNavbar />
+              <MobileNavbar />
+              <Header />
 
-            <Footer />
+              {children}
+
+              <Footer />
+            </UploaderProvider>
+
           </QueryProvider>
         </DevGuard>
       </body>

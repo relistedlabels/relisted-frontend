@@ -6,8 +6,10 @@ import { BrandSelector } from "./BrandSelector";
 import { SizeSelector } from "./SizeSelector";
 import { ColorSelector } from "./ColorSelector";
 import { ConditionSelector } from "./ConditionSelector";
+import { useProductDraftStore } from "@/store/useProductDraftStore";
 
 export const BasicInformationForm: React.FC = () => {
+   const { data, setField } = useProductDraftStore();
   return (
     <div className="w-full rounded-xl border border-gray-200 p-4">
       <div className="mb-4">
@@ -28,7 +30,9 @@ export const BasicInformationForm: React.FC = () => {
           <input
             type="text"
             placeholder="eg. Fendi Arco Boots"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black"
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black" 
+            value={data.name}
+            onChange={(e)=>setField("name",e.target.name)}
           />
         </div>
 
@@ -45,6 +49,8 @@ export const BasicInformationForm: React.FC = () => {
               type="number"
               placeholder="15,000"
               className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black"
+              // value={data.}
+              readOnly
             />
           </div>
 
@@ -55,16 +61,18 @@ export const BasicInformationForm: React.FC = () => {
             <input
               type="number"
               placeholder="500,000"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black" 
+              value={data.originalValue} 
+              onChange={(e)=>setField("originalValue",Number(e.target.value))}
             />
           </div>
         </div>
 
         {/* Size & Color */}
         <div className="grid grid-cols-2 gap-4">
-          <SizeSelector />
+          <SizeSelector  />
 
-          <ColorSelector />
+          <ColorSelector/>
         </div>
 
         {/* Condition */}
