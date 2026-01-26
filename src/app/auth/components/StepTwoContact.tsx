@@ -8,12 +8,10 @@ import { useUpdateProfile } from "@/lib/queries/user/useUpdateProfile";
 import { useRouter } from "next/navigation";
 
 interface StepTwoContactProps {
-  onSubmit: () => void; // Function to handle final submission
   onBack: () => void; // Function to move to the previous step
 }
 
 const StepTwoContact: React.FC<StepTwoContactProps> = ({
-  onSubmit,
   onBack,
 }) => {
   // State for all form fields
@@ -50,9 +48,11 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({
     // 2️⃣ Commit profile
     updateProfile.mutate(undefined, {
       onSuccess: () => {
-        router.replace("/shop"); // ✅ redirect on success
+        router.replace("/auth/profile-complete"); // ✅ redirect on success
       },
     });
+
+    router.replace("/auth/profile-complete"); // ✅ redirect on success
   };
 
 
@@ -197,7 +197,8 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({
 
         {/* Submit Button (Black Background, White Text) */}
         <button
-          type="submit"
+          onClick={handleFormSubmit}
+          // type="submit"
           disabled={updateProfile.isPending}
           className="w-1/2 py-3 text-base font-semibold text-white bg-black rounded-lg
              hover:bg-gray-800 transition duration-150

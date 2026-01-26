@@ -43,7 +43,6 @@ const CompleteProfileFlow: React.FC = () => {
         // Pass the function to handle final submission (or a back button)
         return (
           <StepTwoContact
-            onSubmit={() => alert("Profile Completed!")}
             onBack={handlePrevStep}
           />
         );
