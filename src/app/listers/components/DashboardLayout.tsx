@@ -241,6 +241,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
           <div />
 
+          <Paragraph3 className=" text-white"> Early Access</Paragraph3>
+
           <div className="flex- hidden items-center gap-4">
             <Mail className="w-5 h-5 text-white cursor-pointer" />
             <Bell className="w-5 h-5 text-white cursor-pointer" />

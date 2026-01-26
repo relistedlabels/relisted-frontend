@@ -1,15 +1,15 @@
 import Breadcrumbs from "@/common/ui/BreadcrumbItem";
 import DashboardLayout from "../../../components/DashboardLayout";
-import ProductMediaGallery from "@/app/curators/components/ProductMediaGallery";
-import InventoryItemDetailsHeader from "@/app/curators/components/InventoryItemDetailsHeader";
-import ProductInfoTabs from "@/app/curators/components/ProductInfoTabs";
-import RentalsHistory from "@/app/curators/components/RentalsHistory";
-import ManageItemHeader from "@/app/curators/components/ManageItemHeader";
+import ProductMediaGallery from "@/app/listers/components/ProductMediaGallery";
+import InventoryItemDetailsHeader from "@/app/listers/components/InventoryItemDetailsHeader";
+import ProductInfoTabs from "@/app/listers/components/ProductInfoTabs";
+import RentalsHistory from "@/app/listers/components/RentalsHistory";
+import ManageItemHeader from "@/app/listers/components/ManageItemHeader";
 
 export default function Page() {
   const path = [
-    { label: "Dashboard", href: "/curators/dashboard" },
-    { label: "Inventory", href: "/curators/inventory" },
+    { label: "Dashboard", href: "/listers/dashboard" },
+    { label: "Inventory", href: "/listers/inventory" },
     { label: "Product", href: null }, // Current page, href is null
   ];
   return (
