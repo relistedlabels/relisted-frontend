@@ -7,7 +7,7 @@ import { useProfile } from "@/lib/queries/user/useProfile";
 export function useAuthRedirect() {
   const router = useRouter();
   const { data: user, isLoading: userLoading } = useMe();
-  const { data: profile, isLoading: profileLoading } = useProfile(user?.id);
+  const { data: profile, isLoading: profileLoading } = useProfile(user?.sub);
 
   const redirect = () => {
     if (userLoading || profileLoading) return;
@@ -22,7 +22,7 @@ export function useAuthRedirect() {
       return;
     }
 
-    if (user.role === "CURATOR") {
+    if (user.role === "CURATOR curator") {
       router.replace("/listers/inventory");
       return;
     }

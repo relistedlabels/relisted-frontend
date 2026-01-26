@@ -53,7 +53,7 @@ export const resetPassword = (data: {
 
 export const getMe = () =>
   apiFetch<{
-    id: string;
+    sub: string;
     email: string;
     role: string;
   }>("/auth/user");
