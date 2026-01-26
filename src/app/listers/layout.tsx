@@ -14,10 +14,10 @@ export default function CuratorsLayout({ children }: { children: ReactNode }) {
   if (isLoading) return <FullPageLoader />;
 
   // ⛔ unauthenticated → redirect before render
-  // if (!user) {
-  //   router.replace("/auth/sign-in");
-  //   return <FullPageLoader />;
-  // }
+  if (!user) {
+    router.replace("/auth/sign-in");
+    return <FullPageLoader />;
+  }
 
   // optional role gate
   // if (user.role !== "CURATOR") {

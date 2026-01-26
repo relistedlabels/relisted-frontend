@@ -37,7 +37,8 @@ const CreateAccountForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const signup = useSignup();
   const router = useRouter();
-  const setUser = useUserStore((s) => s.setUser); 
+  const setUser = useUserStore((s) => s.setUser);
+  const role = useUserStore((s) => s.role); // ✅ get role
 
   return (
     <div className="font-sans">
@@ -73,6 +74,7 @@ const CreateAccountForm: React.FC = () => {
                 name: values.fullName,
                 email: values.email,
                 password: values.password,
+                role: role, // ✅ from user store
               },
               {
                 onSuccess: () => {

@@ -22,12 +22,12 @@ export function useAuthRedirect() {
       return;
     }
 
-    if (user.role === "curator") {
+    if (user.role === "CURATOR") {
       router.replace("/listers/inventory");
       return;
     }
 
-    if (user.role === "dresser") {
+    if (user.role === "DRESSER") {
       router.replace("/shop");
       return;
     }

@@ -4,6 +4,7 @@ export const signup = (data: {
   name: string;
   email: string;
   password: string;
+  role: string | null;
 }) =>
   apiFetch("/auth/signup", {
     method: "POST",
