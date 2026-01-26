@@ -16,7 +16,7 @@ const SocialSignInOptions: React.FC = () => {
 
   const handleLoginRedirect = () => {
     if (pathname === "/auth/sign-in") {
-      router.push("/auth/create-account/sign-up");
+      router.push("/auth/create-account");
     } else {
       router.push("/auth/sign-in");
     }

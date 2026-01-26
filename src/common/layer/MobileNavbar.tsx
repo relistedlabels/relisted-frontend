@@ -15,7 +15,7 @@ export default function MobileNavbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-if (pathname.includes("/auth") || pathname.includes("/curators") ||
+if (pathname.includes("/auth") || pathname.includes("/listers") ||
     pathname.startsWith("/waitlist") ||
     pathname.startsWith("/dev")) return null;
 

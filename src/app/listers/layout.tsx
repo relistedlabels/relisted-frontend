@@ -1,28 +1,30 @@
+// app/curators/layout.tsx
 "use client";
 
 import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useMe } from "@/lib/queries/auth/useMe";
+import FullPageLoader from "@/common/ui/FullPageLoader";
 
 export default function CuratorsLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { data: user, isLoading } = useMe();
 
-  // ⛔ absolutely nothing renders until check finishes
-  if (isLoading) return null;
+  // ⛔ block render until auth check completes
+  if (isLoading) return <FullPageLoader />;
 
   // ⛔ unauthenticated → redirect before render
-  if (!user) {
-    router.replace("/auth/sign-in");
-    return null;
-  }
+  // if (!user) {
+  //   router.replace("/auth/sign-in");
+  //   return <FullPageLoader />;
+  // }
 
   // optional role gate
   // if (user.role !== "CURATOR") {
-  //   router.replace("/");
-  //   return null;
+  //   router.replace("/dev");
+  //   return <FullPageLoader />;
   // }
 
-  // ✅ safe: checks completed, authorized
+  // ✅ authorized
   return <>{children}</>;
 }

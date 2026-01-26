@@ -26,6 +26,7 @@ import {
   Paragraph1,
   Paragraph3,
 } from "@/common/ui/Text";
+import { UserProfileBadge } from "./UserProfileBadge";
 
 // --------------------
 // Types
@@ -170,25 +171,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
         {/* Profile */}
         <div className="flex items-center border-b border-gray-800 pb-4 mb-4 space-x-3">
-          <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
-            {user.avatarUrl && (
-              <img
-                src={user.avatarUrl}
-                alt={user.name}
-                className="w-full h-full object-cover"
-              />
-            )}
-          </div>
-          <div className="hidden lg:block">
-            <Paragraph1 className="text-sm font-medium text-white">
-              {user.name}
-            </Paragraph1>
-            {user.role && (
-              <Paragraph1 className="text-xs text-gray-500">
-                {user.role}
-              </Paragraph1>
-            )}
-          </div>
+         <UserProfileBadge />
         </div>
 
         <div className="flex-1 overflow-y-auto hide-scrollbar">
@@ -258,7 +241,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
           <div />
 
-          <div className="flex items-center gap-4">
+          <div className="flex- hidden items-center gap-4">
             <Mail className="w-5 h-5 text-white cursor-pointer" />
             <Bell className="w-5 h-5 text-white cursor-pointer" />
 

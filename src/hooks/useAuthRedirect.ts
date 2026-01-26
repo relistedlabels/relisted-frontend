@@ -23,7 +23,7 @@ export function useAuthRedirect() {
     }
 
     if (user.role === "curator") {
-      router.replace("/curators/inventory");
+      router.replace("/listers/inventory");
       return;
     }
 

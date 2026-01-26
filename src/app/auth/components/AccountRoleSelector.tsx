@@ -93,7 +93,7 @@ const AccountRoleSelector: React.FC = () => {
             {/* content */}
             <div className="pointer-events-none">
               <RoleOption
-                title="Dresser"
+                title="Renter"
                 description="I want to rent stylish, quality pieces for events, everyday wear, or content creation."
                 imageUrl="/images/sin1.jpg"
                 onContinue={handleRoleSelection}
@@ -103,7 +103,7 @@ const AccountRoleSelector: React.FC = () => {
           </div>
 
           <RoleOption
-            title="Curator"
+            title="Lister"
             description="I want to list my fashion pieces and earn by sharing my wardrobe with others."
             imageUrl="/images/sin2.jpg"
             onContinue={handleRoleSelection}
