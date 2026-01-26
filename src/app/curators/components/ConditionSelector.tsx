@@ -1,15 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { Paragraph1 } from "@/common/ui/Text";
-
-/**
- * ConditionSelector
- * - Self contained
- * - Dummy data only
- * - No parent interaction
- */
+import { useProductDraftStore } from "@/store/useProductDraftStore";
 
 const CONDITIONS = [
   "Brand New",
@@ -22,6 +16,18 @@ const CONDITIONS = [
 export const ConditionSelector: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
+  const { data, setField } = useProductDraftStore();
+
+  // Sync selected state with store
+  useEffect(() => {
+    if (data.condition) setSelected(data.condition);
+  }, [data.condition]);
+
+  const handleSelect = (condition: string) => {
+    setSelected(condition);
+    setOpen(false);
+    setField("condition", condition); // update Zustand store
+  };
 
   return (
     <div className="relative w-full">
@@ -45,16 +51,11 @@ export const ConditionSelector: React.FC = () => {
           {CONDITIONS.map((condition) => (
             <button
               key={condition}
-              onClick={() => {
-                setSelected(condition);
-                setOpen(false);
-              }}
+              onClick={() => handleSelect(condition)}
               className="flex w-full items-center justify-between px-3 py-2 text-sm hover:bg-gray-50"
             >
-              {condition}
-              {selected === condition && (
-                <Check className="h-4 w-4 text-black" />
-              )}
+              <span>{condition}</span>
+              {selected === condition && <Check className="h-4 w-4 text-black" />}
             </button>
           ))}
         </div>

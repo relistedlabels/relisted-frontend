@@ -1,6 +1,13 @@
 // lib/api/product.ts
 import { apiFetch } from "./http";
-
+type Attachment = {
+  id: string;
+  url: string;
+  name: string;
+  progress:number
+  type?:string
+  slotId?:string
+};
 export type ProductPayload = {
   name: string;
   subText: string;
@@ -11,10 +18,11 @@ export type ProductPayload = {
   originalValue: number;
   color: string[];
   warning: string;
+  size :string
   careInstruction: string;
   careSteps: string[];
   stylingTip: string;
-  attachments: string[];
+  attachments: Attachment[];
   categoryId: string;
   brandId: string;
 };
