@@ -20,7 +20,7 @@ export default function DesktopNavbar() {
     
 if (
   pathname.includes("/auth") ||
-  pathname.includes("/curators") ||
+  pathname.includes("/listers") ||
   pathname.startsWith("/waitlist") ||
   pathname.startsWith("/dev")
 )

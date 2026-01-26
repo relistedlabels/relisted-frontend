@@ -6,18 +6,20 @@ import MobileNavbar from "@/common/layer/MobileNavbar";
 import QueryProvider from "@/lib/providers/query-provider";
 import DevGuard from "@/common/layer/DevGuard";
 import { Header } from "./Header";
-import { UploaderProvider } from "@/context/UploaderProvider"
+import { UploaderProvider } from "@/context/UploaderProvider";
 
 export const metadata: Metadata = {
-  title: "Relisted — Global Fashion, Rooted in Heritage",
+  title:
+    "RELISTED LABELS is a peer-to-peer rental platform redefining how women access fashion across Africa.",
   description:
-    "Relisted is a fashion brand born in Nigeria, inspired by the elegance, craftsmanship, and cultural richness of Asia and Europe. Timeless pieces that transcend borders.",
+    "We enable individuals rent and buy standout pieces at a fraction of the retail price from each other and the brands they love. At the same time, users earn from their wardrobe by listing pieces through our secure, easy to navigate software.",
   keywords: ["Relisted", "Fashion", "Heritage", "Luxury", "Global Style"],
   authors: [{ name: "Relisted" }],
   openGraph: {
-    title: "Relisted — Global Fashion, Rooted in Heritage",
+    title:
+      "RELISTED LABELS is a peer-to-peer rental platform redefining how women access fashion across Africa.",
     description:
-      "Relisted is a fashion brand born in Nigeria, inspired by the elegance, craftsmanship, and cultural richness of Asia and Europe.",
+      "We enable individuals rent and buy standout pieces at a fraction of the retail price from each other and the brands they love. At the same time, users earn from their wardrobe by listing pieces through our secure, easy to navigate software.",
     url: "https://www.relisted.com",
     siteName: "Relisted",
     images: [
@@ -44,9 +46,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Relisted — Global Fashion, Rooted in Heritage",
+    title:
+      "RELISTED LABELS is a peer-to-peer rental platform redefining how women access fashion across Africa.",
     description:
-      "Relisted is a fashion brand born in Nigeria, inspired by the elegance, craftsmanship, and cultural richness of Asia and Europe.",
+      "We enable individuals rent and buy standout pieces at a fraction of the retail price from each other and the brands they love. At the same time, users earn from their wardrobe by listing pieces through our secure, easy to navigate software.",
     images: ["/og-image.jpg"],
   },
 };
@@ -63,8 +66,7 @@ export default function RootLayout({
       <body className=" ">
         <DevGuard>
           <QueryProvider>
-
-            <UploaderProvider >
+            <UploaderProvider>
               <DesktopNavbar />
               <MobileNavbar />
               <Header />
@@ -73,7 +75,6 @@ export default function RootLayout({
 
               <Footer />
             </UploaderProvider>
-
           </QueryProvider>
         </DevGuard>
       </body>

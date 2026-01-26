@@ -5,10 +5,13 @@ import { Paragraph1, Paragraph3 } from "@/common/ui/Text";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { useUserProducts } from "@/lib/queries/product/useUserProducts";
+import { useRouter } from "next/router";
+
 
 // --- Item Data Structure ---
 interface InventoryItem {
-  id: number;
+  id: string;
   name: string;
   size: string;
   color: string;
@@ -21,50 +24,9 @@ interface InventoryItem {
   imageUrl: string;
 }
 
-const inventoryData: InventoryItem[] = [
-  {
-    id: 1,
-    name: "FENDI ARCO BOOTS",
-    size: "S",
-    color: "Black",
-    pricePerDay: "₦50,000",
-    itemValue: "₦550,000",
-    listedDate: "05 May, 2025",
-    isAvailable: true,
-    isRented: false,
-    status: "Active",
-    imageUrl: "/products/p2.jpg",
-  },
-  {
-    id: 2,
-    name: "FENDI ARCO BOOTS",
-    size: "S",
-    color: "Black",
-    pricePerDay: "₦50,000",
-    itemValue: "₦550,000",
-    listedDate: "05 May, 2025",
-    isAvailable: false,
-    isRented: true,
-    status: "Active",
-    imageUrl: "/products/p2.jpg",
-  },
-  {
-    id: 3,
-    name: "FENDI ARCO BOOTS",
-    size: "M",
-    color: "Brown",
-    pricePerDay: "₦40,000",
-    itemValue: "₦400,000",
-    listedDate: "01 Feb, 2025",
-    isAvailable: false,
-    isRented: false,
-    status: "Disabled",
-    imageUrl: "/products/p2.jpg",
-  },
-];
-
 // --- Individual Item Card ---
 const InventoryItemCard: React.FC<InventoryItem> = ({
+  id, // ✅ bring id into scope
   name,
   size,
   color,
@@ -79,12 +41,14 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
   let dotClass = isAvailable
     ? "bg-green-600"
     : isRented
-    ? "bg-blue-600"
-    : "bg-gray-400";
+      ? "bg-blue-600"
+      : "bg-gray-400";
+
+  const router = useRouter();
 
   const handleManage = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent Link navigation when clicking button
-    alert(`Managing item: ${name}`);
+    e.preventDefault(); // keep this so the parent Link doesn't trigger
+    router.push(`/listers/inventory/product-details/${id}`);
   };
 
   return (
@@ -95,8 +59,8 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
     >
-      <Link
-        href="/curators/inventory/product-details/id"
+      <div
+        // href="/listers/inventory/product-details/id"
         className="flex items-center flex-wrap gap-4 justify-between p-2 sm:pr-4 border border-gray-200 rounded-xl bg-white hover:shadow-md transition-shadow duration-150"
       >
         <div className="flex items-center space-x-3 min-w-0">
@@ -116,8 +80,8 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
                   isAvailable
                     ? "text-green-600"
                     : isRented
-                    ? "text-blue-600"
-                    : "text-gray-600"
+                      ? "text-blue-600"
+                      : "text-gray-600"
                 }`}
               >
                 {statusText}
@@ -158,8 +122,8 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
             isAvailable
               ? "text-green-800 bg-green-100"
               : isRented
-              ? "text-blue-600 bg-blue-100"
-              : "text-gray-600 bg-gray-200"
+                ? "text-blue-600 bg-blue-100"
+                : "text-gray-600 bg-gray-200"
           }`}
         >
           <Paragraph1>{statusText}</Paragraph1>
@@ -172,7 +136,7 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
         >
           Manage
         </button>
-      </Link>
+      </div>
     </motion.div>
   );
 };
@@ -181,8 +145,29 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
 const InventoryList: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"Active" | "Disabled">("Active");
 
-  const filteredInventory = inventoryData.filter(
-    (item) => item.status === activeTab
+  const { data, isLoading } = useUserProducts();
+
+// if (isLoading) {
+//   return <div>Loading inventory...</div>;
+// }
+
+  const mappedInventory: InventoryItem[] =
+    data?.map((item) => ({
+      id: item.id, // ✅ UUID stays a string
+      name: item.name,
+      size: item.size,
+      color: item.color,
+      pricePerDay: `₦${item.pricePerDay.toLocaleString()}`,
+      itemValue: `₦${item.originalValue.toLocaleString()}`,
+      listedDate: new Date(item.createdAt).toLocaleDateString(),
+      isAvailable: item.status === "ACTIVE" && !item.isRented,
+      isRented: item.isRented,
+      status: item.status === "ACTIVE" ? "Active" : "Disabled",
+      imageUrl: item.attachments?.[0]?.url ?? "/images/placeholder.png",
+    })) ?? [];
+
+  const filteredInventory = mappedInventory.filter(
+    (item) => item.status === activeTab,
   );
 
   return (
@@ -192,7 +177,7 @@ const InventoryList: React.FC = () => {
           Inventory
         </Paragraph3>
         <Link
-          href="/curators/inventory/product-upload"
+          href="/listers/inventory/product-upload"
           className="flex items-center space-x-2 px-4 py-2 text-sm font-semibold text-white bg-black rounded-lg hover:bg-gray-800 transition duration-150"
         >
           <Plus className="w-4 h-4" />

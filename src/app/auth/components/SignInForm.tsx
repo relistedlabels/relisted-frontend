@@ -49,6 +49,7 @@ const SignInForm: React.FC = () => {
           onSubmit={(values) => {
             login.mutate(values, {
               onSuccess: () => {
+                // router.push("/listers/inventory")
                 authRedirect.redirect();
               },
             });

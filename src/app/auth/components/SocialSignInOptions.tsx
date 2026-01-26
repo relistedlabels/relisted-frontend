@@ -16,7 +16,7 @@ const SocialSignInOptions: React.FC = () => {
 
   const handleLoginRedirect = () => {
     if (pathname === "/auth/sign-in") {
-      router.push("/auth/create-account/sign-up");
+      router.push("/auth/create-account");
     } else {
       router.push("/auth/sign-in");
     }
@@ -51,7 +51,7 @@ const SocialSignInOptions: React.FC = () => {
       <div className="text-center mt-6">
         <Paragraph1 className="text-sm text-gray-600">
           {isLoginPage ? "Don’t have an account?" : "Already have an account?"}{" "}
-          <button 
+          <button
             type="button"
             onClick={handleLoginRedirect}
             className="font-bold text-black hover:underline"

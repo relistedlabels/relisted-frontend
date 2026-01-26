@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { devAuth } from "@/lib/devAuth";
+import FullPageLoader from "@/common/ui/FullPageLoader";
 
-const PUBLIC_PATHS = ["/dev", "/waitlist", "/auth", "/curators/inventory"];
+const PUBLIC_PATHS = ["/dev", "/waitlist", "/auth", "/listers/inventory"];
 
 export default function DevGuard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -43,8 +44,8 @@ export default function DevGuard({ children }: { children: React.ReactNode }) {
     setChecked(true);
   }, [pathname, router]);
 
-  // children NEVER render until check completes
-  if (!checked) return null;
+  // ⛔ block render until access check completes
+  if (!checked) return <FullPageLoader />;
 
   return <>{children}</>;
 }

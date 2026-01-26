@@ -8,6 +8,24 @@ type Attachment = {
   type?:string
   slotId?:string
 };
+
+
+export type UserProduct = {
+  id: string;
+  name: string;
+  size: string;
+  color: string;
+  pricePerDay: number;
+  originalValue: number;
+  createdAt: string;
+  status: "ACTIVE" | "DISABLED";
+  isRented: boolean;
+  attachments: {
+    url: string;
+  }[];
+};
+
+
 export type ProductPayload = {
   name: string;
   subText: string;
@@ -49,4 +67,11 @@ export const productApi = {
     apiFetch<void>(`/product/${id}`, {
       method: "DELETE",
     }),
+
+  getUserProducts: () =>
+    apiFetch<UserProduct[]>("/product/user-products", {
+      method: "GET",
+    }),
 };
+
+
