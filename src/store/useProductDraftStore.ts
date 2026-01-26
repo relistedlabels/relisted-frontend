@@ -12,6 +12,8 @@ export type Attachment = {
 
 
 
+// store/productDraftStore.ts
+
 export type ProductDraft = {
   name: string;
   subText: string;
@@ -20,16 +22,20 @@ export type ProductDraft = {
   composition: string;
   measurement: string;
   originalValue: number;
-  color: string;
+
+  color: string[];        // ✅ array
   warning: string;
+  size: string;           // ✅ required
+
   careInstruction: string;
-  
-  careSteps: string;
+  careSteps: string[];    // ✅ array
   stylingTip: string;
+
   attachments: Attachment[];
   categoryId: string;
   brandId: string;
 };
+
 
 type ProductDraftStore = {
   data: ProductDraft;
@@ -49,15 +55,20 @@ const initialState: ProductDraft = {
   composition: "",
   measurement: "",
   originalValue: 0,
-  color: "",
+
+  color: [], // ✅
   warning: "",
+  size: "", // ✅
+
   careInstruction: "",
-  careSteps: "",
+  careSteps: [], // ✅
   stylingTip: "",
+
   attachments: [],
   categoryId: "",
   brandId: "",
 };
+
 
 export const useProductDraftStore = create<ProductDraftStore>()(
   persist(

@@ -1,25 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { ChevronDown } from "lucide-react";
 import { Paragraph1 } from "@/common/ui/Text";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
 
-const SIZES = ["6", "7", "8", "9", "10", "11", "12"];
-const UNITS = ["UK", "US", "EU"];
-
-type SizeSelectorProps = {
-  value: string;
-  onChange: (value: string) => void;
+const SIZE_MAP: Record<string, string[]> = {
+  EU: Array.from({ length: 14 }, (_, i) => String(35 + i)), // 35–48
+  UK: Array.from({ length: 12 }, (_, i) => String(2 + i)), // 2–13
+  US: Array.from({ length: 12 }, (_, i) => String(3 + i)), // 3–14
 };
+
+const UNITS = ["UK", "US", "EU"] as const;
+
 export const SizeSelector: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const [unit, setUnit] = useState<"UK" | "US" | "EU">("UK");
   const [size, setSize] = useState<string | null>(null);
-  const [unit, setUnit] = useState("UK");
 
   const { setField } = useProductDraftStore();
 
-  const commitToStore = (s: string, u: string) => {
+  const sizes = useMemo(() => SIZE_MAP[unit], [unit]);
+
+  const commit = (s: string, u: string) => {
     setField("measurement", `${s}-${u}`);
   };
 
@@ -49,7 +52,7 @@ export const SizeSelector: React.FC = () => {
                 key={u}
                 onClick={() => {
                   setUnit(u);
-                  if (size) commitToStore(size, u);
+                  setSize(null); // reset because scales differ
                 }}
                 className={`flex-1 px-3 py-2 text-xs font-medium ${
                   unit === u ? "bg-gray-100 text-black" : "text-gray-500"
@@ -62,12 +65,12 @@ export const SizeSelector: React.FC = () => {
 
           {/* Size grid */}
           <div className="grid grid-cols-4 gap-2 p-2">
-            {SIZES.map((s) => (
+            {sizes.map((s) => (
               <button
                 key={s}
                 onClick={() => {
                   setSize(s);
-                  commitToStore(s, unit);
+                  commit(s, unit);
                   setOpen(false);
                 }}
                 className={`rounded-md border px-2 py-1 text-sm ${

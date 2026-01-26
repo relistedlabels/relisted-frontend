@@ -11,7 +11,24 @@ const COLORS = [
   { name: "Green", hex: "#16A34A" },
   { name: "Blue", hex: "#2563EB" },
   { name: "Brown", hex: "#92400E" },
+
+  { name: "Gray", hex: "#6B7280" },
+  { name: "Silver", hex: "#D1D5DB" },
+  { name: "Yellow", hex: "#FACC15" },
+  { name: "Orange", hex: "#F97316" },
+  { name: "Purple", hex: "#7C3AED" },
+  { name: "Pink", hex: "#EC4899" },
+  { name: "Teal", hex: "#14B8A6" },
+  { name: "Cyan", hex: "#06B6D4" },
+  { name: "Indigo", hex: "#4F46E5" },
+  { name: "Lime", hex: "#84CC16" },
+  { name: "Amber", hex: "#F59E0B" },
+  { name: "Rose", hex: "#F43F5E" },
+  { name: "Navy", hex: "#0F172A" },
+  { name: "Olive", hex: "#3F6212" },
+  { name: "Maroon", hex: "#7F1D1D" },
 ];
+
 
 export const ColorSelector: React.FC = () => {
   const [open, setOpen] = useState(false);

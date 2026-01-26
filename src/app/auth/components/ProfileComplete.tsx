@@ -36,7 +36,7 @@ export default function ProfileComplete() {
       </Paragraph1>
 
       <Link
-        href="/"
+        href="/listers/inventory"
         onClick={handleTrackOrder}
         className="px-8 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors shadow-lg"
       >
