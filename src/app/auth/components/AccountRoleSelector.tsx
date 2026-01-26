@@ -75,8 +75,7 @@ const AccountRoleSelector: React.FC = () => {
           Who are you joining as?
         </Paragraph3>
         <Paragraph1 className="text-sm text-gray-600 mb-8">
-          Choose your role to get started. You can only sign up as one at a
-          time.
+          Choose how you want to get started. You can switch roles anytime.
         </Paragraph1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
