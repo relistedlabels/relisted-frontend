@@ -2,8 +2,8 @@ import { FullProfile, UpdateProfilePayload } from "../../../types/profile";
 import { apiFetch } from "./http";
 
 
-export const getProfile = (userId: string) =>
-  apiFetch<FullProfile>(`/profile/${userId}`, {
+export const getProfile = (profileId: string) =>
+  apiFetch<FullProfile>(`/profile/${profileId}`, {
     method: "GET",
   });
 
