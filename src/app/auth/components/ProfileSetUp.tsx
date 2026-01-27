@@ -3,7 +3,6 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-
 import { useUserStore } from "@/store/useUserStore";
 
 import CompleteProfileFlow from "./CompleteProfileFlow";
@@ -13,12 +12,13 @@ function ProfileSetUp() {
   const router = useRouter();
   const role = useUserStore((s) => s.role);
 
-  // Safety: no role selected → go back
   useEffect(() => {
     if (!role) {
       router.replace("/auth/sign-in");
     }
   }, [role, router]);
+
+  if (!role) return null;
 
   return (
     <div className="relative w-full bg-gray-100 bg-cover bg-center">
@@ -34,16 +34,12 @@ function ProfileSetUp() {
           variants={{
             hidden: {},
             visible: {
-              transition: {
-                staggerChildren: 0.25,
-              },
+              transition: { staggerChildren: 0.25 },
             },
           }}
         >
-          <div>
-            {role === "RENTER" && <CompleteProfileFlow />}
-            {role === "LISTER" && <CompleteBusinessProfileFlow />}
-          </div>
+          {role === "RENTER" && <CompleteProfileFlow />}
+          {role === "LISTER" && <CompleteBusinessProfileFlow />}
         </motion.div>
       </motion.div>
     </div>

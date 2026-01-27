@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Paragraph1 } from "@/common/ui/Text";
-import { User, Users, MapPin, ChevronDown } from "lucide-react";
+import { User, MapPin } from "lucide-react";
 import { useProfileStore } from "@/store/useProfileStore";
 import { CityLGASelect } from "./CityLGASelect";
 import { StateSelect } from "./StateSelect";
@@ -15,6 +15,9 @@ interface StepTwoContactProps {
 }
 
 const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
+  const emergencyContacts = useProfileStore((s) => s.emergencyContacts);
+  const setProfile = useProfileStore((s) => s.setProfile);
+
   const [fullName, setFullName] = useState("");
   const [relationship, setRelationship] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("+234");
@@ -22,35 +25,34 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
 
-  const setProfile = useProfileStore((s) => s.setProfile);
+  useEffect(() => {
+    setFullName(emergencyContacts.name || "");
+    setRelationship(emergencyContacts.relationship || "");
+    setPhoneNumber(emergencyContacts.phoneNumber || "+234");
+    setCity(emergencyContacts.city || "");
+    setState(emergencyContacts.state || "");
+  }, [emergencyContacts]);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!fullName || !relationship || !phoneNumber || !city || !state) {
-      alert("Please fill in all Emergency Contact details.");
-      return;
-    }
+    if (!fullName || !relationship || !phoneNumber || !city || !state) return;
 
-    // ✅ ONLY store data — NO backend call here
     setProfile({
       emergencyContacts: {
         name: fullName,
         relationship,
         phoneNumber,
-
         city,
         state,
       },
     });
 
-    // ✅ Move to Step 4 (Account Number)
     onNext();
   };
 
   return (
     <form onSubmit={handleFormSubmit} className="space-y-6">
-      {/* Full Name */}
       <div>
         <label className="block mb-2">
           <Paragraph1 className="text-sm font-medium text-gray-800">
@@ -61,7 +63,6 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
           <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             type="text"
-            required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             className="w-full p-4 pl-12 border rounded-lg"
@@ -69,13 +70,10 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
         </div>
       </div>
 
-      {/* Relationship */}
       <RelationshipSelect value={relationship} onChange={setRelationship} />
 
-      {/* Phone */}
-      <PhoneInput value={phoneNumber} onChange={(val) => setPhoneNumber(val)} />
+      <PhoneInput value={phoneNumber} onChange={setPhoneNumber} />
 
-      {/* Address */}
       <div>
         <label className="block mb-2">
           <Paragraph1 className="text-sm font-medium text-gray-800">
@@ -86,7 +84,6 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
           <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             type="text"
-            required
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             className="w-full p-4 pl-12 border rounded-lg"
@@ -94,16 +91,11 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
         </div>
       </div>
 
-      {/* City & State */}
       <div className="flex flex-col sm:flex-row gap-4">
-        {/* City Input */}
         <CityLGASelect value={city} onChange={setCity} />
-
-        {/* State Dropdown */}
         <StateSelect value={state} onChange={setState} />
       </div>
 
-      {/* Buttons */}
       <div className="flex gap-4 pt-4">
         <button
           type="button"

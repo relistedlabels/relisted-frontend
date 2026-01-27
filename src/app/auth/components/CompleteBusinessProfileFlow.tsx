@@ -30,7 +30,7 @@ const CompleteBusinessProfileFlow: React.FC = () => {
 
   const renderStepComponent = () => {
     switch (currentStep) {
-      case 4:
+      case 1:
         return <StepOneBusiness onNext={handleNextStep} />;
       case 2:
         return (
@@ -43,7 +43,7 @@ const CompleteBusinessProfileFlow: React.FC = () => {
         return (
           <StepThreeContact onNext={handleNextStep} onBack={handlePrevStep} />
         );
-      case 1:
+      case 4:
         return (
           <StepFourPayment 
             onBack={handlePrevStep}
