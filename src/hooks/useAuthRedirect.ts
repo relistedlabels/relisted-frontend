@@ -7,7 +7,7 @@ import { useProfile } from "@/lib/queries/user/useProfile";
 export function useAuthRedirect() {
   const router = useRouter();
   const { data: user, isLoading: userLoading } = useMe();
-  const { data: profile, isLoading: profileLoading } = useProfile(user?.sub);
+  const { data: profile, isLoading: profileLoading } = useProfile(user?.id);
 
   const redirect = () => {
     if (userLoading || profileLoading) return;

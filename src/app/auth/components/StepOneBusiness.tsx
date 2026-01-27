@@ -46,10 +46,14 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
 
   // Handler for file upload (drag and drop or click)
   const handleUpload = (data: { id: string; url?: string }) => {
+    console.log("ninuploadid",data.id)
     setProfile({
       ninUploadId: data.id,
     });
-  };
+
+  }; 
+
+  
 
   // Prevents default for drag over event
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {

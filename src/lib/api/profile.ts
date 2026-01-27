@@ -11,9 +11,9 @@ export const getProfile = (userId: string) =>
 
 
 
-export const updateProfile = (userId: string, data: UpdateProfilePayload) =>
-  apiFetch(`/profile/${userId}`, {
-    method: "PATCH",
+export const updateProfile = (data: UpdateProfilePayload) =>
+  apiFetch("/profile", {
+    method: "POST",
     body: JSON.stringify(data),
   });
 

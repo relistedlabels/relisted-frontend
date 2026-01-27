@@ -10,7 +10,7 @@ import { useProfile } from "@/lib/queries/user/useProfile";
 export default function CuratorsLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { data: user, isLoading } = useMe();
-  const { data: profile, isLoading: profileLoading } = useProfile(user?.sub);
+  const { data: profile, isLoading: profileLoading } = useProfile(user?.id);
 
   // ⛔ block render until auth check completes
   if (isLoading) return <FullPageLoader />;
