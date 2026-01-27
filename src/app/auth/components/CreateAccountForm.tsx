@@ -68,7 +68,10 @@ const CreateAccountForm: React.FC = () => {
             setUser({
               name: values.fullName,
               email: values.email,
+              role: role, // ✅ from user store
             });
+           console.log("ROLE FROM STORE:", role);
+
             signup.mutate(
               {
                 name: values.fullName,
