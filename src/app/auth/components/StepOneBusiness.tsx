@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Paragraph1 } from "@/common/ui/Text";
-import { MapPin, Briefcase } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { FileUploader } from "@/common/ui/FileUploader";
 import { useProfileStore } from "@/store/useProfileStore";
 import { PhoneInput } from "./PhoneInput";
@@ -17,17 +17,12 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
   const profile = useProfileStore((s) => s);
   const setProfile = useProfileStore((s) => s.setProfile);
 
-  // local state (UI state)
   const [phoneNumber, setPhoneNumber] = useState(profile.phoneNumber);
   const [address, setAddress] = useState(profile.address.street);
   const [cityLGA, setCityLGA] = useState(profile.address.city);
   const [state, setState] = useState(profile.address.state);
   const [bvn, setBvn] = useState(profile.bvn);
 
-  /**
-   * Re-hydrate UI state after reload
-   * (persist middleware hydrates async)
-   */
   useEffect(() => {
     setPhoneNumber(profile.phoneNumber || "+234");
     setAddress(profile.address.street || "");
@@ -45,7 +40,15 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!phoneNumber || !address || !cityLGA || !state || !bvn) return;
+    if (
+      !phoneNumber ||
+      !address ||
+      !cityLGA ||
+      !state ||
+      !bvn ||
+      !profile.ninUploadId
+    )
+      return;
 
     setProfile({
       phoneNumber,
@@ -90,7 +93,7 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
         <StateSelect value={state} onChange={setState} />
       </div>
 
-      <div>
+      {/* <div>
         <label className="block mb-2">
           <Paragraph1 className="text-sm font-medium text-gray-800">
             BVN
@@ -104,7 +107,7 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
             className="w-full p-4 pl-12 border rounded-lg"
           />
         </div>
-      </div>
+      </div> */}
 
       <FileUploader
         helperText="International Passport, NIN, Driver's License"

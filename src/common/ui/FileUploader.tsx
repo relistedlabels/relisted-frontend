@@ -63,65 +63,72 @@ export function FileUploader({
   };
 
   return (
-    <div
-      onDrop={handleFileUpload}
-      onDragOver={handleDragOver}
-      className="relative flex flex-col items-center justify-center p-6 text-center border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 cursor-pointer hover:border-black transition resize overflow-auto min-h-[220px]"
-      style={{ resize: "both" }}
-    >
-      {!preview && !fileName && (
-        <>
-          <UploadCloud className="w-8 h-8 text-gray-500 mb-2" />
-          <Paragraph1 className="text-sm text-gray-600">
-            Drop your file here or{" "}
-            <label
-              htmlFor="file-upload"
-              className="text-black font-semibold cursor-pointer hover:underline"
-            >
-              Click to upload
-            </label>
-          </Paragraph1>
-
-          {helperText && (
-            <Paragraph1 className="text-xs text-gray-400 mt-1">
-              {helperText}
+    <div>
+      <label className="block mb-2">
+        <Paragraph1 className="text-sm font-medium text-gray-800">
+          Means of Identification 
+        </Paragraph1>
+      </label>
+      <div
+        onDrop={handleFileUpload}
+        onDragOver={handleDragOver}
+        className="relative flex flex-col items-center justify-center p-6 text-center border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 cursor-pointer hover:border-black transition resize overflow-auto min-h-[220px]"
+        style={{ resize: "both" }}
+      >
+        {!preview && !fileName && (
+          <>
+            <UploadCloud className="w-8 h-8 text-gray-500 mb-2" />
+            <Paragraph1 className="text-sm text-gray-600">
+              Drop your file here or{" "}
+              <label
+                htmlFor="file-upload"
+                className="text-black font-semibold cursor-pointer hover:underline"
+              >
+                Click to upload
+              </label>
             </Paragraph1>
-          )}
-        </>
-      )}
 
-      {preview && (
-        <img
-          src={preview}
-          alt="Preview"
-          className="max-h-40 rounded-md object-contain mb-2"
-        />
-      )}
+            {helperText && (
+              <Paragraph1 className="text-xs text-gray-400 mt-1">
+                {helperText}
+              </Paragraph1>
+            )}
+          </>
+        )}
 
-      {fileName && !preview && (
-        <Paragraph1 className="text-sm text-gray-700">{fileName}</Paragraph1>
-      )}
+        {preview && (
+          <img
+            src={preview}
+            alt="Preview"
+            className="max-h-40 rounded-md object-contain mb-2"
+          />
+        )}
 
-      {upload.isPending && (
-        <div className="absolute bottom-3 left-3 right-3">
-          <div className="w-full h-2 bg-gray-200 rounded">
-            <div className="h-2 bg-black rounded animate-pulse w-full" />
+        {fileName && !preview && (
+          <Paragraph1 className="text-sm text-gray-700">{fileName}</Paragraph1>
+        )}
+
+        {upload.isPending && (
+          <div className="absolute bottom-3 left-3 right-3">
+            <div className="w-full h-2 bg-gray-200 rounded">
+              <div className="h-2 bg-black rounded animate-pulse w-full" />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {upload.error && (
-        <p className="text-red-600 text-xs mt-2">
-          {(upload.error as Error).message}
-        </p>
-      )}
+        {upload.error && (
+          <p className="text-red-600 text-xs mt-2">
+            {(upload.error as Error).message}
+          </p>
+        )}
 
-      <input
-        id="file-upload"
-        type="file"
-        onChange={handleFileUpload}
-        className="absolute inset-0 opacity-0 cursor-pointer"
-      />
+        <input
+          id="file-upload"
+          type="file"
+          onChange={handleFileUpload}
+          className="absolute inset-0 opacity-0 cursor-pointer"
+        />
+      </div>
     </div>
   );
 }
