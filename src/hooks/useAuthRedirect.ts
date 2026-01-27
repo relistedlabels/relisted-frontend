@@ -8,6 +8,7 @@ export function useAuthRedirect() {
   const router = useRouter();
   const { data: user, isLoading: userLoading } = useMe();
   const profileId = user?.profile.id
+  console.log("uuuuuu",user)
   console.log("userme profile",profileId)
   const { data: profile, isLoading: profileLoading } = useProfile(profileId);
 
