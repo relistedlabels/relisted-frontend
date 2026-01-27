@@ -56,6 +56,7 @@ export const getMe = () =>
     id: string;
     email: string;
     role: string;
+    profile:{id:string}
   }>("/auth/user");
 
 export const resendOtp = (data: { email: string }) =>
