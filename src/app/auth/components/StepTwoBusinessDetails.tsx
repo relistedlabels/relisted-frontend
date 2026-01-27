@@ -3,6 +3,8 @@ import { Paragraph1 } from "@/common/ui/Text";
 // Importing icons needed for the form fields
 import { User, Mail, Hash, MapPin, ChevronDown } from "lucide-react";
 import { useProfileStore } from "@/store/useProfileStore";
+import { CityLGASelect } from "./CityLGASelect";
+import { StateSelect } from "./StateSelect";
 
 interface StepTwoBusinessDetailsProps {
   onNext: () => void; // Function to move to the next step (or final submission)
@@ -25,10 +27,10 @@ const setProfile = useProfileStore((s) => s.setProfile);
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!businessName || !registrationNumber || !address || !city || !state) {
-      alert("Please fill in all required Business details.");
-      return;
-    }
+    // if (!businessName || !registrationNumber || !address || !city || !state) {
+    //   alert("Please fill in all required Business details.");
+    //   return;
+    // }
 
     // ✅ Store ONLY business-related data
     setProfile({
@@ -60,7 +62,7 @@ const setProfile = useProfileStore((s) => s.setProfile);
           <input
             type="text"
             id="business-name"
-            required
+            // required
             value={businessName}
             onChange={(e) => setBusinessName(e.target.value)}
             placeholder="Enter name"
@@ -102,7 +104,7 @@ const setProfile = useProfileStore((s) => s.setProfile);
           <input
             type="text"
             id="registration-number"
-            required
+            // required
             value={registrationNumber}
             onChange={(e) => setRegistrationNumber(e.target.value)}
             placeholder="0000"
@@ -123,7 +125,7 @@ const setProfile = useProfileStore((s) => s.setProfile);
           <input
             type="text"
             id="business-address"
-            required
+            // required
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             placeholder="Street address"
@@ -133,56 +135,13 @@ const setProfile = useProfileStore((s) => s.setProfile);
       </div>
 
       {/* 5. City and State (Side-by-side) */}
-      <div className="flex space-x-4">
-        {/* City Input */}
-        <div className="flex-1">
-          <label htmlFor="city-business" className="block mb-2">
-            <Paragraph1 className="text-sm font-medium text-gray-800">
-              City
-            </Paragraph1>
-          </label>
-          <div className="relative">
-            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              id="city-business"
-              required
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              placeholder="Enter City"
-              className="w-full p-4 pl-12 border border-gray-300 rounded-lg bg-white text-gray-600 placeholder-gray-400 focus:ring-black focus:border-black"
-            />
-          </div>
-        </div>
+        <div className="flex space-x-4">
+          {/* City Input */}
+          <CityLGASelect value={city} onChange={setCity} />
 
-        {/* State Dropdown */}
-        <div className="flex-1">
-          <label htmlFor="state-business" className="block mb-2">
-            <Paragraph1 className="text-sm font-medium text-gray-800">
-              State
-            </Paragraph1>
-          </label>
-          <div className="relative">
-            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <select
-              id="state-business"
-              required
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              className="w-full appearance-none p-4 pl-12 pr-10 border border-gray-300 rounded-lg bg-white text-gray-600 focus:ring-black focus:border-black"
-            >
-              <option value="" disabled>
-                Select State
-              </option>
-              {/* Example options */}
-              <option value="Lagos">Lagos</option>
-              <option value="Abuja">Abuja FCT</option>
-              <option value="Rivers">Rivers</option>
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-          </div>
+          {/* State Dropdown */}
+          <StateSelect value={state} onChange={setState} />
         </div>
-      </div>
 
       {/* Skip and Continue Buttons */}
       <div className="flex justify-between space-x-4 pt-4">

@@ -17,7 +17,7 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({
   // State for all form fields
   const [fullName, setFullName] = useState("");
   const [relationship, setRelationship] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("+234"); // Prefix placeholder
+  const [phoneNumber, setPhoneNumber] = useState(""); // Prefix placeholder
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");

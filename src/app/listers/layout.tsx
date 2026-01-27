@@ -22,7 +22,7 @@ export default function CuratorsLayout({ children }: { children: ReactNode }) {
     return <FullPageLoader />;
   }
 
-  if (!profile || !profile.name) {
+  if (!profile ) {
     router.replace("/auth/profile-setup");
     return;
   }

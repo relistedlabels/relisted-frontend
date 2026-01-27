@@ -22,15 +22,14 @@
 //   const setProfile = useProfileStore((s) => s.setProfile);
 //   const updateProfile = useUpdateProfile();
 
-
 //   const handleFormSubmit = (e: React.FormEvent) => {
 //       e.preventDefault();
-  
+
 //       if (!fullName || !relationship || !phoneNumber || !city || !state) {
 //         alert("Please fill in all Emergency Contact details.");
 //         return;
 //       }
-  
+
 //       // 1️⃣ Store step-two data
 //       setProfile({
 //         emergencyContacts: {
@@ -41,7 +40,7 @@
 //           state,
 //         },
 //       });
-  
+
 //       // 2️⃣ Commit profile
 //       updateProfile.mutate(undefined, {
 //         onSuccess: () => {
@@ -50,8 +49,6 @@
 //         },
 //       });
 //     };
-
-  
 
 //   return (
 //     <form onSubmit={handleFormSubmit} className="space-y-6">
@@ -233,8 +230,6 @@
 
 // export default StepTwoContact;
 
-
-
 // new dorcas code
 "use client";
 
@@ -242,6 +237,8 @@ import React, { useState } from "react";
 import { Paragraph1 } from "@/common/ui/Text";
 import { User, Users, MapPin, ChevronDown } from "lucide-react";
 import { useProfileStore } from "@/store/useProfileStore";
+import { CityLGASelect } from "./CityLGASelect";
+import { StateSelect } from "./StateSelect";
 
 interface StepTwoContactProps {
   onNext: () => void;
@@ -261,7 +258,7 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!fullName || !relationship || !phoneNumber || !city || !state ) {
+    if (!fullName || !relationship || !phoneNumber || !city || !state) {
       alert("Please fill in all Emergency Contact details.");
       return;
     }
@@ -272,7 +269,7 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
         name: fullName,
         relationship,
         phoneNumber,
-        
+
         city,
         state,
       },
@@ -368,27 +365,11 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
 
       {/* City & State */}
       <div className="flex space-x-4">
-        <input
-          type="text"
-          placeholder="City"
-          required
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          className="w-1/2 p-4 border rounded-lg"
-        />
-        <select
-          required
-          value={state}
-          onChange={(e) => setState(e.target.value)}
-          className="w-1/2 p-4 border rounded-lg"
-        >
-          <option value="" disabled>
-            Select State
-          </option>
-          <option value="Lagos">Lagos</option>
-          <option value="Abuja">Abuja</option>
-          <option value="Rivers">Rivers</option>
-        </select>
+        {/* City Input */}
+        <CityLGASelect value={city} onChange={setCity} />
+
+        {/* State Dropdown */}
+        <StateSelect value={state} onChange={setState} />
       </div>
 
       {/* Buttons */}
