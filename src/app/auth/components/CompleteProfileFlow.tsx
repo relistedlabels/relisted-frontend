@@ -53,7 +53,7 @@ const CompleteProfileFlow: React.FC = () => {
 
   return (
     <div className="font-sans flex flex-col  min-h-screen ">
-      <div className="w-full sm:w-[600px]  bg-white p-8 md:p-10 min-h-screen md:min-h-0 md:mt-10 sm:rounded-3xl text-gray-600 shadow-xl">
+      <div className="w-full sm:w-[600px]  bg-white p-2 md:p-10 min-h-screen md:min-h-0 md:mt-10 sm:rounded-3xl text-gray-600 shadow-xl">
         {/* Header Section */}
         <div className="mb-8 text-center flex flex-col items-center">
           {/* Logo (as shown in the image) */}

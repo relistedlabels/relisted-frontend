@@ -28,7 +28,7 @@ export default function CuratorsLayout({ children }: { children: ReactNode }) {
   }
 
   // optional role gate
-  // if (user.role !== "CURATOR") {
+  // if (user.role !== "LISTER") {
   //   router.replace("/dev");
   //   return <FullPageLoader />;
   // }

@@ -1,43 +1,49 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { Paragraph1 } from "@/common/ui/Text";
-// Importing icons needed for the form fields
-import { Banknote, CreditCard, User, ChevronDown } from "lucide-react";
+import { CreditCard, User, Phone, Heart } from "lucide-react"; // Added icons
 import { useProfileStore } from "@/store/useProfileStore";
 import { useRouter } from "next/navigation";
 import { useUpdateProfile } from "@/lib/queries/user/useUpdateProfile";
+import { BankSelect } from "./BankSelect";
 
 interface StepFourPaymentProps {
-  onSubmit: () => void; // Function to handle final submission
-  onBack: () => void; // Function to move to the previous step
+  onBack: () => void;
 }
 
-const StepFourPayment: React.FC<StepFourPaymentProps> = ({
-  onSubmit,
-  onBack,
-}) => {
-  // State for all form fields
-  const [bankName, setBankName] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [nameOnAccount, setNameOnAccount] = useState("");
-  const setProfile = useProfileStore((s) => s.setProfile);
-  const updateProfile = useUpdateProfile();
+const StepFourPayment: React.FC<StepFourPaymentProps> = ({ onBack }) => {
+  // 1. Extract emergencyContacts from store
+  const { bankAccounts, emergencyContacts, setProfile } = useProfileStore(
+    (s) => ({
+      bankAccounts: s.bankAccounts,
+      emergencyContacts: s.emergencyContacts,
+      setProfile: s.setProfile,
+    }),
+  );
+
+  const [bankName, setBankName] = useState(bankAccounts.bankName);
+  const [accountNumber, setAccountNumber] = useState(
+    bankAccounts.accountNumber,
+  );
+  const [nameOnAccount, setNameOnAccount] = useState(
+    bankAccounts.nameOfAccount,
+  );
 
   const router = useRouter();
+  const updateProfile = useUpdateProfile();
+  const isLoading = updateProfile.isPending;
+
+  useEffect(() => {
+    setBankName(bankAccounts.bankName || "");
+    setAccountNumber(bankAccounts.accountNumber || "");
+    setNameOnAccount(bankAccounts.nameOfAccount || "");
+  }, [bankAccounts]);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading || !bankName || !accountNumber || !nameOnAccount) return;
 
-    if (!bankName || !accountNumber || !nameOnAccount) {
-      alert("Please fill in all bank details.");
-      return;
-    }
-
-    if (accountNumber.length < 10) {
-      alert("Account Number seems too short.");
-      return;
-    }
-
-    // ✅ Store ONLY bank-related data
     setProfile({
       bankAccounts: {
         bankName,
@@ -46,47 +52,49 @@ const StepFourPayment: React.FC<StepFourPaymentProps> = ({
       },
     });
 
-    // 2️⃣ Commit profile
     updateProfile.mutate(undefined, {
       onSuccess: () => {
-        router.replace("/shop"); // ✅ redirect on success
+        router.replace("/listed/inventory");
       },
     });
-  };;
+  };
 
   return (
     <form onSubmit={handleFormSubmit} className="space-y-6">
-      {/* 1. Bank Name Dropdown */}
-      <div>
-        <label htmlFor="bank-name" className="block mb-2">
-          <Paragraph1 className="text-sm font-medium text-gray-800">
-            Bank Name
-          </Paragraph1>
-        </label>
-        <div className="relative">
-          <Banknote className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <select
-            id="bank-name"
-            required
-            value={bankName}
-            onChange={(e) => setBankName(e.target.value)}
-            className="w-full appearance-none p-4 pl-12 pr-10 border border-gray-300 rounded-lg bg-white text-gray-600 focus:ring-black focus:border-black"
-          >
-            <option value="" disabled>
-              Select Bank
-            </option>
-            {/* Example options */}
-            <option value="BankA">First National Bank</option>
-            <option value="BankB">Apex Trust Bank</option>
-            <option value="BankC">Global Finance Plc</option>
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+      {/* Emergency Contact Preview Section */}
+      <div className="p-4 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+        <Paragraph1 className="text-xs font-bold uppercase text-gray-500 mb-3">
+          Emergency Contact (Review)
+        </Paragraph1>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex items-center gap-2">
+            <User className="w-4 h-4 text-gray-400" />
+            <Paragraph1 className="text-sm">
+              {emergencyContacts.name || "Not set"}
+            </Paragraph1>
+          </div>
+          <div className="flex items-center gap-2">
+            <Heart className="w-4 h-4 text-gray-400" />
+            <Paragraph1 className="text-sm">
+              {emergencyContacts.relationship}
+            </Paragraph1>
+          </div>
+          <div className="flex items-center gap-2">
+            <Phone className="w-4 h-4 text-gray-400" />
+            <Paragraph1 className="text-sm">
+              {emergencyContacts.phoneNumber}
+            </Paragraph1>
+          </div>
         </div>
       </div>
 
-      {/* 2. Account Number Input */}
+      <hr className="border-gray-100" />
+
+      {/* Bank Account Section */}
+      <BankSelect value={bankName} onChange={setBankName} />
+
       <div>
-        <label htmlFor="account-number" className="block mb-2">
+        <label className="block mb-2">
           <Paragraph1 className="text-sm font-medium text-gray-800">
             Account Number
           </Paragraph1>
@@ -94,24 +102,18 @@ const StepFourPayment: React.FC<StepFourPaymentProps> = ({
         <div className="relative">
           <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
-            type="text"
-            pattern="\d*" // Restrict to numbers (for mobile keyboards)
-            id="account-number"
-            required
             value={accountNumber}
             onChange={(e) =>
-              setAccountNumber(e.target.value.replace(/[^0-9]/g, ""))
-            } // Ensure only digits are stored
-            placeholder="Enter number"
-            maxLength={12} // Common max length
-            className="w-full p-4 pl-12 border border-gray-300 rounded-lg bg-white text-gray-600 placeholder-gray-400 focus:ring-black focus:border-black"
+              setAccountNumber(e.target.value.replace(/\D/g, ""))
+            }
+            maxLength={12}
+            className="w-full p-4 pl-12 border rounded-lg"
           />
         </div>
       </div>
 
-      {/* 3. Name on Account Input */}
       <div>
-        <label htmlFor="name-on-account" className="block mb-2">
+        <label className="block mb-2">
           <Paragraph1 className="text-sm font-medium text-gray-800">
             Name on Account
           </Paragraph1>
@@ -119,34 +121,31 @@ const StepFourPayment: React.FC<StepFourPaymentProps> = ({
         <div className="relative">
           <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
-            type="text"
-            id="name-on-account"
-            required
             value={nameOnAccount}
             onChange={(e) => setNameOnAccount(e.target.value)}
-            placeholder="Enter name on account"
-            className="w-full p-4 pl-12 border border-gray-300 rounded-lg bg-white text-gray-600 placeholder-gray-400 focus:ring-black focus:border-black"
+            className="w-full p-4 pl-12 border rounded-lg"
           />
         </div>
       </div>
 
-      {/* Previous and Submit Buttons */}
-      <div className="flex justify-between space-x-4 pt-4">
-        {/* Previous Button (White Background, Black Text/Border) */}
+      <div className="flex gap-4 pt-4">
         <button
           type="button"
           onClick={onBack}
-          className="w-1/2 py-3 text-base font-semibold text-gray-700 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition duration-150"
+          className="w-1/2 py-3 border rounded-lg"
         >
           <Paragraph1>Previous</Paragraph1>
         </button>
-
-        {/* Submit Button (Black Background, White Text) */}
         <button
           type="submit"
-          className="w-1/2 py-3 text-base font-semibold text-white bg-black rounded-lg hover:bg-gray-800 transition duration-150"
+          disabled={isLoading}
+          className={`w-1/2 py-3 rounded-lg text-white transition ${
+            isLoading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-black hover:bg-gray-800"
+          }`}
         >
-          <Paragraph1>Submit</Paragraph1>
+          <Paragraph1>{isLoading ? "Submitting..." : "Submit"}</Paragraph1>
         </button>
       </div>
     </form>

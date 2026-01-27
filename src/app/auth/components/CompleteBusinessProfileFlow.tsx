@@ -30,7 +30,7 @@ const CompleteBusinessProfileFlow: React.FC = () => {
 
   const renderStepComponent = () => {
     switch (currentStep) {
-      case 1:
+      case 4:
         return <StepOneBusiness onNext={handleNextStep} />;
       case 2:
         return (
@@ -43,10 +43,9 @@ const CompleteBusinessProfileFlow: React.FC = () => {
         return (
           <StepThreeContact onNext={handleNextStep} onBack={handlePrevStep} />
         );
-      case 4:
+      case 1:
         return (
           <StepFourPayment 
-            onSubmit={() => alert("Business Profile Completed!")}
             onBack={handlePrevStep}
           />
         );
@@ -65,7 +64,7 @@ const CompleteBusinessProfileFlow: React.FC = () => {
 
   return (
     <div className="font-sans flex flex-col min-h-screen">
-      <div className="w-full sm:w-[600px] bg-white p-8 md:p-10 min-h-screen md:min-h-0 md:mt-10 sm:rounded-3xl text-gray-600 shadow-xl">
+      <div className="w-full sm:w-[600px] bg-white p-4 py-8 md:p-10 min-h-screen md:min-h-0 md:mt-10 sm:rounded-3xl text-gray-600 shadow-xl">
         {/* Header Section */}
         <div className="mb-8 text-center flex flex-col items-center">
           <img src="/images/logo1.svg" alt="Logo" className="h-10 w-10 mb-4" />

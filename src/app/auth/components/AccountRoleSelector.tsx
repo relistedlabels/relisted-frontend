@@ -5,7 +5,7 @@ import { Paragraph1, Paragraph3 } from "@/common/ui/Text";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/useUserStore";
 
-type Role = "DRESSER" | "CURATOR";
+type Role = "RENTER" | "LISTER";
 
 interface RoleOptionProps {
   title: string;
@@ -65,8 +65,8 @@ const AccountRoleSelector: React.FC = () => {
   };
 
   return (
-    <div className="font-sans min-h-screen flex items-center justify-center p-4">
-      <div className="max-w-4xl w-full bg-white p-10 rounded-xl shadow-2xl text-center">
+    <div className="font-sans min-h-screen flex items-center justify-center sm:p-4">
+      <div className="max-w-4xl w-full bg-white p-2 py-10 sm:p-10 sm:rounded-xl shadow-2xl text-center">
         <div className="mb-6 flex justify-center">
           <img src="/images/logo1.svg" alt="Logo" />
         </div>
@@ -84,7 +84,7 @@ const AccountRoleSelector: React.FC = () => {
             description="I want to list my fashion pieces and earn by sharing my wardrobe with others."
             imageUrl="/images/sin2.jpg"
             onContinue={handleRoleSelection}
-            roleKey="CURATOR"
+            roleKey="LISTER"
           />
           <div className="relative">
             {/* coming soon label */}
@@ -93,7 +93,7 @@ const AccountRoleSelector: React.FC = () => {
             </div>
 
             {/* overlay */}
-            <div className="absolute inset-0 rounded-2xl bg-black/30 z-10 cursor-not-allowed" />
+            <div className="absolute inset-0 rounded-2xl bg-gray-500/30 z-10 cursor-not-allowed" />
 
             {/* content */}
             <div className="pointer-events-none">
@@ -102,7 +102,7 @@ const AccountRoleSelector: React.FC = () => {
                 description="I want to rent stylish, quality pieces for events, everyday wear, or content creation."
                 imageUrl="/images/sin1.jpg"
                 onContinue={handleRoleSelection}
-                roleKey="DRESSER"
+                roleKey="RENTER"
               />
             </div>
           </div>

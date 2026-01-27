@@ -16,14 +16,14 @@ function ProfileSetUp() {
   // Safety: no role selected → go back
   useEffect(() => {
     if (!role) {
-      router.replace("/auth/create-account");
+      router.replace("/auth/sign-in");
     }
   }, [role, router]);
 
   return (
     <div className="relative w-full bg-gray-100 bg-cover bg-center">
       <motion.div
-        className="relative flex flex-col items-center justify-center sm:px-6 sm:py-20"
+        className="relative flex flex-col sm:items-center sm:justify-center sm:px-6 sm:py-20"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.1, ease: "easeOut" }}
@@ -41,8 +41,8 @@ function ProfileSetUp() {
           }}
         >
           <div>
-            {role === "DRESSER" && <CompleteProfileFlow />}
-            {role === "CURATOR" && <CompleteBusinessProfileFlow />}
+            {role === "RENTER" && <CompleteProfileFlow />}
+            {role === "LISTER" && <CompleteBusinessProfileFlow />}
           </div>
         </motion.div>
       </motion.div>
