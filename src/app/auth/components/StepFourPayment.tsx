@@ -5,7 +5,7 @@ import { Paragraph1 } from "@/common/ui/Text";
 import { CreditCard, User, Loader2 } from "lucide-react";
 import { useProfileStore } from "@/store/useProfileStore";
 import { useRouter } from "next/navigation";
-import { useUpdateProfile } from "@/lib/queries/user/useUpdateProfile";
+import { useCreateProfile } from "@/lib/queries/user/useCreateProfile";
 import { BankSelect } from "./BankSelect";
 
 interface StepFourPaymentProps {
@@ -25,8 +25,8 @@ const StepFourPayment: React.FC<StepFourPaymentProps> = ({ onBack }) => {
   );
 
   const router = useRouter();
-  const updateProfile = useUpdateProfile();
-  const isLoading = updateProfile.isPending;
+  const createProfile = useCreateProfile();
+  const isLoading = createProfile.isPending;
 
   useEffect(() => {
     setBankName(bankAccounts.bankName || "");
@@ -52,7 +52,7 @@ const StepFourPayment: React.FC<StepFourPaymentProps> = ({ onBack }) => {
       },
     });
 
-    updateProfile.mutate(undefined, {
+    createProfile.mutate(undefined, {
       onSuccess: () => {
         router.replace("/listed/inventory");
       },
