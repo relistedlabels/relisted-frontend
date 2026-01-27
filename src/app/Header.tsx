@@ -12,7 +12,7 @@ export function Header() {
     if (user) {
       console.log("Logged in:", {
         email: user.email,
-        id: user.sub,
+        id: user.id,
       });
     } else {
       console.log("Not logged in");

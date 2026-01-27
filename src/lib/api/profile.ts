@@ -2,8 +2,8 @@ import { FullProfile, UpdateProfilePayload } from "../../../types/profile";
 import { apiFetch } from "./http";
 
 
-export const getProfile = (userId: string) =>
-  apiFetch<FullProfile>(`/profile/${userId}`, {
+export const getProfile = (profileId: string) =>
+  apiFetch<FullProfile>(`/profile/${profileId}`, {
     method: "GET",
   });
 
@@ -11,9 +11,9 @@ export const getProfile = (userId: string) =>
 
 
 
-export const updateProfile = (userId: string, data: UpdateProfilePayload) =>
-  apiFetch(`/profile/${userId}`, {
-    method: "PATCH",
+export const updateProfile = (data: UpdateProfilePayload) =>
+  apiFetch("/profile", {
+    method: "POST",
     body: JSON.stringify(data),
   });
 

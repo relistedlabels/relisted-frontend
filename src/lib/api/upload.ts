@@ -1,4 +1,5 @@
 
+import { useUserStore } from "@/store/useUserStore";
 import { apiFetch } from "./http";
 
 
@@ -18,12 +19,15 @@ export const uploadFile = async ({
 }) => {
   const formData = new FormData();
   formData.append("file", file);
-
+const token = useUserStore.getState().token;
   const response = await axios.post(
     `${BASE_URL}/upload/${id}`,
     formData,
     {
-      withCredentials: true, 
+       headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      // withCredentials: true, 
       onUploadProgress: (progressEvent) => {
         if (!progressEvent.total) return;
 

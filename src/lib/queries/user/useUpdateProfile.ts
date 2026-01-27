@@ -11,7 +11,7 @@ export function useUpdateProfile() {
   return useMutation({
     mutationFn: () => {
       if (!userId) throw new Error("No user id");
-      return updateProfile(userId, profile);
+      return updateProfile( profile);
     },
     onSuccess: () => {
       resetProfile(); // optional but recommended

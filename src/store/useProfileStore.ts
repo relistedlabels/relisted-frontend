@@ -8,6 +8,7 @@ interface EmergencyContacts {
   phoneNumber: string;
   city: string;
   state: string;
+  
 }
 
 interface BusinessInfo {
@@ -56,6 +57,7 @@ const initialState = {
     name: "",
     relationship: "",
     phoneNumber: "",
+  
     city: "",
     state: "",
   },
