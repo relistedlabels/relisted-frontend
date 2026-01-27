@@ -1,11 +1,22 @@
 "use client";
 
-import React from "react";
-// import AccountRoleSelector from "../components/AccountRoleSelector";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+
+import { useUserStore } from "@/store/useUserStore";
 import CreateAccountForm from "../../components/CreateAccountForm";
 
 function Page() {
+  const router = useRouter();
+  const role = useUserStore((s) => s.role);
+
+  // Safety: no role selected → go back
+  useEffect(() => {
+    if (!role) {
+      router.replace("/auth/sign-in");
+    }
+  }, [role, router]);
   return (
     <div
       className="relative w-full h-full bg-black bg-cover bg-center"
