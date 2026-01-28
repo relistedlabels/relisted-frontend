@@ -124,37 +124,37 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   // Centralized navigation (NOT passed from parents)
   const navItems: NavItem[] = [
-    // {
-    //   name: "Overview",
-    //   href: "/curators/dashboard",
-    //   icon: LayoutDashboard,
-    //   isActive: pathname === "/curators/dashboard",
-    // },
+    {
+      name: "Overview",
+      href: "/listers/dashboard",
+      icon: LayoutDashboard,
+      isActive: pathname === "/listers/dashboard",
+    },
     {
       name: "Inventory",
       href: "/listers/inventory",
       icon: Package,
-      isActive: pathname.startsWith("/curators/inventory"),
+      isActive: pathname.startsWith("/listers/inventory"),
     },
-    // {
-    //   name: "Orders",
-    //   href: "/curators/orders",
-    //   icon: ShoppingCart,
-    //   isActive: pathname.startsWith("/curators/orders"),
-    // },
-    // {
-    //   name: "Wallet",
-    //   href: "/curators/wallet",
-    //   icon: Wallet,
-    //   isActive: pathname.startsWith("/curators/wallet"),
-    // },
+    {
+      name: "Orders",
+      href: "/listers/orders",
+      icon: ShoppingCart,
+      isActive: pathname.startsWith("/listers/orders"),
+    },
+    {
+      name: "Wallet",
+      href: "/listers/wallet",
+      icon: Wallet,
+      isActive: pathname.startsWith("/listers/wallet"),
+    },
 
-    // {
-    //   name: "Dispute",
-    //   href: "/curators/dispute",
-    //   icon: FileText,
-    //   isActive: pathname.startsWith("/curators/dispute"),
-    // },
+    {
+      name: "Dispute",
+      href: "/listers/dispute",
+      icon: FileText,
+      isActive: pathname.startsWith("/listers/dispute"),
+    },
   ];
 
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -241,9 +241,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
           <div />
 
-          <Paragraph3 className=" text-white"> Early Access</Paragraph3>
+          {/* <Paragraph3 className=" text-white"> Early Access</Paragraph3> */}
 
-          <div className="flex- hidden items-center gap-4">
+          <div className="flex items-center gap-4">
             <Mail className="w-5 h-5 text-white cursor-pointer" />
             <Bell className="w-5 h-5 text-white cursor-pointer" />
 
