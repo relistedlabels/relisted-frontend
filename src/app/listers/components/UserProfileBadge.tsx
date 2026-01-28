@@ -6,10 +6,12 @@ import { useProfile } from "@/lib/queries/user/useProfile";
 import { useUserStore } from "@/store/useUserStore";
 
 export function UserProfileBadge() {
-const userId = useUserStore((s) => s.userId ?? undefined);
+  const userId = useUserStore((s) => s.userId ?? undefined);
+  const name = useUserStore((s) => s.name)?.trim() || "New user";
+  const role = useUserStore((s) => s.role);
+
   const { data: profile, isLoading } = useProfile(userId);
 
-  const name = profile?.name?.trim() || "New user";
   const avatar = profile?.avatar;
 
   if (isLoading) return null;
@@ -25,18 +27,17 @@ const userId = useUserStore((s) => s.userId ?? undefined);
         )}
       </div>
 
-      {/* Name */}
+      {/* Name & Role */}
       <div className="hidden lg:block">
         <Paragraph1 className="text-sm font-medium text-white">
           {name}
         </Paragraph1>
 
-        {/* {profile?.role && (
+        {role && (
           <Paragraph1 className="text-xs text-gray-500">
-            -LISTER-
+           - {role.toUpperCase()} -
           </Paragraph1>
-        )} */}
-        <Paragraph1 className="text-xs text-gray-500">-LISTER-</Paragraph1>
+        )}
       </div>
     </div>
   );
