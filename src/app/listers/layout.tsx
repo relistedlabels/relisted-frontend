@@ -17,10 +17,10 @@ export default function CuratorsLayout({ children }: { children: ReactNode }) {
   }
 
   // profile already comes from getMe
-  if (!user.profile) {
-    router.replace("/auth/profile-setup");
-    return <FullPageLoader />;
-  }
+  // if (!user.profile) {
+  //   router.replace("/auth/profile-setup");
+  //   return <FullPageLoader />;
+  // }
 
   return <>{children}</>;
 }
