@@ -18,6 +18,7 @@ export const verifyOtp = (data: { code: string }) =>
   });
 
 // lib/api/auth.ts
+// lib/api/auth.ts
 export const login = (data: {
   email: string;
   password: string;
@@ -28,12 +29,14 @@ export const login = (data: {
     id: string;
     email: string;
     role: string;
+    name: string;
   };
 }> =>
   apiFetch("/auth/login", {
     method: "POST",
     body: JSON.stringify(data),
   });
+
 
 export const forgotPassword = (data: { email: string }) =>
   apiFetch("/auth/forgot-password", {

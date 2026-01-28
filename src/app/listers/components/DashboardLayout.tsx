@@ -27,6 +27,7 @@ import {
   Paragraph3,
 } from "@/common/ui/Text";
 import { UserProfileBadge } from "./UserProfileBadge";
+import { UserProfileBadge2 } from "./UserProfileBadge2";
 
 // --------------------
 // Types
@@ -83,7 +84,7 @@ const SidebarNav: React.FC<{
 const SidebarFooter = () => (
   <div className="mt-8 space-y-2 border-t border-gray-800 pt-6">
     <Link
-      href="/listed/settings"
+      href="/listers/settings"
       className="flex items-center p-3 rounded-xl text-gray-300 hover:bg-gray-800"
     >
       <Settings className="w-5 h-5 mr-3" />
@@ -171,7 +172,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
         {/* Profile */}
         <div className="flex items-center border-b border-gray-800 pb-4 mb-4 space-x-3">
-         <UserProfileBadge />
+          <UserProfileBadge />
         </div>
 
         <div className="flex-1 overflow-y-auto hide-scrollbar">
@@ -198,25 +199,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           </button>
         </div>
         <div className="flex items-center border-b border-gray-800 pb-4 mb-4 space-x-3">
-          <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
-            {user.avatarUrl && (
-              <img
-                src={user.avatarUrl}
-                alt={user.name}
-                className="w-full h-full object-cover"
-              />
-            )}
-          </div>
-          <div className="">
-            <Paragraph1 className="text-sm font-medium text-white">
-              {user.name}
-            </Paragraph1>
-            {user.role && (
-              <Paragraph1 className="text-xs text-gray-500">
-                {user.role}
-              </Paragraph1>
-            )}
-          </div>
+          <UserProfileBadge />
         </div>
         <SidebarNav navItems={navItems} onItemClick={toggleMobile} />
         <SidebarFooter />
@@ -247,18 +230,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             <Mail className="w-5 h-5 text-white cursor-pointer" />
             <Bell className="w-5 h-5 text-white cursor-pointer" />
 
-            <div className=" text-right flex items-center gap-1 text-white">
-              <div className="w-6 sm:w-10 sm:h-10 h-6 rounded-full bg-gray-300 overflow-hidden">
-                {user.avatarUrl && (
-                  <img
-                    src={user.avatarUrl}
-                    alt={user.name}
-                    className="w-full h-full object-cover"
-                  />
-                )}
-              </div>
-              <ChevronDown size={18} />
-            </div>
+            <UserProfileBadge2 />
           </div>
         </header>
 

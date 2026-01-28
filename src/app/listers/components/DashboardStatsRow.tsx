@@ -4,6 +4,7 @@ import React from "react";
 import { Paragraph1, Paragraph3 } from "@/common/ui/Text";
 import { Database, ShoppingCart, Archive, Loader } from "lucide-react";
 import { ToolInfo } from "@/common/ui/ToolInfo";
+import { useProfileStore } from "@/store/profileStore";
 
 interface StatCardData {
   title: string;
@@ -102,11 +103,17 @@ const StatCard: React.FC<StatCardData> = ({
 };
 
 const DashboardStatsRow: React.FC = () => {
+  const profile = useProfileStore((s) => s.profile);
+
+  const name = profile?.data?.user?.name?.trim() || "New user";
+  const role = profile?.data?.user?.role;
+  const avatar = profile?.data?.avatarUrl || null;
+
   return (
     <div className="space-y-6">
       <div>
         <Paragraph3 className="text-2xl font-semibold text-black">
-          Welcome back, Jane!
+          Welcome back, {name}
         </Paragraph3>
         <Paragraph1 className="text-sm text-gray-500">
           Here's Your Current Sales Overview

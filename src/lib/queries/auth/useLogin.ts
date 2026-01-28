@@ -14,6 +14,7 @@ export function useLogin() {
         userId: data.user.id,
         email: data.user.email,
         role: data.user.role,
+        name: data.user.name,
       });
     },
   });

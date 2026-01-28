@@ -94,7 +94,7 @@ export function ToolInfo({ content, className }: ToolInfoProps) {
               left: coords.left,
               zIndex: 50,
             }}
-            className="max-w-xs rounded-lg bg-gray-900 px-3 py-2 text-xs text-white shadow-lg"
+            className="max-w-[120px] rounded-lg bg-gray-900 px-3 py-2 text-xs text-white shadow-lg"
           >
             {content}
           </div>,

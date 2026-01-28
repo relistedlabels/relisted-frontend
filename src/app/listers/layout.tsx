@@ -12,7 +12,6 @@
 //    const { data: profile, isLoading: profileLoading } = useProfile();
 //    console.log(profile)
 
-
 //      if (profileLoading) {
 //     return <FullPageLoader />;
 //   }
@@ -30,8 +29,6 @@
 //   //   return <FullPageLoader />;
 //   // }
 
-  
-
 //   useEffect(() => {
 //     if (!profile) {
 //       router.replace("/auth/profile-setup");
@@ -42,11 +39,8 @@
 //     return <FullPageLoader />;
 //   }
 
-
 //   return <>{children}</>;
 // }
-
-
 
 "use client";
 
@@ -55,6 +49,7 @@ import { useRouter } from "next/navigation";
 import { useMe } from "@/lib/queries/auth/useMe";
 import { useProfile } from "@/lib/queries/user/useProfile";
 import FullPageLoader from "@/common/ui/FullPageLoader";
+import ProfileFromStore from "@/common/ui/ProfileFromStore";
 
 export default function CuratorsLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -62,7 +57,6 @@ export default function CuratorsLayout({ children }: { children: ReactNode }) {
   const { data: user, isLoading: userLoading } = useMe();
   const { data: profile, isLoading: profileLoading } = useProfile();
 
-  
   useEffect(() => {
     if (!userLoading && !profileLoading) {
       if (!user) {
@@ -73,16 +67,18 @@ export default function CuratorsLayout({ children }: { children: ReactNode }) {
     }
   }, [user, profile, userLoading, profileLoading, router]);
 
-
   if (userLoading || profileLoading) {
     return <FullPageLoader />;
   }
-
 
   if (!user || !profile) {
     return <FullPageLoader />;
   }
 
-
-  return <>{children}</>;
+  return (
+    <>
+      {/* <ProfileFromStore /> */}
+      {children}
+    </>
+  );
 }

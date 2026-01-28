@@ -2,19 +2,14 @@
 
 import { User } from "lucide-react";
 import { Paragraph1 } from "@/common/ui/Text";
-import { useProfile } from "@/lib/queries/user/useProfile";
-import { useUserStore } from "@/store/useUserStore";
+import { useProfileStore } from "@/store/profileStore";
 
 export function UserProfileBadge() {
-  const userId = useUserStore((s) => s.userId);
-  const name = useUserStore((s) => s.name)?.trim() || "New user";
-  const role = useUserStore((s) => s.role);
+  const profile = useProfileStore((s) => s.profile);
 
-  const { data: profile, isLoading } = useProfile();
-
-  const avatar = profile?.avatar;
-
-  if (!userId || isLoading) return null;
+  const name = profile?.data?.user?.name?.trim() || "New user";
+  const role = profile?.data?.user?.role;
+  const avatar = profile?.data?.avatarUrl || null;
 
   return (
     <div className="flex items-center gap-3">
@@ -26,7 +21,7 @@ export function UserProfileBadge() {
         )}
       </div>
 
-      <div className="hidden lg:block">
+      <div className=" ">
         <Paragraph1 className="text-sm font-medium text-white">
           {name}
         </Paragraph1>

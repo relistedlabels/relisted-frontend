@@ -2,21 +2,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "@/lib/api/profile";
 import { FullProfile } from "@/types/profile";
+import { useProfileStore } from "@/store/profileStore";
 
-export const useProfile = () =>
-  useQuery<FullProfile>({
+export const useProfile = () => {
+  const setProfile = useProfileStore((s) => s.setProfile);
+
+  return useQuery<FullProfile>({
     queryKey: ["profile"],
-    queryFn: getProfile,
-   
-    retry: false, // important: 404 means "no profile"
+    queryFn: async () => {
+      const profile = await getProfile();
+      console.log("PROFILE FETCHED:", profile);
+      setProfile(profile);
+      return profile;
+    },
+    retry: false,
   });
-
-
-  // export function useMe() {
-  //   return useQuery({
-  //     queryKey: ["auth", "me"],
-  //     queryFn: getMe,
-  //     retry: false,
-  //   });
-  // }
-  
+};

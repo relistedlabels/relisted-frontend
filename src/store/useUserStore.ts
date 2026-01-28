@@ -1,3 +1,4 @@
+// store/useUserStore.ts
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -8,7 +9,6 @@ type UserState = {
   email: string | null;
   role: string | null;
 
-  // 🔧 FIX: include role here
   setUser: (user: {
     name?: string | null;
     email?: string | null;
@@ -20,6 +20,7 @@ type UserState = {
     userId: string;
     email: string;
     role: string;
+    name: string;
   }) => void;
 
   clearUser: () => void;
@@ -40,12 +41,13 @@ export const useUserStore = create<UserState>()(
           ...user,
         })),
 
-      setAuth: ({ token, userId, email, role }) =>
+      setAuth: ({ token, userId, email, role, name }) =>
         set({
           token,
           userId,
           email,
           role,
+          name,
         }),
 
       clearUser: () =>
