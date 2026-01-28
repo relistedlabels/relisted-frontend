@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { Paragraph1 } from "@/common/ui/Text";
+import { useProductDraftStore } from "@/store/useProductDraftStore";
 
 const COLORS = [
   { name: "Black", hex: "#000000" },
@@ -11,7 +12,6 @@ const COLORS = [
   { name: "Green", hex: "#16A34A" },
   { name: "Blue", hex: "#2563EB" },
   { name: "Brown", hex: "#92400E" },
-
   { name: "Gray", hex: "#6B7280" },
   { name: "Silver", hex: "#D1D5DB" },
   { name: "Yellow", hex: "#FACC15" },
@@ -29,12 +29,20 @@ const COLORS = [
   { name: "Maroon", hex: "#7F1D1D" },
 ];
 
-
 export const ColorSelector: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<(typeof COLORS)[number] | null>(
-    null,
+  const { data, setField } = useProductDraftStore();
+
+  const selected = useMemo(
+    () => COLORS.find((c) => data.color?.includes(c.name)) ?? null,
+    [data.color],
   );
+
+  useEffect(() => {
+    if (!Array.isArray(data.color)) {
+      setField("color", []);
+    }
+  }, [data.color, setField]);
 
   return (
     <div className="relative w-full">
@@ -65,27 +73,29 @@ export const ColorSelector: React.FC = () => {
 
       {open && (
         <div className="absolute z-40 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-sm">
-          {COLORS.map((color) => (
-            <button
-              key={color.name}
-              onClick={() => {
-                setSelected(color);
-                setOpen(false);
-              }}
-              className="flex w-full items-center justify-between px-3 py-2 text-sm hover:bg-gray-50"
-            >
-              <span className="flex items-center gap-2">
-                <span
-                  className="h-4 w-4 rounded-full border"
-                  style={{ backgroundColor: color.hex }}
-                />
-                {color.name}
-              </span>
-              {selected?.name === color.name && (
-                <Check className="h-4 w-4 text-black" />
-              )}
-            </button>
-          ))}
+          {COLORS.map((color) => {
+            const isSelected = data.color.includes(color.name);
+
+            return (
+              <button
+                key={color.name}
+                onClick={() => {
+                  setField("color", [color.name]);
+                  setOpen(false);
+                }}
+                className="flex w-full items-center justify-between px-3 py-2 text-sm hover:bg-gray-50"
+              >
+                <span className="flex items-center gap-2">
+                  <span
+                    className="h-4 w-4 rounded-full border"
+                    style={{ backgroundColor: color.hex }}
+                  />
+                  {color.name}
+                </span>
+                {isSelected && <Check className="h-4 w-4 text-black" />}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
