@@ -43,9 +43,10 @@ const CompleteBusinessProfileFlow: React.FC = () => {
       //   return (
       //     <StepThreeContact onNext={handleNextStep} onBack={handlePrevStep} />
       //   );
+      
       // case 4:
       //   return (
-      //     <StepFourPayment 
+      //     <StepFourPayment
       //       onBack={handlePrevStep}
       //     />
       //   );
@@ -79,19 +80,19 @@ const CompleteBusinessProfileFlow: React.FC = () => {
 
         {/* Step Indicator & Progress Bar */}
         <div className="mb-8">
-          {/* <Paragraph3 className="text-xl font-bold text-center text-black mb-2">
+          <Paragraph3 className="text-xl font-bold text-center text-black mb-2">
             {currentStep}/{MAX_STEPS}
-          </Paragraph3> */}
+          </Paragraph3>
           <Paragraph3 className="text-2xl font-bold text-center text-black mb-4">
             {stepTitles[currentStep - 1]}
           </Paragraph3>
 
-          {/* <div className="w-full bg-gray-200 rounded-full h-2.5">
+          <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div
               className="bg-black h-2.5 rounded-full transition-all duration-500 ease-in-out"
               style={{ width: `${progressPercentage}%` }}
             ></div>
-          </div> */}
+          </div>
         </div>
 
         {/* Dynamic Step Component */}

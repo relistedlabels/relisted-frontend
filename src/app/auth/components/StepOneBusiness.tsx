@@ -64,8 +64,6 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
       },
     });
     onNext();
-
-   
   };
 
   return (
@@ -101,15 +99,9 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
 
       <button
         type="submit"
-        disabled={isLoading}
-        className={`w-full py-3 rounded-lg text-white flex items-center justify-center gap-2 ${
-          isLoading
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-black hover:bg-gray-800"
-        }`}
+        className="w-full py-3 bg-black text-white rounded-lg"
       >
-        {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-        <Paragraph1>{isLoading ? "Submitting..." : "Submit"}</Paragraph1>
+        <Paragraph1>Next</Paragraph1>
       </button>
     </form>
   );

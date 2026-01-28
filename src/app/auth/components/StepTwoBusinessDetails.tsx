@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Paragraph1 } from "@/common/ui/Text";
-import { User, Mail, Hash, MapPin } from "lucide-react";
+import { User, Mail, Hash, MapPin, Loader2 } from "lucide-react";
 import { useProfileStore } from "@/store/useProfileStore";
 import { CityLGASelect } from "./CityLGASelect";
 import { StateSelect } from "./StateSelect";
@@ -157,11 +157,19 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
           <Paragraph1>Previous</Paragraph1>
         </button>
 
+        
+
         <button
           type="submit"
-          className="w-1/2 py-3 bg-black text-white rounded-lg"
+          disabled={isLoading}
+          className={`w-full py-3 rounded-lg text-white flex items-center justify-center gap-2 ${
+            isLoading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-black hover:bg-gray-800"
+          }`}
         >
-          <Paragraph1>Continue</Paragraph1>
+          {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+          <Paragraph1>{isLoading ? "Submitting..." : "Submit"}</Paragraph1>
         </button>
       </div>
     </form>
