@@ -63,12 +63,9 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
         country: "Nigeria",
       },
     });
+    onNext();
 
-    createProfile.mutate(undefined, {
-      onSuccess: () => {
-        router.replace("/listers/inventory");
-      },
-    });
+   
   };
 
   return (

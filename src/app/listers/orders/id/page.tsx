@@ -7,8 +7,8 @@ import OrderItemList from "../../components/OrderItemList";
 
 export default function Page() {
   const path = [
-    { label: "Dashboard", href: "/curators/dashboard" },
-    { label: "Orders", href: "/curators/orders" },
+    { label: "Dashboard", href: "/listers/dashboard" },
+    { label: "Orders", href: "/listers/orders" },
     { label: "Orders Details", href: null }, // Current page, href is null
   ];
   return (

@@ -5,7 +5,7 @@ import OrdersManagement from "../components/OrdersManagement";
 
 export default function Page() {
   const path = [
-    { label: "Dashboard", href: "/curators/dashboard" },
+    { label: "Dashboard", href: "/listers/dashboard" },
     { label: "Orders", href: null }, // Current page, href is null
   ];
   return (

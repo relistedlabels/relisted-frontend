@@ -6,6 +6,8 @@ import { User, Mail, Hash, MapPin } from "lucide-react";
 import { useProfileStore } from "@/store/useProfileStore";
 import { CityLGASelect } from "./CityLGASelect";
 import { StateSelect } from "./StateSelect";
+import { useRouter } from "next/navigation";
+import { useCreateProfile } from "@/lib/queries/user/useCreateProfile";
 
 interface StepTwoBusinessDetailsProps {
   onNext: () => void;
@@ -30,6 +32,10 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
   const [address, setAddress] = useState(businessInfo.businessAddress);
   const [city, setCity] = useState(businessInfo.businessCity);
   const [state, setState] = useState(businessInfo.businessState);
+
+  const router = useRouter();
+  const createProfile = useCreateProfile();
+  const isLoading = createProfile.isPending;
 
   /**
    * 🔁 Re-sync after persist hydration
@@ -64,7 +70,11 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
       },
     });
 
-    onNext();
+    createProfile.mutate(undefined, {
+      onSuccess: () => {
+        router.replace("/listers/dashboard");
+      },
+    });
   };
 
   return (

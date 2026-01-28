@@ -1,11 +1,13 @@
+// src/app/listers/components/TagSelector.tsx
 "use client";
 
 import React, { useMemo, useState } from "react";
 import { Plus } from "lucide-react";
 import { Paragraph1, Paragraph3 } from "@/common/ui/Text";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
+import { nanoid } from "nanoid";
 
-const INITIAL_TAGS = [
+const DEMO_TAGS = [
   "Men",
   "Women",
   "Unisex",
@@ -18,36 +20,48 @@ const INITIAL_TAGS = [
   "Vintage",
   "Party",
   "Workwear",
-];
+].map((value, i) => ({
+  id: `demo-${i}`,
+  value,
+}));
 
 export const TagSelector: React.FC = () => {
-  const [tags, setTags] = useState<string[]>(INITIAL_TAGS);
-  const [selected, setSelected] = useState<string[]>([]);
+  const data = useProductDraftStore((s) => s.data);
+  const mergeData = useProductDraftStore((s) => s.mergeData);
+
+  const selected = data?.tags ?? []; // ✅ guard
   const [query, setQuery] = useState("");
 
-  const { setField } = useProductDraftStore();
-
   const filteredTags = useMemo(
-    () => tags.filter((tag) => tag.toLowerCase().includes(query.toLowerCase())),
-    [tags, query],
+    () =>
+      DEMO_TAGS.filter((t) =>
+        t.value.toLowerCase().includes(query.toLowerCase()),
+      ),
+    [query],
   );
 
-  const syncToStore = (next: string[]) => {
-    setField("subText", next.join(", "));
-  };
+  const toggleTag = (tag: (typeof DEMO_TAGS)[number]) => {
+    const exists = selected.some((t) => t.id === tag.id);
 
-  const toggleTag = (tag: string) => {
-    setSelected((prev) => {
-      const next = prev.includes(tag)
-        ? prev.filter((t) => t !== tag)
-        : [...prev, tag];
+    if (exists) {
+      mergeData({
+        tags: selected.filter((t) => t.id !== tag.id),
+      });
+      return;
+    }
 
-      syncToStore(next);
-      return next;
+    if (selected.length >= 10) return;
+
+    mergeData({
+      tags: [...selected, tag],
     });
   };
 
-  const canAdd = query.length > 0 && filteredTags.length === 0;
+  const canAdd =
+    query.length > 0 &&
+    selected.length < 10 &&
+    !DEMO_TAGS.some((t) => t.value.toLowerCase() === query.toLowerCase()) &&
+    !selected.some((t) => t.value.toLowerCase() === query.toLowerCase());
 
   return (
     <div className="rounded-xl border border-gray-200 p-4">
@@ -55,10 +69,9 @@ export const TagSelector: React.FC = () => {
         Tags
       </Paragraph3>
       <Paragraph1 className="mb-3 text-xs text-gray-500">
-        Select tags that are associated with this item
+        Select up to 10 tags
       </Paragraph1>
 
-      {/* Search */}
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
@@ -66,13 +79,12 @@ export const TagSelector: React.FC = () => {
         className="mb-3 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black"
       />
 
-      {/* Tags */}
       <div className="flex flex-wrap gap-2">
         {filteredTags.map((tag) => {
-          const active = selected.includes(tag);
+          const active = selected.some((t) => t.id === tag.id);
           return (
             <button
-              key={tag}
+              key={tag.id}
               type="button"
               onClick={() => toggleTag(tag)}
               className={`rounded-md border px-3 py-1.5 text-xs font-medium transition ${
@@ -81,20 +93,25 @@ export const TagSelector: React.FC = () => {
                   : "border-gray-200 text-gray-700 hover:border-gray-400"
               }`}
             >
-              <Paragraph1>{tag}</Paragraph1>
+              <Paragraph1>{tag.value}</Paragraph1>
             </button>
           );
         })}
 
-        {/* Add new tag */}
         {canAdd && (
           <button
             type="button"
             onClick={() => {
-              setTags((prev) => [...prev, query]);
-              const next = [...selected, query];
-              setSelected(next);
-              syncToStore(next);
+              const newTag = {
+                id: nanoid(),
+                value: query,
+                isNew: true,
+              };
+
+              mergeData({
+                tags: [...selected, newTag],
+              });
+
               setQuery("");
             }}
             className="flex items-center gap-1 rounded-md border border-dashed border-gray-400 px-3 py-1.5 text-xs font-medium text-gray-700 hover:border-black"

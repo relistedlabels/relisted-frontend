@@ -7,7 +7,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUserProducts } from "@/lib/queries/product/useUserProducts";
 import { useRouter } from "next/router";
-
+import { ToolInfo } from "@/common/ui/ToolInfo";
 
 // --- Item Data Structure ---
 interface InventoryItem {
@@ -147,9 +147,9 @@ const InventoryList: React.FC = () => {
 
   const { data, isLoading } = useUserProducts();
 
-// if (isLoading) {
-//   return <div>Loading inventory...</div>;
-// }
+  // if (isLoading) {
+  //   return <div>Loading inventory...</div>;
+  // }
 
   const mappedInventory: InventoryItem[] =
     data?.map((item) => ({
@@ -173,9 +173,13 @@ const InventoryList: React.FC = () => {
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
-        <Paragraph3 className="text-2xl font-semibold text-black">
-          Inventory
-        </Paragraph3>
+        <div className="flex items-center gap-1">
+          <Paragraph3 className="text-2xl font-semibold text-black">
+            Inventory
+          </Paragraph3>
+          <ToolInfo content="Lists all items in your inventory, including availability, rental frequency, and pricing." />
+        </div>
+
         <Link
           href="/listers/inventory/product-upload"
           className="flex items-center space-x-2 px-4 py-2 text-sm font-semibold text-white bg-black rounded-lg hover:bg-gray-800 transition duration-150"

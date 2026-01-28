@@ -190,7 +190,7 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
         </div>
 
         <Link
-          href="/curators/orders/id"
+          href="/listers/orders/id"
           className="px-6 py-2.5 bg-[#33332D] text-white rounded-xl text-sm font-bold hover:bg-black transition-all active:scale-95"
         >
           View Details

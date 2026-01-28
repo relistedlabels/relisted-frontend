@@ -1,18 +1,21 @@
 // lib/stores/productDraftStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+
+export type Tag = {
+  id: string; // db id or temp id
+  value: string;
+  isNew?: boolean; // client-created
+};
+
 export type Attachment = {
   id: string;
   url: string;
   name: string;
-  progress:number
-  type?:string
-  slotId?:string
+  progress: number;
+  type?: string;
+  slotId?: string;
 };
-
-
-
-// store/productDraftStore.ts
 
 export type ProductDraft = {
   name: string;
@@ -23,19 +26,20 @@ export type ProductDraft = {
   measurement: string;
   originalValue: number;
 
-  color: string[];        // ✅ array
+  color: string[];
   warning: string;
-  size: string;           // ✅ required
+  size: string;
 
   careInstruction: string;
-  careSteps: string[];    // ✅ array
+  careSteps: string[];
   stylingTip: string;
+
+  tags: Tag[]; // ✅ only selected tags (db + new)
 
   attachments: Attachment[];
   categoryId: string;
   brandId: string;
 };
-
 
 type ProductDraftStore = {
   data: ProductDraft;
@@ -56,19 +60,20 @@ const initialState: ProductDraft = {
   measurement: "",
   originalValue: 0,
 
-  color: [], // ✅
+  color: [],
   warning: "",
-  size: "", // ✅
+  size: "",
 
   careInstruction: "",
-  careSteps: [], // ✅
+  careSteps: [],
   stylingTip: "",
+
+  tags: [],
 
   attachments: [],
   categoryId: "",
   brandId: "",
 };
-
 
 export const useProductDraftStore = create<ProductDraftStore>()(
   persist(
@@ -87,8 +92,6 @@ export const useProductDraftStore = create<ProductDraftStore>()(
 
       reset: () => set({ data: initialState }),
     }),
-    {
-      name: "product-draft-store", // localStorage key
-    },
+    { name: "product-draft-store" },
   ),
 );

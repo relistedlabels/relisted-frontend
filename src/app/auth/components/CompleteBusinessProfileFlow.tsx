@@ -9,7 +9,7 @@ import StepTwoBusinessDetails from "./StepTwoBusinessDetails";
 import StepThreeContact from "./StepThreeContact";
 import StepFourPayment from "./StepFourPayment";
 
-const MAX_STEPS = 1;
+const MAX_STEPS = 2;
 
 const CompleteBusinessProfileFlow: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -32,13 +32,13 @@ const CompleteBusinessProfileFlow: React.FC = () => {
     switch (currentStep) {
       case 1:
         return <StepOneBusiness onNext={handleNextStep} />;
-      // case 2:
-      //   return (
-      //     <StepTwoBusinessDetails
-      //       onNext={handleNextStep}
-      //       onBack={handlePrevStep}
-      //     />
-      //   );
+      case 2:
+        return (
+          <StepTwoBusinessDetails
+            onNext={handleNextStep}
+            onBack={handlePrevStep}
+          />
+        );
       // case 3:
       //   return (
       //     <StepThreeContact onNext={handleNextStep} onBack={handlePrevStep} />
@@ -57,7 +57,7 @@ const CompleteBusinessProfileFlow: React.FC = () => {
   // Titles for each step
   const stepTitles = [
     "Personal Information",
-    // "Business Profile(For Brands)",
+    "Business Profile(For Brands)",
     // "Emergency Contact",
     // "Bank Account Details",
   ];
