@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { Paragraph1 } from "@/common/ui/Text";
-import { MapPin } from "lucide-react";
-import { FileUploader } from "@/common/ui/FileUploader";
+import { Loader2, MapPin } from "lucide-react";
 import { useProfileStore } from "@/store/useProfileStore";
 import { PhoneInput } from "./PhoneInput";
 import { StateSelect } from "./StateSelect";
 import { CityLGASelect } from "./CityLGASelect";
+import { useRouter } from "next/navigation";
+import { useCreateProfile } from "@/lib/queries/user/useCreateProfile";
 
 interface StepOnePersonalProps {
   onNext: () => void;
@@ -23,6 +24,10 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
   const [state, setState] = useState(profile.address.state);
   const [bvn, setBvn] = useState(profile.bvn);
   const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
+  const createProfile = useCreateProfile();
+  const isLoading = createProfile.isPending;
 
   useEffect(() => {
     setPhoneNumber(profile.phoneNumber || "+234");
@@ -59,12 +64,11 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
       },
     });
 
-    onNext();
-  };
-
-  const handleUpload = (data: { id: string }) => {
-    setProfile({ ninUploadId: data.id });
-    setError(null);
+    createProfile.mutate(undefined, {
+      onSuccess: () => {
+        router.replace("/listers/inventory");
+      },
+    });
   };
 
   return (
@@ -92,19 +96,23 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
         <StateSelect value={state} onChange={setState} />
       </div>
 
-      {/* <FileUploader
-        helperText="International Passport, NIN, Driver's License"
-        onUploaded={handleUpload}
-      /> */}
-
       {error && (
         <Paragraph1 className="text-sm text-red-600 text-center">
           {error}
         </Paragraph1>
       )}
 
-      <button className="w-full py-3 bg-black text-white rounded-lg">
-        <Paragraph1>Next</Paragraph1>
+      <button
+        type="submit"
+        disabled={isLoading}
+        className={`w-full py-3 rounded-lg text-white flex items-center justify-center gap-2 ${
+          isLoading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-black hover:bg-gray-800"
+        }`}
+      >
+        {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+        <Paragraph1>{isLoading ? "Submitting..." : "Submit"}</Paragraph1>
       </button>
     </form>
   );

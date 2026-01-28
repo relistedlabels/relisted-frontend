@@ -12,6 +12,7 @@ interface StepFourPaymentProps {
   onBack: () => void;
 }
 
+
 const StepFourPayment: React.FC<StepFourPaymentProps> = ({ onBack }) => {
   const bankAccounts = useProfileStore((s) => s.bankAccounts);
   const setProfile = useProfileStore((s) => s.setProfile);
