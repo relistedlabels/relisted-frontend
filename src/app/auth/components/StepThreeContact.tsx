@@ -24,6 +24,7 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setFullName(emergencyContacts.name || "");
@@ -36,7 +37,12 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!fullName || !relationship || !phoneNumber || !city || !state) return;
+    if (!fullName || !relationship || !phoneNumber || !city || !state) {
+      setError("Please complete all required fields before continuing.");
+      return;
+    }
+
+    setError(null);
 
     setProfile({
       emergencyContacts: {
@@ -95,6 +101,12 @@ const StepTwoContact: React.FC<StepTwoContactProps> = ({ onNext, onBack }) => {
         <CityLGASelect value={city} onChange={setCity} />
         <StateSelect value={state} onChange={setState} />
       </div>
+
+      {error && (
+        <Paragraph1 className="text-sm text-red-600 text-center">
+          {error}
+        </Paragraph1>
+      )}
 
       <div className="flex gap-4 pt-4">
         <button

@@ -12,7 +12,8 @@ export function useCreateProfile() {
       return createProfile(profile);
     },
     onSuccess: () => {
-      resetProfile();
+      //   resetProfile();
+      console.log("Profile sent");
     },
   });
 }

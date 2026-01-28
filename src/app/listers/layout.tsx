@@ -22,10 +22,10 @@ export default function CuratorsLayout({ children }: { children: ReactNode }) {
     return <FullPageLoader />;
   }
 
-  if (!profile ) {
-    router.replace("/auth/profile-setup");
-    return;
-  }
+  // if (!profile ) {
+  //   router.replace("/auth/profile-setup");
+  //   return;
+  // }
 
   // optional role gate
   // if (user.role !== "LISTER") {

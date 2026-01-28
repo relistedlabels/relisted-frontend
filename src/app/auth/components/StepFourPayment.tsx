@@ -23,6 +23,7 @@ const StepFourPayment: React.FC<StepFourPaymentProps> = ({ onBack }) => {
   const [nameOnAccount, setNameOnAccount] = useState(
     bankAccounts.nameOfAccount,
   );
+  const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
   const createProfile = useCreateProfile();
@@ -41,8 +42,18 @@ const StepFourPayment: React.FC<StepFourPaymentProps> = ({ onBack }) => {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isLoading) return;
-    if (!bankName || !accountNumber || !nameOnAccount) return;
-    if (accountNumber.length < 10) return;
+
+    if (!bankName || !accountNumber || !nameOnAccount) {
+      setError("Please complete all required fields before submitting.");
+      return;
+    }
+
+    if (accountNumber.length < 10) {
+      setError("Account number must be at least 10 digits.");
+      return;
+    }
+
+    setError(null);
 
     setProfile({
       bankAccounts: {
@@ -54,7 +65,7 @@ const StepFourPayment: React.FC<StepFourPaymentProps> = ({ onBack }) => {
 
     createProfile.mutate(undefined, {
       onSuccess: () => {
-        router.replace("/listed/inventory");
+        router.replace("/listers/inventory");
       },
     });
   };
@@ -99,6 +110,12 @@ const StepFourPayment: React.FC<StepFourPaymentProps> = ({ onBack }) => {
           />
         </div>
       </div>
+
+      {error && (
+        <Paragraph1 className="text-sm text-red-600 text-center">
+          {error}
+        </Paragraph1>
+      )}
 
       <div className="flex gap-4 pt-4">
         <button

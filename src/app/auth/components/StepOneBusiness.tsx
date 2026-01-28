@@ -22,6 +22,7 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
   const [cityLGA, setCityLGA] = useState(profile.address.city);
   const [state, setState] = useState(profile.address.state);
   const [bvn, setBvn] = useState(profile.bvn);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setPhoneNumber(profile.phoneNumber || "+234");
@@ -45,10 +46,13 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
       !address ||
       !cityLGA ||
       !state ||
-      !bvn ||
       !profile.ninUploadId
-    )
+    ) {
+      setError("Please complete all required fields before continuing.");
       return;
+    }
+
+    setError(null);
 
     setProfile({
       phoneNumber,
@@ -66,6 +70,7 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
 
   const handleUpload = (data: { id: string }) => {
     setProfile({ ninUploadId: data.id });
+    setError(null);
   };
 
   return (
@@ -93,26 +98,16 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
         <StateSelect value={state} onChange={setState} />
       </div>
 
-      {/* <div>
-        <label className="block mb-2">
-          <Paragraph1 className="text-sm font-medium text-gray-800">
-            BVN
-          </Paragraph1>
-        </label>
-        <div className="relative">
-          <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
-            value={bvn}
-            onChange={(e) => setBvn(e.target.value)}
-            className="w-full p-4 pl-12 border rounded-lg"
-          />
-        </div>
-      </div> */}
-
       <FileUploader
         helperText="International Passport, NIN, Driver's License"
         onUploaded={handleUpload}
       />
+
+      {error && (
+        <Paragraph1 className="text-sm text-red-600 text-center">
+          {error}
+        </Paragraph1>
+      )}
 
       <button className="w-full py-3 bg-black text-white rounded-lg">
         <Paragraph1>Next</Paragraph1>

@@ -132,7 +132,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     // },
     {
       name: "Inventory",
-      href: "/curators/inventory",
+      href: "/listers/inventory",
       icon: Package,
       isActive: pathname.startsWith("/curators/inventory"),
     },
