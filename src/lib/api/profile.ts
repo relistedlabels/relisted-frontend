@@ -3,8 +3,8 @@ import { apiFetch } from "./http";
 import { FullProfile, UpdateProfilePayload } from "../../types/profile";
 
 /** Get profile by id */
-export const getProfile = (profileId: string) =>
-  apiFetch<FullProfile>(`/profile/${profileId}`, {
+export const getProfile = () =>
+  apiFetch<FullProfile>(`/profile/user-profile`, {
     method: "GET",
   });
 
