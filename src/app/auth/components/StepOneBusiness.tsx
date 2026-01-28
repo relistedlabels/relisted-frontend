@@ -41,13 +41,7 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (
-      !phoneNumber ||
-      !address ||
-      !cityLGA ||
-      !state ||
-      !profile.ninUploadId
-    ) {
+    if (!phoneNumber || !address || !cityLGA || !state) {
       setError("Please complete all required fields before continuing.");
       return;
     }
@@ -98,10 +92,10 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
         <StateSelect value={state} onChange={setState} />
       </div>
 
-      <FileUploader
+      {/* <FileUploader
         helperText="International Passport, NIN, Driver's License"
         onUploaded={handleUpload}
-      />
+      /> */}
 
       {error && (
         <Paragraph1 className="text-sm text-red-600 text-center">

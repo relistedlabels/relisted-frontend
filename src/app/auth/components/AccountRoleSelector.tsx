@@ -24,7 +24,7 @@ const RoleOption: React.FC<RoleOptionProps> = ({
 }) => {
   return (
     <div className="w-full p-4 bg-white border border-gray-200 rounded-xl shadow-lg flex flex-col transition hover:shadow-xl">
-      <div className="h-64 overflow-hidden">
+      <div className="h-[320px] overflow-hidden">
         <img
           src={imageUrl}
           alt={title}
@@ -65,8 +65,8 @@ const AccountRoleSelector: React.FC = () => {
   };
 
   return (
-    <div className="font-sans min-h-screen flex items-center justify-center sm:p-4">
-      <div className="max-w-4xl w-full bg-white p-2 py-10 sm:p-10 sm:rounded-xl shadow-2xl text-center">
+    <div className="font-sans min-h-screen flex items-center justify-center p-4">
+      <div className="max-w-4xl w-full bg-white p-4 py-10 sm:p-10 rounded-xl shadow-2xl text-center">
         <div className="mb-6 flex justify-center">
           <img src="/images/logo1.svg" alt="Logo" />
         </div>

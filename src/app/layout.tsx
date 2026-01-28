@@ -70,9 +70,7 @@ export default function RootLayout({
               <DesktopNavbar />
               <MobileNavbar />
               <Header />
-
               {children}
-
               <Footer />
             </UploaderProvider>
           </QueryProvider>
