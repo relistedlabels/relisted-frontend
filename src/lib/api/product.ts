@@ -34,11 +34,11 @@ export type ProductPayload = {
   composition: string;
   measurement: string;
   originalValue: number;
-  color: string[];
+  color: string;
   warning: string;
   size :string
   careInstruction: string;
-  careSteps: string[];
+  careSteps: string;
   stylingTip: string;
   attachments: Attachment[];
   categoryId: string;

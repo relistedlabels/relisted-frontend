@@ -10,7 +10,11 @@ export const useCreateProduct = () => {
 
   return useMutation({
     mutationFn: async (draft: ProductDraft) => {
-      // Map store format to backend expected format
+      // Extract only image URLs from attachments
+      const imageUrls = draft.attachments
+        .filter((att) => att.type === "image")
+        .map((att) => att.url);
+
       const payload = {
         name: draft.name,
         subText: draft.subText,
@@ -20,15 +24,15 @@ export const useCreateProduct = () => {
         measurement: draft.measurement,
         originalValue: draft.originalValue,
         dailyPrice: draft.dailyRentalPrice,
-        quantity: draft.quantity, // Now from store
-        color: draft.color.join(", "),
+        quantity: draft.quantity,
+        color: draft.color,
         warning: draft.warning,
         careInstruction: draft.careInstruction,
-        careSteps: draft.careSteps.join(", "),
+        careSteps: draft.careSteps,
         stylingTip: draft.stylingTip,
-        attachments: draft.attachments.map((att) => att.url),
+        attachments: imageUrls, // Only image URLs
         categoryId: draft.categoryId,
-        tagId: draft.tags[0]?.id || "",
+        tagId: draft.tagId,
         brandId: draft.brandId,
       };
 

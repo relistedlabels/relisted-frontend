@@ -1,9 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api/http";
-import {
-  useProductDraftStore,
-  ProductDraft,
-} from "@/store/useProductDraftStore";
+import { useProductDraftStore, ProductDraft } from "@/store/useProductDraftStore";
 
 export const useUpdateProduct = (productId: string) => {
   const reset = useProductDraftStore((state) => state.reset);
@@ -21,14 +18,14 @@ export const useUpdateProduct = (productId: string) => {
         originalValue: draft.originalValue,
         dailyPrice: draft.dailyRentalPrice,
         quantity: draft.quantity,
-        color: draft.color.join(", "),
+        color: draft.color, // Already a string
         warning: draft.warning,
         careInstruction: draft.careInstruction,
-        careSteps: draft.careSteps.join(", "),
+        careSteps: draft.careSteps, // Already a string
         stylingTip: draft.stylingTip,
         attachments: draft.attachments.map((att) => att.url),
         categoryId: draft.categoryId,
-        tagId: draft.tags[0]?.id || "",
+        tagId: draft.tagId,
         brandId: draft.brandId,
       };
 
