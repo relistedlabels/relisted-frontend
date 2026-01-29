@@ -1,14 +1,5 @@
 // lib/api/product.ts
 import { apiFetch } from "./http";
-type Attachment = {
-  id: string;
-  url: string;
-  name: string;
-  progress:number
-  type?:string
-  slotId?:string
-};
-
 
 export type UserProduct = {
   id: string;
@@ -25,7 +16,6 @@ export type UserProduct = {
   }[];
 };
 
-
 export type ProductPayload = {
   name: string;
   subText: string;
@@ -34,14 +24,16 @@ export type ProductPayload = {
   composition: string;
   measurement: string;
   originalValue: number;
+  dailyPrice: number; // ✅ Match backend
+  quantity: number; // ✅ Add missing field
   color: string;
   warning: string;
-  size :string
   careInstruction: string;
   careSteps: string;
   stylingTip: string;
-  attachments: Attachment[];
+  attachments: string[]; // ✅ Array of IDs (strings), NOT objects
   categoryId: string;
+  tagId: string;
   brandId: string;
 };
 
@@ -73,5 +65,3 @@ export const productApi = {
       method: "GET",
     }),
 };
-
-
