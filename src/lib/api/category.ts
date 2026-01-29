@@ -2,7 +2,7 @@ import { apiFetch } from "./http";
 
 export const categoryApi={
       getCategories: () =>
-        apiFetch("categories", {
+        apiFetch("/categories", {
           method: "GET",
         }),
 }

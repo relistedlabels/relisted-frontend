@@ -1,29 +1,37 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { Paragraph1 } from "@/common/ui/Text";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
 
 const SIZE_MAP: Record<string, string[]> = {
-  EU: Array.from({ length: 14 }, (_, i) => String(35 + i)), // 35–48
-  UK: Array.from({ length: 12 }, (_, i) => String(2 + i)), // 2–13
-  US: Array.from({ length: 12 }, (_, i) => String(3 + i)), // 3–14
+  EU: Array.from({ length: 14 }, (_, i) => String(35 + i)),
+  UK: Array.from({ length: 12 }, (_, i) => String(2 + i)),
+  US: Array.from({ length: 12 }, (_, i) => String(3 + i)),
 };
 
 const UNITS = ["UK", "US", "EU"] as const;
+type Unit = (typeof UNITS)[number];
 
 export const SizeSelector: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const [unit, setUnit] = useState<"UK" | "US" | "EU">("UK");
-  const [size, setSize] = useState<string | null>(null);
 
-  const { setField } = useProductDraftStore();
+  const { data, setField } = useProductDraftStore();
 
-  const sizes = useMemo(() => SIZE_MAP[unit], [unit]);
+  // 👇 extract from store
+  const parsed = useMemo(() => {
+    if (!data.measurement) return { size: null, unit: "UK" as Unit };
 
-  const commit = (s: string, u: string) => {
-    setField("measurement", `${s}-${u}`);
+    const [size, unit] = data.measurement.split("-");
+    return { size, unit: unit as Unit };
+  }, [data.measurement]);
+
+  const sizes = useMemo(() => SIZE_MAP[parsed.unit], [parsed.unit]);
+
+  const commit = (size: string, unit: Unit) => {
+    setField("measurement", `${size}-${unit}`);
+    setOpen(false);
   };
 
   return (
@@ -37,8 +45,10 @@ export const SizeSelector: React.FC = () => {
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-black"
       >
-        <span className={size ? "text-black" : "text-gray-400"}>
-          {size ? `${size} (${unit})` : "Select size"}
+        <span className={parsed.size ? "text-black" : "text-gray-400"}>
+          {parsed.size
+            ? `${parsed.size} (${parsed.unit})`
+            : "Select size"}
         </span>
         <ChevronDown className="h-4 w-4 text-gray-500" />
       </button>
@@ -50,12 +60,11 @@ export const SizeSelector: React.FC = () => {
             {UNITS.map((u) => (
               <button
                 key={u}
-                onClick={() => {
-                  setUnit(u);
-                  setSize(null); // reset because scales differ
-                }}
+                onClick={() => setField("measurement", "")}
                 className={`flex-1 px-3 py-2 text-xs font-medium ${
-                  unit === u ? "bg-gray-100 text-black" : "text-gray-500"
+                  parsed.unit === u
+                    ? "bg-gray-100 text-black"
+                    : "text-gray-500"
                 }`}
               >
                 {u}
@@ -68,13 +77,9 @@ export const SizeSelector: React.FC = () => {
             {sizes.map((s) => (
               <button
                 key={s}
-                onClick={() => {
-                  setSize(s);
-                  commit(s, unit);
-                  setOpen(false);
-                }}
+                onClick={() => commit(s, parsed.unit)}
                 className={`rounded-md border px-2 py-1 text-sm ${
-                  size === s
+                  parsed.size === s
                     ? "border-black text-black"
                     : "border-gray-200 text-gray-600"
                 }`}

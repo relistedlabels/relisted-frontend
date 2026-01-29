@@ -43,7 +43,7 @@ export const QuantityInput: React.FC = () => {
           value={data.quantity}
           onChange={handleChange}
           min="0"
-          className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-center text-sm outline-none transition-colors focus:border-black focus:ring-1 focus:ring-black"
+          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-center text-sm outline-none transition-colors focus:border-black focus:ring-1 focus:ring-black"
         />
         <button
           type="button"

@@ -1,44 +1,46 @@
-// components/BrandSelector.tsx
+// components/CategorySelector.tsx
 "use client";
 
 import React, { useState, useMemo } from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { Paragraph1 } from "@/common/ui/Text";
-import { useBrands } from "@/lib/queries/brand/useBrands";
+import { useCategory } from "@/lib/queries/category/useCategories";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
 
-interface Brand {
+// Match your backend schema
+interface Category {
   id: string;
   name: string;
-  createdAt?: string;
   userId?: string;
+  createdAt?: string;
 }
 
-export const BrandSelector: React.FC = () => {
+export const CategorySelector: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
 
-  const { data: brands = [] } = useBrands();
-  const { data, setField } = useProductDraftStore();
+  // fetch categories from backend
+  const { data: categories = [] } = useCategory();
+  const { data, setField } = useProductDraftStore(); 
 
-  // Filter brands based on search query
+  // filter by search
   const filtered = useMemo(
     () =>
-      (brands as Brand[]).filter((b) =>
-        b.name.toLowerCase().includes(query.toLowerCase())
+      (categories as Category[]).filter((c) =>
+        c.name.toLowerCase().includes(query.toLowerCase())
       ),
-    [brands, query]
+    [categories, query]
   );
 
-  // Selected brand from store
-  const selectedBrand = (brands as Brand[]).find(
-    (b) => b.id === data.brandId
+  // find currently selected category in store
+  const selectedCategory = (categories as Category[]).find(
+    (c) => c.id === data.categoryId
   );
 
   return (
     <div className="relative w-full">
       <Paragraph1 className="mb-1 text-xs font-medium text-gray-700">
-        Brand / Designer
+        Category
       </Paragraph1>
 
       <button
@@ -46,8 +48,8 @@ export const BrandSelector: React.FC = () => {
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-black"
       >
-        <span className={selectedBrand ? "text-black" : "text-gray-400"}>
-          {selectedBrand?.name ?? "Select brand"}
+        <span className={selectedCategory ? "text-black" : "text-gray-400"}>
+          {selectedCategory?.name ?? "Select category"}
         </span>
         <ChevronDown className="h-4 w-4 text-gray-500" />
       </button>
@@ -58,28 +60,31 @@ export const BrandSelector: React.FC = () => {
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search brand..."
+            placeholder="Search category..."
             className="w-full border-b border-gray-100 px-3 py-2 text-sm outline-none"
           />
 
           <div className="max-h-48 overflow-y-auto">
             {filtered.length === 0 && (
-              <p className="px-3 py-2 text-sm text-gray-400">No brands found</p>
+              <p className="px-3 py-2 text-sm text-gray-400">
+                No categories found
+              </p>
             )}
 
-            {filtered.map((brand: Brand) => (
+            {filtered.map((category: Category) => (
               <button
-                key={brand.id}
+                key={category.id}
                 type="button"
                 onClick={() => {
-                  setField("brandId", brand.id); // store selected brand in product draft
+                  // store full category object in draft
+                  setField("categoryId", category.id);
                   setOpen(false);
                   setQuery("");
                 }}
                 className="flex w-full items-center justify-between px-3 py-2 text-left text-sm hover:bg-gray-50"
               >
-                {brand.name}
-                {selectedBrand?.id === brand.id && (
+                {category.name}
+                {selectedCategory?.id === category.id && (
                   <Check className="h-4 w-4 text-black" />
                 )}
               </button>

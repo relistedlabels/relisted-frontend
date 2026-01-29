@@ -6,7 +6,7 @@ import InventoryList from "../components/InventoryList";
 export default function Page() {
     const path = [
       { label: "Dashboard", href: "/curators/dashboard" },
-      { label: "Inventory", href: null }, // Current page, href is null
+      { label: "Inventory", href: null }, 
     ];
   return (
     <DashboardLayout>

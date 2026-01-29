@@ -10,6 +10,7 @@ import { SubTextInput } from "./SubTextInput";
 import { QuantityInput } from "./QuantityInput";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
 import { PricingFields } from "./PricingFields";
+import { CategorySelector } from "./CategorySelector";
 
 export const BasicInformationForm: React.FC = () => {
   const { data, setField } = useProductDraftStore();
@@ -56,8 +57,12 @@ export const BasicInformationForm: React.FC = () => {
         </div>
 
         <ConditionSelector />
+<div className="grid grid-cols-2 gap-4  ">
 
-        <QuantityInput />
+ <QuantityInput />
+        <CategorySelector />
+</div>
+       
       </div>
     </div>
   );
