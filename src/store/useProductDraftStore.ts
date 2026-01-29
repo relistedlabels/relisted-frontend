@@ -24,22 +24,25 @@ export type ProductDraft = {
   condition: string;
   composition: string;
   measurement: string;
+ 
 
   originalValue: number;
   dailyRentalPrice: number;
   quantity: number;
 
-  color: string[];
+  color: string;
   warning: string;
   size: string;
+  
 
   careInstruction: string;
-  careSteps: string[];
+  careSteps: string;
   stylingTip: string;
 
-  tags: Tag[];
+  tagId:string;
   attachments: Attachment[];
   categoryId: string;
+  
   brandId: string;
 };
 
@@ -65,15 +68,15 @@ const initialState: ProductDraft = {
   dailyRentalPrice: 0,
   quantity: 1,
 
-  color: [],
+  color:"" ,
   warning: "",
   size: "",
 
   careInstruction: "",
-  careSteps: [],
+  careSteps: "",
   stylingTip: "",
 
-  tags: [],
+  tagId: "",
   attachments: [],
   categoryId: "",
   brandId: "",

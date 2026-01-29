@@ -14,7 +14,7 @@
 import { categoryApi } from "@/lib/api/category";
 import { useQuery } from "@tanstack/react-query";
 
-export function useCategories() {
+export function useCategory() {
   return useQuery({
     queryKey: ["category"],
     queryFn: () => categoryApi.getCategories(), 

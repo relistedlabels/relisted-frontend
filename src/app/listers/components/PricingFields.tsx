@@ -33,7 +33,7 @@ export const PricingFields: React.FC = () => {
           inputMode="numeric"
           placeholder="500,000"
           className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black"
-          value={formatNumber(data.originalValue || 0)}
+          value={formatNumber(data.originalValue)}
           onChange={(e) =>
             setField("originalValue", parseNumber(e.target.value))
           }
@@ -47,7 +47,7 @@ export const PricingFields: React.FC = () => {
         <input
           type="text"
           className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-          value={formatNumber(data.dailyRentalPrice || 0)}
+          value={formatNumber(data.dailyRentalPrice )}
           onChange={(e) =>
             setField("dailyRentalPrice", parseNumber(e.target.value))
           }

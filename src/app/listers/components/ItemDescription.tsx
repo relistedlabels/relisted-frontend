@@ -55,6 +55,19 @@ export const ItemDescription: React.FC = () => {
             className="w-full resize-none rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black"
           />
         </div>
+
+         <div>
+          <Paragraph1 className="mb-1 text-xs font-medium text-gray-700">
+            Warning 
+          </Paragraph1>
+          <textarea
+            rows={2}
+            value={data.warning}
+            onChange={(e) => setField("warning", e.target.value)}
+            placeholder="How should a dresser care for this item"
+            className="w-full resize-none rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black"
+          />
+        </div>
       </div>
     </div>
   );

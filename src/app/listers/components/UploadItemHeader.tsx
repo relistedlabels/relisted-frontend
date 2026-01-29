@@ -19,8 +19,10 @@ const UploadItemHeader: React.FC<UploadItemHeaderProps> = ({
   const createProduct = useCreateProduct();
 
   const handleSubmit = () => {
-    if (createProduct.isPending) return;
-    createProduct.mutate(data);
+    // if (createProduct.isPending) return;
+    // createProduct.mutate(data);
+    console.log("kkkkkk")
+
   };
 
   const isCreating = createProduct.isPending;
