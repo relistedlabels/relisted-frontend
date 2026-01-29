@@ -6,6 +6,8 @@ import { BrandSelector } from "./BrandSelector";
 import { SizeSelector } from "./SizeSelector";
 import { ColorSelector } from "./ColorSelector";
 import { ConditionSelector } from "./ConditionSelector";
+import { SubTextInput } from "./SubTextInput";
+import { QuantityInput } from "./QuantityInput";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
 import { PricingFields } from "./PricingFields";
 
@@ -42,16 +44,20 @@ export const BasicInformationForm: React.FC = () => {
           />
         </div>
 
+        <SubTextInput />
+
         <BrandSelector />
 
         <PricingFields />
-        
+
         <div className="grid grid-cols-2 gap-4">
           <SizeSelector />
           <ColorSelector />
         </div>
 
         <ConditionSelector />
+
+        <QuantityInput />
       </div>
     </div>
   );
