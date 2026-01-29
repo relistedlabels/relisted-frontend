@@ -1,6 +1,7 @@
 // lib/stores/productDraftStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { Product } from "@/lib/queries/product/useGetProductById";
 
 export type Tag = {
   id: string;
@@ -53,6 +54,7 @@ type ProductDraftStore = {
     value: ProductDraft[K],
   ) => void;
   mergeData: (partial: Partial<ProductDraft>) => void;
+  populateFromProduct: (product: Product) => void;
   reset: () => void;
 };
 
@@ -96,6 +98,39 @@ export const useProductDraftStore = create<ProductDraftStore>()(
         set((state) => ({
           data: { ...state.data, ...partial },
         })),
+
+      populateFromProduct: (product: Product) =>
+        set({
+          data: {
+            name: product.name,
+            subText: product.subText,
+            description: product.description,
+            condition: product.condition,
+            composition: product.composition,
+            measurement: product.measurement,
+            originalValue: product.originalValue,
+            dailyRentalPrice: product.dailyPrice,
+            quantity: product.quantity,
+            color: product.color.split(", ").filter(Boolean),
+            warning: product.warning,
+            size: product.measurement,
+            careInstruction: product.careInstruction,
+            careSteps: product.careSteps.split(", ").filter(Boolean),
+            stylingTip: product.stylingTip,
+            tags: product.tagId
+              ? [{ id: product.tagId, value: product.tagId }]
+              : [],
+            attachments: product.attachments.map((url, idx) => ({
+              id: `${idx}`,
+              url,
+              name: `Image ${idx + 1}`,
+              progress: 100,
+              type: "image",
+            })),
+            categoryId: product.categoryId,
+            brandId: product.brandId,
+          },
+        }),
 
       reset: () => set({ data: initialState }),
     }),

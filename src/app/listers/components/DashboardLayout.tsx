@@ -170,6 +170,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           Relisted labels
         </HeaderAny>
 
+        <Paragraph3 className=" text-white"> Early Access</Paragraph3>
+
         {/* Profile */}
         <div className="flex items-center border-b border-gray-800 pb-4 mb-4 space-x-3">
           <UserProfileBadge />
@@ -224,7 +226,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
           <div />
 
-          {/* <Paragraph3 className=" text-white"> Early Access</Paragraph3> */}
+          <Paragraph3 className=" text-white"> Early Access</Paragraph3>
 
           <div className="flex items-center gap-4">
             <Mail className="w-5 h-5 text-white cursor-pointer" />

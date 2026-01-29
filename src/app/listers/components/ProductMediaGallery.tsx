@@ -3,21 +3,27 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X, Play } from "lucide-react";
+import { useProductDetailsStore } from "@/store/useProductDetailsStore";
 
-// Media can be image or video
-const media = [
-  { type: "image", src: "/products/sam1.jpg" },
-  { type: "image", src: "/products/sam2.jpg" },
-  { type: "image", src: "/products/sam3.jpg" },
-  { type: "image", src: "/products/sam4.jpg" },
-  { type: "image", src: "/products/sam3.jpg" },
-  { type: "image", src: "/products/sam4.jpg" },
-  { type: "video", src: "/products/product-video.mp4" }, // LAST ITEM = VIDEO
-];
+interface MediaItem {
+  type: "image" | "video";
+  src: string;
+}
 
 const ProductMediaGallery: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const product = useProductDetailsStore((state) => state.product);
+
+  if (!product || !product.attachments || product.attachments.length === 0) {
+    return <div className="text-center py-8">No media available</div>;
+  }
+
+  // Convert attachments to media items (assume all are images for now)
+  const media: MediaItem[] = product.attachments.map((url) => ({
+    type: "image" as const,
+    src: url,
+  }));
 
   const nextMedia = () => {
     setActiveIndex((prev) => (prev + 1) % media.length);
@@ -68,7 +74,7 @@ const ProductMediaGallery: React.FC = () => {
       </motion.div>
 
       {/* Thumbnails */}
-      <div className="sm:w-full w-[340px] - flex hide-scrollbar overflow-hidden overflow-x-auto ">
+      <div className="sm:w-full w-[340px] flex hide-scrollbar overflow-hidden overflow-x-auto">
         <div className="mt-3 flex gap-3">
           {media.map((item, index) => (
             <motion.button
@@ -106,7 +112,6 @@ const ProductMediaGallery: React.FC = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center"
           >
-            {/* Close */}
             <button
               onClick={() => setIsOpen(false)}
               className="absolute top-6 right-6 text-white"
@@ -114,7 +119,6 @@ const ProductMediaGallery: React.FC = () => {
               <X className="w-7 h-7" />
             </button>
 
-            {/* Prev */}
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={prevMedia}
@@ -123,7 +127,6 @@ const ProductMediaGallery: React.FC = () => {
               <ChevronLeft className="w-8 h-8" />
             </motion.button>
 
-            {/* Media */}
             <AnimatePresence mode="wait">
               {activeItem.type === "image" ? (
                 <motion.img
@@ -151,7 +154,6 @@ const ProductMediaGallery: React.FC = () => {
               )}
             </AnimatePresence>
 
-            {/* Next */}
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={nextMedia}
