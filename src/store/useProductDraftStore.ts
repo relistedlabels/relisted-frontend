@@ -25,7 +25,6 @@ export type ProductDraft = {
   condition: string;
   composition: string;
   measurement: string;
- 
 
   originalValue: number;
   dailyRentalPrice: number;
@@ -34,16 +33,15 @@ export type ProductDraft = {
   color: string;
   warning: string;
   size: string;
-  
 
   careInstruction: string;
   careSteps: string;
   stylingTip: string;
 
-  tagId:string;
+  tagId: string;
   attachments: Attachment[];
   categoryId: string;
-  
+
   brandId: string;
 };
 
@@ -70,7 +68,7 @@ const initialState: ProductDraft = {
   dailyRentalPrice: 0,
   quantity: 1,
 
-  color:"" ,
+  color: "",
   warning: "",
   size: "",
 
@@ -111,15 +109,13 @@ export const useProductDraftStore = create<ProductDraftStore>()(
             originalValue: product.originalValue,
             dailyRentalPrice: product.dailyPrice,
             quantity: product.quantity,
-            color: product.color.split(", ").filter(Boolean),
+            color: product.color, // Keep as string
             warning: product.warning,
             size: product.measurement,
             careInstruction: product.careInstruction,
-            careSteps: product.careSteps.split(", ").filter(Boolean),
+            careSteps: product.careSteps, // Keep as string
             stylingTip: product.stylingTip,
-            tags: product.tagId
-              ? [{ id: product.tagId, value: product.tagId }]
-              : [],
+            tagId: product.tagId || "",
             attachments: product.attachments.map((url, idx) => ({
               id: `${idx}`,
               url,

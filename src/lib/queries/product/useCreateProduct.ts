@@ -20,15 +20,15 @@ export const useCreateProduct = () => {
         measurement: draft.measurement,
         originalValue: draft.originalValue,
         dailyPrice: draft.dailyRentalPrice,
-        quantity: draft.quantity, // Now from store
-        color: draft.color.join(", "),
+        quantity: draft.quantity,
+        color: draft.color, // Already a string
         warning: draft.warning,
         careInstruction: draft.careInstruction,
-        careSteps: draft.careSteps.join(", "),
+        careSteps: draft.careSteps, // Already a string
         stylingTip: draft.stylingTip,
         attachments: draft.attachments.map((att) => att.url),
         categoryId: draft.categoryId,
-        tagId: draft.tags[0]?.id || "",
+        tagId: draft.tagId,
         brandId: draft.brandId,
       };
 
