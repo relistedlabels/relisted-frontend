@@ -41,7 +41,6 @@ export type ProductDraft = {
   tagId: string;
   attachments: Attachment[];
   categoryId: string;
-
   brandId: string;
 };
 
@@ -61,7 +60,7 @@ const initialState: ProductDraft = {
   subText: "",
   description: "",
   condition: "",
-  composition: "",
+  composition: "Cotton", // ✅ Default to Cotton
   measurement: "",
 
   originalValue: 0,
@@ -104,16 +103,16 @@ export const useProductDraftStore = create<ProductDraftStore>()(
             subText: product.subText,
             description: product.description,
             condition: product.condition,
-            composition: product.composition,
+            composition: product.composition || "Cotton", // ✅ Default to Cotton if empty
             measurement: product.measurement,
             originalValue: product.originalValue,
             dailyRentalPrice: product.dailyPrice,
             quantity: product.quantity,
-            color: product.color, // Keep as string
+            color: product.color,
             warning: product.warning,
             size: product.measurement,
             careInstruction: product.careInstruction,
-            careSteps: product.careSteps, // Keep as string
+            careSteps: product.careSteps,
             stylingTip: product.stylingTip,
             tagId: product.tagId || "",
             attachments: product.attachments.map((url, idx) => ({

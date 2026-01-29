@@ -10,10 +10,10 @@ export const useCreateProduct = () => {
 
   return useMutation({
     mutationFn: async (draft: ProductDraft) => {
-      // Extract only image URLs from attachments
-      const imageUrls = draft.attachments
+      // ✅ Extract only image IDs (not URLs)
+      const attachmentIds = draft.attachments
         .filter((att) => att.type === "image")
-        .map((att) => att.url);
+        .map((att) => att.id);
 
       const payload = {
         name: draft.name,
@@ -25,16 +25,18 @@ export const useCreateProduct = () => {
         originalValue: draft.originalValue,
         dailyPrice: draft.dailyRentalPrice,
         quantity: draft.quantity,
-        color: draft.color, // Already a string
+        color: draft.color,
         warning: draft.warning,
         careInstruction: draft.careInstruction,
-        careSteps: draft.careSteps, // Already a string
+        careSteps: String(draft.careSteps).trim(),
         stylingTip: draft.stylingTip,
-        attachments: imageUrls, // Only image URLs
+        attachments: attachmentIds, // ✅ IDs, not URLs
         categoryId: draft.categoryId,
         tagId: draft.tagId,
         brandId: draft.brandId,
       };
+
+      console.log("📤 Sending payload:", payload);
 
       return apiFetch<any>("/product", {
         method: "POST",
