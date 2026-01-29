@@ -3,9 +3,9 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export type Tag = {
-  id: string; // db id or temp id
+  id: string;
   value: string;
-  isNew?: boolean; // client-created
+  isNew?: boolean;
 };
 
 export type Attachment = {
@@ -24,7 +24,10 @@ export type ProductDraft = {
   condition: string;
   composition: string;
   measurement: string;
+
   originalValue: number;
+  dailyRentalPrice: number;
+  quantity: number;
 
   color: string[];
   warning: string;
@@ -34,8 +37,7 @@ export type ProductDraft = {
   careSteps: string[];
   stylingTip: string;
 
-  tags: Tag[]; // ✅ only selected tags (db + new)
-
+  tags: Tag[];
   attachments: Attachment[];
   categoryId: string;
   brandId: string;
@@ -58,7 +60,10 @@ const initialState: ProductDraft = {
   condition: "",
   composition: "",
   measurement: "",
+
   originalValue: 0,
+  dailyRentalPrice: 0,
+  quantity: 1,
 
   color: [],
   warning: "",
@@ -69,7 +74,6 @@ const initialState: ProductDraft = {
   stylingTip: "",
 
   tags: [],
-
   attachments: [],
   categoryId: "",
   brandId: "",

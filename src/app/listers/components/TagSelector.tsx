@@ -5,42 +5,38 @@ import React, { useMemo, useState } from "react";
 import { Plus } from "lucide-react";
 import { Paragraph1, Paragraph3 } from "@/common/ui/Text";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
-import { nanoid } from "nanoid";
-
-const DEMO_TAGS = [
-  "Men",
-  "Women",
-  "Unisex",
-  "Nightlife",
-  "Summer",
-  "Casual",
-  "Luxury",
-  "Formal",
-  "Streetwear",
-  "Vintage",
-  "Party",
-  "Workwear",
-].map((value, i) => ({
-  id: `demo-${i}`,
-  value,
-}));
+import { useTags, useCreateTag } from "@/lib/queries/tag/useTags";
 
 export const TagSelector: React.FC = () => {
   const data = useProductDraftStore((s) => s.data);
   const mergeData = useProductDraftStore((s) => s.mergeData);
 
-  const selected = data?.tags ?? []; // ✅ guard
+  const selected = data?.tags ?? [];
   const [query, setQuery] = useState("");
 
-  const filteredTags = useMemo(
+  const { data: tags = [] } = useTags();
+  const { mutate: createTag } = useCreateTag();
+
+  const normalizedTags = useMemo(
     () =>
-      DEMO_TAGS.filter((t) =>
-        t.value.toLowerCase().includes(query.toLowerCase()),
-      ),
-    [query],
+      tags.map((t) => ({
+        id: t.id,
+        value: t.name,
+      })),
+    [tags],
   );
 
-  const toggleTag = (tag: (typeof DEMO_TAGS)[number]) => {
+  const visibleTags = useMemo(() => {
+    const q = query.trim().toLowerCase();
+
+    if (!q) {
+      return normalizedTags.slice(0, 10);
+    }
+
+    return normalizedTags.filter((t) => t.value.toLowerCase().includes(q));
+  }, [normalizedTags, query]);
+
+  const toggleTag = (tag: { id: string; value: string }) => {
     const exists = selected.some((t) => t.id === tag.id);
 
     if (exists) {
@@ -60,7 +56,9 @@ export const TagSelector: React.FC = () => {
   const canAdd =
     query.length > 0 &&
     selected.length < 10 &&
-    !DEMO_TAGS.some((t) => t.value.toLowerCase() === query.toLowerCase()) &&
+    !normalizedTags.some(
+      (t) => t.value.toLowerCase() === query.toLowerCase(),
+    ) &&
     !selected.some((t) => t.value.toLowerCase() === query.toLowerCase());
 
   return (
@@ -80,7 +78,7 @@ export const TagSelector: React.FC = () => {
       />
 
       <div className="flex flex-wrap gap-2">
-        {filteredTags.map((tag) => {
+        {visibleTags.map((tag) => {
           const active = selected.some((t) => t.id === tag.id);
           return (
             <button
@@ -102,16 +100,13 @@ export const TagSelector: React.FC = () => {
           <button
             type="button"
             onClick={() => {
-              const newTag = {
-                id: nanoid(),
-                value: query,
-                isNew: true,
-              };
-
+              createTag({ name: query });
               mergeData({
-                tags: [...selected, newTag],
+                tags: [
+                  ...selected,
+                  { id: `new-${query}`, value: query, isNew: true },
+                ],
               });
-
               setQuery("");
             }}
             className="flex items-center gap-1 rounded-md border border-dashed border-gray-400 px-3 py-1.5 text-xs font-medium text-gray-700 hover:border-black"
