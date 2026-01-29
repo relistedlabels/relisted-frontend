@@ -3,43 +3,43 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Paragraph1 } from "@/common/ui/Text";
+import { useProductDetailsStore } from "@/store/useProductDetailsStore";
 
-// --- Tab Types ---
 type TabID = "details" | "styling" | "care";
 
 interface Tab {
   id: TabID;
   label: string;
-  content: string;
+  getContent: () => string;
 }
-
-const tabs: Tab[] = [
-  {
-    id: "details",
-    label: "Product details",
-    content:
-      "Office ipsum you must be muted. Watches chime tent manage submit event hill no-brainer dive. Pushback respectively it's if well. Focus of they see eco-system quick-win. Winning first create skulls field base start.",
-  },
-  {
-    id: "styling",
-    label: "Styling",
-    content:
-      "High-waist trousers or a sleek midi skirt would complement these boots perfectly. Consider a monochromatic look to let the hagfish leather texture stand out.",
-  },
-  {
-    id: "care",
-    label: "Product Care",
-    content:
-      "Wipe with a damp cloth after use. Store in a cool, dry place away from direct sunlight. Use a specialized leather conditioner every 6 months to maintain suppleness.",
-  },
-];
 
 const ProductInfoTabs: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabID>("details");
+  const product = useProductDetailsStore((state) => state.product);
+
+  if (!product) return null;
+
+  const tabs: Tab[] = [
+    {
+      id: "details",
+      label: "Product details",
+      getContent: () => product.description || "No description available",
+    },
+    {
+      id: "styling",
+      label: "Styling",
+      getContent: () => product.stylingTip || "No styling tips available",
+    },
+    {
+      id: "care",
+      label: "Product Care",
+      getContent: () =>
+        product.careInstruction || "No care instructions available",
+    },
+  ];
 
   return (
-    <div className="w-full max-w-2xl  border border-gray-300 rounded-2xl p-4  mt-6">
-      {/* 1. Tab Switcher Header */}
+    <div className="w-full max-w-2xl border border-gray-300 rounded-2xl p-4 mt-6">
       <div className="relative flex p-1 bg-gray-50 border border-gray-300 rounded-xl mb-6 w-full">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
@@ -51,7 +51,6 @@ const ProductInfoTabs: React.FC = () => {
                 isActive ? "text-white" : "text-gray-600 hover:text-black"
               }`}
             >
-              {/* Animated Background Pill */}
               {isActive && (
                 <motion.div
                   layoutId="activeTabPill"
@@ -59,13 +58,12 @@ const ProductInfoTabs: React.FC = () => {
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
-              <Paragraph1>{tab.label} </Paragraph1>
+              <Paragraph1>{tab.label}</Paragraph1>
             </button>
           );
         })}
       </div>
 
-      {/* 2. Tab Content Area */}
       <div className="min-h-[100px] relative overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
@@ -76,7 +74,7 @@ const ProductInfoTabs: React.FC = () => {
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
             <Paragraph1 className="text-gray-600 leading-relaxed">
-              {tabs.find((t) => t.id === activeTab)?.content}
+              {tabs.find((t) => t.id === activeTab)?.getContent()}
             </Paragraph1>
           </motion.div>
         </AnimatePresence>

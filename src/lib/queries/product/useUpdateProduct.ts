@@ -1,8 +1,44 @@
 import { useMutation } from "@tanstack/react-query";
-import { productApi, ProductPayload } from "@/lib/api/product";
+import { apiFetch } from "@/lib/api/http";
+import {
+  useProductDraftStore,
+  ProductDraft,
+} from "@/store/useProductDraftStore";
 
-export function useUpdateProduct(id: string) {
+export const useUpdateProduct = (productId: string) => {
+  const reset = useProductDraftStore((state) => state.reset);
+
   return useMutation({
-    mutationFn: (data: Partial<ProductPayload>) => productApi.update(id, data),
+    mutationFn: async (draft: ProductDraft) => {
+      // Map store format to backend expected format
+      const payload = {
+        name: draft.name,
+        subText: draft.subText,
+        description: draft.description,
+        condition: draft.condition,
+        composition: draft.composition,
+        measurement: draft.measurement,
+        originalValue: draft.originalValue,
+        dailyPrice: draft.dailyRentalPrice,
+        quantity: draft.quantity,
+        color: draft.color.join(", "),
+        warning: draft.warning,
+        careInstruction: draft.careInstruction,
+        careSteps: draft.careSteps.join(", "),
+        stylingTip: draft.stylingTip,
+        attachments: draft.attachments.map((att) => att.url),
+        categoryId: draft.categoryId,
+        tagId: draft.tags[0]?.id || "",
+        brandId: draft.brandId,
+      };
+
+      return apiFetch<any>(`/product/${productId}`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+      });
+    },
+    onSuccess: () => {
+      reset();
+    },
   });
-}
+};

@@ -8,24 +8,25 @@ import { ItemDescription } from "../../components/ItemDescription";
 
 export default function Page() {
   const path = [
-    { label: "Dashboard", href: "/curators/dashboard" },
-    { label: "Inventory", href: "/curators/inventory" },
+    { label: "Dashboard", href: "/listers/dashboard" },
+    { label: "Inventory", href: "/listers/inventory" },
     { label: "New Item", href: null },
   ];
+
   return (
     <DashboardLayout>
-      <div className=" mb-4 px-4 sm:px-0 ">
-        <Breadcrumbs items={path} />{" "}
+      <div className="mb-4 px-4 sm:px-0">
+        <Breadcrumbs items={path} />
       </div>
       <div>
         <UploadItemHeader />
-      </div>{" "}
+      </div>
       <div>
         <ItemImageUploader />
       </div>
-      <div className=" grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-        <BasicInformationForm />{" "}
-        <div className=" space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+        <BasicInformationForm />
+        <div className="space-y-4">
           <TagSelector />
           <ItemDescription />
         </div>
