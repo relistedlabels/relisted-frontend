@@ -25,10 +25,10 @@ export const useCreateProduct = () => {
         originalValue: draft.originalValue,
         dailyPrice: draft.dailyRentalPrice,
         quantity: draft.quantity,
-        color: draft.color,
+        color: draft.color, // Already a string
         warning: draft.warning,
         careInstruction: draft.careInstruction,
-        careSteps: draft.careSteps,
+        careSteps: draft.careSteps, // Already a string
         stylingTip: draft.stylingTip,
         attachments: imageUrls, // Only image URLs
         categoryId: draft.categoryId,
