@@ -31,44 +31,21 @@ const UploadItemHeader: React.FC<UploadItemHeaderProps> = ({
   const mutation = isEditing ? updateProduct : createProduct;
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const validateForm = (): boolean => {
-    if (!data.name.trim()) {
-      setErrorMessage("Item name is required");
-      return false;
-    }
-    if (!data.categoryId) {
-      setErrorMessage("Category is required");
-      return false;
-    }
-    if (!data.brandId) {
-      setErrorMessage("Brand is required");
-      return false;
-    }
-    if (data.attachments.length === 0) {
-      setErrorMessage("At least one image is required");
-      return false;
-    }
-    if (!data.condition) {
-      setErrorMessage("Condition is required");
-      return false;
-    }
-    setErrorMessage("");
-    return true;
-  };
-
   const handleSubmit = () => {
     if (mutation.isPending) return;
 
-    if (!validateForm()) return;
+    setErrorMessage("");
 
     mutation.mutate(data, {
       onSuccess: () => {
         router.push("/listers/inventory");
       },
       onError: (error: any) => {
-        setErrorMessage(
-          error?.message || "Failed to save product. Please try again.",
-        );
+        const message =
+          error?.response?.data?.message ||
+          error?.message ||
+          "Failed to save product. Please try again.";
+        setErrorMessage(message);
       },
     });
   };
