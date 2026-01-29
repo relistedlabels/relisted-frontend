@@ -79,8 +79,8 @@ const AccountRoleSelector: React.FC = () => {
 
         {/* Early Access Alert */}
         <div className="mb-8 rounded-lg border border-green-300 bg-green-100/60 px-4 py-3">
-          <Paragraph1 className="text-sm text-green-700 font-medium">
-            Early access: features are rolling out gradually as we scale.
+          <Paragraph1 className="text-sm text-green-700 font-bold">
+            Early access
           </Paragraph1>
         </div>
 
@@ -93,13 +93,13 @@ const AccountRoleSelector: React.FC = () => {
             roleKey="LISTER"
           />
 
-          <RoleOption
+          {/* <RoleOption
             title="Renter"
             description="I want to rent stylish, quality pieces for events, everyday wear, or content creation."
             imageUrl="/images/sin1.jpg"
             onContinue={handleRoleSelection}
             roleKey="RENTER"
-          />
+          /> */}
         </div>
       </div>
     </div>
