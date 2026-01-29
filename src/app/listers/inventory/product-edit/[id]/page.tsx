@@ -60,7 +60,7 @@ export default function Page() {
 
   return (
     <DashboardLayout>
-      <div className="mb-4 px-4 sm:px-0">
+      <div className="mb-4  ">
         <Breadcrumbs items={path} />
       </div>
 
