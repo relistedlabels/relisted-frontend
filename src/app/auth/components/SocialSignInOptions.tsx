@@ -27,15 +27,14 @@ const SocialSignInOptions: React.FC = () => {
   return (
     <div className="font-sans w-full">
       {/* OR Separator */}
-      <div className="flex items-center my-6">
+      <div className="flex- items-center hidden my-6">
         <div className="grow border-t border-gray-300" />
         <span className="shrink mx-4 text-sm font-medium text-gray-500">
           OR
         </span>
         <div className="grow border-t border-gray-300" />
       </div>
-
-      <div className="space-y-4">
+      <div className="space-y-4 hidden">
         <GoogleLoginButton />
 
         <button
