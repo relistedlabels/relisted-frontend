@@ -67,6 +67,14 @@ const AccountRoleSelector: React.FC = () => {
   return (
     <div className="font-sans min-h-screen flex items-center justify-center p-4">
       <div className="max-w-4xl w-full bg-white p-4 py-10 sm:p-10 rounded-xl shadow-2xl text-center">
+        <div className=" flex w-full  items-center justify-center">
+          {" "}
+          <div className="mb-8 rounded-full w-fit border border-green-300 bg-green-100/60 px-4 py-3">
+            <Paragraph1 className="text-sm text-green-700 font-medium">
+              Early access
+            </Paragraph1>
+          </div>{" "}
+        </div>{" "}
         <div className="mb-6 flex justify-center">
           <img src="/images/logo1.svg" alt="Logo" />
         </div>
@@ -76,16 +84,6 @@ const AccountRoleSelector: React.FC = () => {
         <Paragraph1 className="text-sm text-gray-600 mb-8">
           Choose how you want to get started. You can switch roles anytime.
         </Paragraph1>
-
-        <div className=" flex w-full  items-center justify-center">
-          {" "}
-          <div className="mb-8 rounded-full w-fit border border-green-300 bg-green-100/60 px-4 py-3">
-            <Paragraph1 className="text-sm text-green-700 font-medium">
-              Early access
-            </Paragraph1>
-          </div>{" "}
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <RoleOption
             title="Lister"
@@ -95,7 +93,7 @@ const AccountRoleSelector: React.FC = () => {
             roleKey="LISTER"
           />
 
-          <div className="relative">
+          <div className="relative hidden">
             {/* coming soon label */}
             <div className="absolute top-10 left-1/2 -translate-x-1/2 z-20 font-semibold tracking-wide text-white text-2xl">
               <Paragraph1> Coming soon</Paragraph1>

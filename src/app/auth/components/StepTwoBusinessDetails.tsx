@@ -82,7 +82,7 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
       <div>
         <label className="block mb-2">
           <Paragraph1 className="text-sm font-medium text-gray-800">
-            Business / Brand Name
+            Username / Brand Name
           </Paragraph1>
         </label>
         <div className="relative">
@@ -97,55 +97,79 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
 
       <div>
         <label className="block mb-2">
-          <Paragraph1 className="text-sm font-medium text-gray-800">
-            Business Email (Optional)
-          </Paragraph1>
+          <div className="flex items-center gap-2">
+            <Paragraph1 className="text-sm font-medium text-gray-800">
+              Business Email
+            </Paragraph1>
+            <span className="text-xs text-gray-500 font-normal">
+              (Optional)
+            </span>
+          </div>
         </label>
         <div className="relative">
           <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             value={businessEmail}
             onChange={(e) => setBusinessEmail(e.target.value)}
-            className="w-full p-4 pl-12 border rounded-lg"
+            placeholder="Fill in to get account verified"
+            className="w-full p-4 pl-12 border rounded-lg text-gray-700 placeholder-gray-400"
           />
         </div>
       </div>
 
       <div>
         <label className="block mb-2">
-          <Paragraph1 className="text-sm font-medium text-gray-800">
-            Business Registration Number
-          </Paragraph1>
+          <div className="flex items-center gap-2">
+            <Paragraph1 className="text-sm font-medium text-gray-800">
+              Business Registration Number
+            </Paragraph1>
+            <span className="text-xs text-gray-500 font-normal">
+              (Optional)
+            </span>
+          </div>
         </label>
         <div className="relative">
           <Hash className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             value={registrationNumber}
             onChange={(e) => setRegistrationNumber(e.target.value)}
-            className="w-full p-4 pl-12 border rounded-lg"
+            placeholder="Fill in to get account verified"
+            className="w-full p-4 pl-12 border rounded-lg text-gray-700 placeholder-gray-400"
           />
         </div>
       </div>
 
       <div>
         <label className="block mb-2">
-          <Paragraph1 className="text-sm font-medium text-gray-800">
-            Business Address
-          </Paragraph1>
+          <div className="flex items-center gap-2">
+            <Paragraph1 className="text-sm font-medium text-gray-800">
+              Business Address
+            </Paragraph1>
+            <span className="text-xs text-gray-500 font-normal">
+              (Optional)
+            </span>
+          </div>
         </label>
         <div className="relative">
           <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            className="w-full p-4 pl-12 border rounded-lg"
+            placeholder="Fill in to get account verified"
+            className="w-full p-4 pl-12 border rounded-lg text-gray-700 placeholder-gray-400"
           />
         </div>
       </div>
 
       <div className="flex gap-4">
-        <CityLGASelect value={city} onChange={setCity} />
-        <StateSelect value={state} onChange={setState} />
+        <div className="flex-1">
+          
+          <CityLGASelect value={city} onChange={setCity} />
+        </div>
+        <div className="flex-1">
+          
+          <StateSelect value={state} onChange={setState} />
+        </div>
       </div>
 
       <div className="flex gap-4 pt-4">
@@ -156,8 +180,6 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
         >
           <Paragraph1>Previous</Paragraph1>
         </button>
-
-        
 
         <button
           type="submit"
