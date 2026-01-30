@@ -9,14 +9,15 @@ import {
   Wallet,
   AlertCircle,
   CreditCard,
+  Heart,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Paragraph1, Paragraph3 } from "@/common/ui/Text";
+import { Paragraph1, Paragraph2, Paragraph3 } from "@/common/ui/Text";
 import UserProfileOverview from "./components/UserProfileOverview";
 import UserRecords from "./components/UserRecords";
 import UserWallet from "./components/UserWallet";
 import UserDisputes from "./components/UserDisputes";
-import UserTransactions from "./components/UserTransactions";
+import SavedItems from "./components/SavedItems";
 
 interface UserDetailPageProps {
   params: {
@@ -57,7 +58,7 @@ const TABS = [
   { id: "rentals", label: "Rentals", icon: ShoppingBag },
   { id: "wallet", label: "Wallet", icon: Wallet },
   { id: "disputes", label: "Disputes", icon: AlertCircle },
-  { id: "transactions", label: "Transactions", icon: CreditCard },
+  { id: "transactions", label: "Favorites", icon: Heart },
 ];
 
 export default function UserDetailPage({ params }: UserDetailPageProps) {
@@ -83,7 +84,7 @@ export default function UserDetailPage({ params }: UserDetailPageProps) {
       case "disputes":
         return <UserDisputes user={DEMO_USER} />;
       case "transactions":
-        return <UserTransactions user={DEMO_USER} />;
+        return <SavedItems user={DEMO_USER} />;
       default:
         return <UserProfileOverview user={DEMO_USER} />;
     }
@@ -93,7 +94,7 @@ export default function UserDetailPage({ params }: UserDetailPageProps) {
     <div className="min-h-screen ">
       <div className="">
         {/* Header */}
-        <div className="flex items-center justify-between gap-4 mb-6 border-b border-gray-200">
+        <div className="flex items-center justify-between gap-4 mb-6 border-b border-gray-200 pb-6">
           <div className="flex items-center gap-4 flex-1">
             <div className="flex items-center gap-4">
               <img
@@ -102,9 +103,9 @@ export default function UserDetailPage({ params }: UserDetailPageProps) {
                 className="w-12 h-12 rounded-full object-cover"
               />
               <div>
-                <Paragraph3 className="text-lg font-bold text-gray-900">
+                <Paragraph2 className="text-2xl font-extrabold text-gray-900 tracking-tight">
                   {DEMO_USER.name}
-                </Paragraph3>
+                </Paragraph2>
                 <Paragraph1 className="text-xs text-gray-500">
                   Joined {DEMO_USER.joinDate}
                 </Paragraph1>

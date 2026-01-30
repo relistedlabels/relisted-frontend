@@ -23,7 +23,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         onLogout={handleLogout}
       />
 
-      <main className="flex-1 p-8 pt-24 hide-scrollbar overflow-auto">
+      <main className="flex-1 bg-white p-2 sm:p-8 pt-20 sm:pt-[100px] hide-scrollbar overflow-auto">
         {children}
       </main>
     </div>
