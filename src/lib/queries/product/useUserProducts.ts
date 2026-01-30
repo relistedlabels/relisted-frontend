@@ -5,6 +5,11 @@ import { productApi } from "@/lib/api/product";
 export const useUserProducts = () =>
   useQuery({
     queryKey: ["user-products"],
-    queryFn: productApi.getUserProducts,
-    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const response = await productApi.getUserProducts();
+      // ✅ Extract data array from response wrapper
+      return response.data;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
   });

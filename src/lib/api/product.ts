@@ -1,24 +1,47 @@
 // lib/api/product.ts
 import { apiFetch } from "./http";
 
+export type ProductAttachment = {
+  id: string;
+  productId: string;
+  disputeId: string | null;
+};
+
+export type ProductCurator = {
+  name: string;
+  id: string;
+};
+
 export type UserProduct = {
   id: string;
   name: string;
-   measurement: string;
-   dailyPrice:string,
-   isAvailable:"AVAILABLE"|
- "RENTED"|
- "MAINTENANCE"|
-  "RESERVED",
-  color: string;
-  pricePerDay: number;
+  subText: string;
+  description: string;
+  condition: string;
+  productVerified: boolean;
+  dailyPrice: number;
+  isActive: boolean;
+  quantity: number;
+  status: "AVAILABLE" | "RENTED" | "MAINTENANCE" | "RESERVED";
+  composition: string;
+  measurement: string;
   originalValue: number;
+  warning: string;
+  color: string;
+  brandId: string | null;
+  categoryId: string | null;
+  tagId: string | null;
+  curatorId: string;
+  receiveSmsNotifications: boolean;
+  receiveEmailNotifications: boolean;
+  receiveProductRecommendations: boolean;
+  careInstruction: string;
+  careSteps: string;
+  stylingTip: string;
   createdAt: string;
-  isActive: "ACTIVE" | "DISABLED";
-  isRented: boolean;
-  attachments: {
-    url: string;
-  }[];
+  updatedAt: string;
+  attachments: ProductAttachment;
+  curator: ProductCurator;
 };
 
 export type ProductPayload = {
@@ -29,27 +52,28 @@ export type ProductPayload = {
   composition: string;
   measurement: string;
   originalValue: number;
-  dailyPrice: number; // ✅ Correct field name (not pricePerDay)
-  quantity: number; // ✅ Added missing field
-  color: string; // ✅ String, not array
+  dailyPrice: number;
+  quantity: number;
+  color: string;
   warning: string;
   careInstruction: string;
-  careSteps: string; // ✅ String, not array
+  careSteps: string;
   stylingTip: string;
-  attachments: string[]; // ✅ Array of IDs (strings)
-  categoryId: string; // ✅ Category ID only
-  tagId: string; // ✅ Tag ID separate
+  attachments: string[];
+  categoryId: string;
+  tagId: string;
   brandId: string;
 };
 
 export type ProductResponse = {
-  message: string; // ✅ Backend returns message, not id
+  message: string;
 };
 
-type ProductsResponse = {
-  product: UserProduct[];
+export type UserProductsResponse = {
+  success: boolean;
+  message: string;
+  data: UserProduct[];
 };
-
 
 export const productApi = {
   create: (data: ProductPayload) =>
@@ -59,7 +83,7 @@ export const productApi = {
     }),
 
   getById: (id: string) =>
-    apiFetch<ProductPayload>(`/product/${id}`, {
+    apiFetch<UserProduct>(`/product/${id}`, {
       method: "GET",
     }),
 
@@ -75,7 +99,7 @@ export const productApi = {
     }),
 
   getUserProducts: () =>
-    apiFetch<ProductsResponse>("/product/user-products", {
+    apiFetch<UserProductsResponse>("/product/user-products", {
       method: "GET",
     }),
 };

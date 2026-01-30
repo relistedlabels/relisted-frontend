@@ -6,30 +6,9 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUserProducts } from "@/lib/queries/product/useUserProducts";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { ToolInfo } from "@/common/ui/ToolInfo";
-
-// --- Backend product type ---
-export type UserProduct = {
-  id: string;
-  name: string;
-  measurement: string;
-  color: string;
-  dailyPrice: number;
-  originalValue: number;
-  createdAt: string;
-  isActive: boolean;
-  status: string; // "AVAILABLE" etc.
-  attachments: {
-    id: string;
-    productId: string;
-    disputeId?: string | null;
-  };
-  curator: {
-    name: string;
-    id: string;
-  };
-};
+import type { UserProduct } from "@/lib/api/product";
 
 // --- Frontend Inventory Item type ---
 interface InventoryItem {
@@ -40,11 +19,22 @@ interface InventoryItem {
   pricePerDay: string;
   itemValue: string;
   listedDate: string;
-  isAvailable: boolean;
-  isRented: boolean;
-  status: "Active" | "Disabled";
+  status: "AVAILABLE" | "RENTED" | "MAINTENANCE" | "RESERVED";
+  isActive: boolean;
   imageUrl: string;
+  curatorName: string;
 }
+
+// ✅ Helper to convert ALL_CAPS status to Initial Caps for display
+const formatStatusLabel = (
+  status: "AVAILABLE" | "RENTED" | "MAINTENANCE" | "RESERVED" | "All",
+): string => {
+  if (status === "All") return "All Items";
+  return status
+    .split("_")
+    .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
+    .join(" ");
+};
 
 // --- Individual Item Card ---
 const InventoryItemCard: React.FC<InventoryItem> = ({
@@ -55,15 +45,40 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
   pricePerDay,
   itemValue,
   listedDate,
-  isAvailable,
-  isRented,
   status,
+  isActive,
   imageUrl,
+  curatorName,
 }) => {
   const router = useRouter();
 
-  const statusText = isAvailable ? "Available" : isRented ? "Rented" : "Disabled";
-  const dotClass = isAvailable ? "bg-green-600" : isRented ? "bg-blue-600" : "bg-gray-400";
+  const statusColors: Record<
+    string,
+    { dot: string; text: string; badge: string }
+  > = {
+    AVAILABLE: {
+      dot: "bg-green-600",
+      text: "text-green-600",
+      badge: "text-green-800 bg-green-100",
+    },
+    RENTED: {
+      dot: "bg-blue-600",
+      text: "text-blue-600",
+      badge: "text-blue-800 bg-blue-100",
+    },
+    MAINTENANCE: {
+      dot: "bg-yellow-600",
+      text: "text-yellow-600",
+      badge: "text-yellow-800 bg-yellow-100",
+    },
+    RESERVED: {
+      dot: "bg-purple-600",
+      text: "text-purple-600",
+      badge: "text-purple-800 bg-purple-100",
+    },
+  };
+
+  const colors = statusColors[status] || statusColors.AVAILABLE;
 
   const handleManage = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -78,57 +93,74 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="flex items-center flex-wrap gap-4 justify-between p-2 sm:pr-4 border border-gray-200 rounded-xl bg-white hover:shadow-md transition-shadow duration-150">
-        <div className="flex items-center space-x-3 min-w-0">
-          <div className="w-14 h-14 bg-gray-100 rounded-lg overflow-hidden shrink-0">
-            <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
+      <div className=" grid grid-cols-2 sm:grid-cols-7 items-center flex-wrap gap-4 justify-between p-4 border border-gray-200 rounded-xl bg-white hover:shadow-md transition-shadow duration-150">
+        {/* Product Image & Info */}
+        <div className="flex items-center space-x-3 col-span-2 ">
+          <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+            <img
+              src={imageUrl}
+              alt={name}
+              className="w-full h-full object-cover"
+            />
           </div>
 
-          <div className="min-w-0">
-            <div className="flex items-center space-x-2">
-              <span className={`w-1.5 h-1.5 rounded-full ${dotClass}`}></span>
-              <Paragraph1
-                className={`text-xs font-semibold ${
-                  isAvailable ? "text-green-600" : isRented ? "text-blue-600" : "text-gray-600"
-                }`}
-              >
-                {statusText}
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center space-x-2 mb-1">
+              <span className={`w-2 h-2 rounded-full ${colors.dot}`}></span>
+              <Paragraph1 className={`text-xs font-semibold ${colors.text}`}>
+                {formatStatusLabel(status)}
               </Paragraph1>
+              {!isActive && (
+                <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                  Disabled
+                </span>
+              )}
             </div>
-            <Paragraph1 className="font-semibold text-gray-800 truncate">{name}</Paragraph1>
+            <Paragraph1 className="font-semibold text-gray-800 truncate">
+              {name}
+            </Paragraph1>
             <Paragraph1 className="text-sm text-gray-500">
               Size: {size} | Color: {color}
             </Paragraph1>
           </div>
         </div>
 
+        {/* Price Per Day */}
         <div className="text-left">
           <Paragraph1 className="text-xs text-gray-500">Price/Day</Paragraph1>
-          <Paragraph1 className="font-medium text-black">{pricePerDay}</Paragraph1>
+          <Paragraph1 className="font-semibold text-black">
+            {pricePerDay}
+          </Paragraph1>
         </div>
 
+        {/* Item Value */}
         <div className="text-left">
           <Paragraph1 className="text-xs text-gray-500">Item Value</Paragraph1>
-          <Paragraph1 className="font-medium text-black">{itemValue}</Paragraph1>
+          <Paragraph1 className="font-semibold text-black">
+            {itemValue}
+          </Paragraph1>
         </div>
 
+        {/* Listed Date */}
         <div className="text-left">
           <Paragraph1 className="text-xs text-gray-500">Listed</Paragraph1>
-          <Paragraph1 className="font-medium text-black">{listedDate}</Paragraph1>
+          <Paragraph1 className="font-semibold text-black">
+            {listedDate}
+          </Paragraph1>
         </div>
 
-        <span
-          className={`px-3 py-1 text-sm font-semibold rounded-lg ${
-            isAvailable ? "text-green-800 bg-green-100" : isRented ? "text-blue-600 bg-blue-100" : "text-gray-600 bg-gray-200"
-          }`}
+        {/* Status Badge */}
+        <div
+          className={`px-3 flex justify-center item-center py-1.5 text-xs font-semibold rounded-lg ${colors.badge}`}
         >
-          <Paragraph1>{statusText}</Paragraph1>
-        </span>
+          <Paragraph1>{formatStatusLabel(status)}</Paragraph1>
+        </div>
 
+        {/* Manage Button */}
         <button
           type="button"
           onClick={handleManage}
-          className="px-4 py-2 text-sm font-semibold w-full flex sm:w-fit items-center justify-center text-white bg-black rounded-lg hover:bg-gray-800 transition duration-150"
+          className="px-4 py-2 w-full sm:w-fit text-sm font-semibold whitespace-nowrap text-white bg-black rounded-lg hover:bg-gray-800 transition duration-150"
         >
           Manage
         </button>
@@ -139,43 +171,65 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
 
 // --- Main Inventory List Component ---
 const InventoryList: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"Active" | "Disabled">("Active");
+  const [activeTab, setActiveTab] = useState<
+    "AVAILABLE" | "RENTED" | "MAINTENANCE" | "RESERVED" | "All"
+  >("All");
 
-  const { data, isLoading } = useUserProducts();
+  const { data: products, isLoading, error } = useUserProducts();
 
-  // --- Normalize backend response ---
-  const productsArray: UserProduct[] = Array.isArray(data)
-    ? data
-    : Array.isArray((data as any)?.product)
-    ? (data as any).product
-    : [];
+  // ✅ Map backend products to frontend InventoryItem
+  const mappedInventory: InventoryItem[] = (products || []).map(
+    (product: UserProduct) => ({
+      id: product.id,
+      name: product.name,
+      size: product.measurement,
+      color: product.color,
+      pricePerDay: `₦${product.dailyPrice.toLocaleString()}`,
+      itemValue: `₦${product.originalValue.toLocaleString()}`,
+      listedDate: new Date(product.createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }),
+      status: product.status,
+      isActive: product.isActive,
+      imageUrl: "/images/placeholder.png", // TODO: Get actual image URL from attachments
+      curatorName: product.curator.name,
+    }),
+  );
 
-  // --- Map backend products to frontend InventoryItem ---
-  const mappedInventory: InventoryItem[] = productsArray.map((item) => ({
-    id: item.id,
-    name: item.name,
-    size: item.measurement,
-    color: item.color,
-    pricePerDay: `₦${item.dailyPrice.toLocaleString()}`,
-    itemValue: `₦${item.originalValue.toLocaleString()}`,
-    listedDate: new Date(item.createdAt).toLocaleDateString(),
-    isAvailable: item.status === "AVAILABLE",
-    isRented: false,
-    status: item.isActive ? "Active" : "Disabled",
-    imageUrl: "/images/placeholder.png", // default placeholder, replace when attachments have URLs
-  }));
-
-  const filteredInventory = mappedInventory.filter((item) => item.status === activeTab);
+  // ✅ Filter by status
+  const filteredInventory =
+    activeTab === "All"
+      ? mappedInventory
+      : mappedInventory.filter((item) => item.status === activeTab);
 
   if (isLoading) {
-    return <div>Loading inventory...</div>;
+    return (
+      <div className="flex items-center justify-center p-8">
+        <Paragraph1 className="text-gray-500">Loading inventory...</Paragraph1>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center p-8 bg-red-50 rounded-lg border border-red-200">
+        <Paragraph1 className="text-red-600">
+          Failed to load inventory. Please try again.
+        </Paragraph1>
+      </div>
+    );
   }
 
   return (
     <div className="w-full">
+      {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-1">
-          <Paragraph3 className="text-2xl font-semibold text-black">Inventory</Paragraph3>
+        <div className="flex items-center gap-2">
+          <Paragraph3 className="text-2xl font-semibold text-black">
+            Inventory
+          </Paragraph3>
           <ToolInfo content="Lists all items in your inventory, including availability, rental frequency, and pricing." />
         </div>
 
@@ -188,33 +242,43 @@ const InventoryList: React.FC = () => {
         </Link>
       </div>
 
-      {/* Tab Switcher */}
-      <div className="mb-6 p-1 bg-white rounded-xl shadow-sm inline-flex border border-gray-200 relative">
-        {(["Active", "Disabled"] as const).map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`relative px-6 py-2 text-sm font-semibold rounded-lg transition duration-150 z-10 ${
-              activeTab === tab ? "text-white" : "text-gray-700 hover:bg-gray-50"
-            }`}
-          >
-            {activeTab === tab && (
-              <motion.div
-                layoutId="activeTab"
-                className="absolute inset-0 bg-black rounded-lg -z-10"
-                transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-              />
-            )}
-            {tab}
-          </button>
-        ))}
+      {/* Tab Switcher - Scrollable on mobile, wrapping on desktop */}
+      <div className="mb-6 overflow-x-auto  w-[330px]  sm:w-fit">
+        <div className="p-1 bg-white rounded-xl shadow-sm inline-flex border border-gray-200 relative gap-1 min-w-max">
+          {(
+            ["All", "AVAILABLE", "RENTED", "MAINTENANCE", "RESERVED"] as const
+          ).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`relative px-2.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition duration-150 z-10 whitespace-nowrap ${
+                activeTab === tab
+                  ? "text-white"
+                  : "text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              {activeTab === tab && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-black rounded-lg -z-10"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                />
+              )}
+              <Paragraph1 className="text-xs sm:text-sm">
+                {formatStatusLabel(tab)}
+              </Paragraph1>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Inventory List */}
-      <motion.div layout className="space-y-4">
+      <motion.div layout className="space-y-3">
         <AnimatePresence mode="popLayout">
           {filteredInventory.length > 0 ? (
-            filteredInventory.map((item) => <InventoryItemCard key={item.id} {...item} />)
+            filteredInventory.map((item) => (
+              <InventoryItemCard key={item.id} {...item} />
+            ))
           ) : (
             <motion.div
               initial={{ opacity: 0 }}
@@ -222,7 +286,13 @@ const InventoryList: React.FC = () => {
               exit={{ opacity: 0 }}
               className="p-8 text-center text-gray-500 bg-white rounded-xl border border-gray-200"
             >
-              No {activeTab} inventory items found.
+              <Paragraph1>
+                No{" "}
+                {activeTab !== "All"
+                  ? formatStatusLabel(activeTab).toLowerCase()
+                  : ""}{" "}
+                inventory items found.
+              </Paragraph1>
             </motion.div>
           )}
         </AnimatePresence>
