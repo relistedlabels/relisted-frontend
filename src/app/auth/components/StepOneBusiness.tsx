@@ -2,13 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { Paragraph1 } from "@/common/ui/Text";
-import { Loader2, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { useProfileStore } from "@/store/useProfileStore";
 import { PhoneInput } from "./PhoneInput";
 import { StateSelect } from "./StateSelect";
 import { CityLGASelect } from "./CityLGASelect";
-import { useRouter } from "next/navigation";
-import { useCreateProfile } from "@/lib/queries/user/useCreateProfile";
+import { ToolInfo } from "@/common/ui/ToolInfo";
 
 interface StepOnePersonalProps {
   onNext: () => void;
@@ -24,10 +23,6 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
   const [state, setState] = useState(profile.address.state);
   const [bvn, setBvn] = useState(profile.bvn);
   const [error, setError] = useState<string | null>(null);
-
-  const router = useRouter();
-  const createProfile = useCreateProfile();
-  const isLoading = createProfile.isPending;
 
   useEffect(() => {
     setPhoneNumber(profile.phoneNumber || "+234");
@@ -68,13 +63,26 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
 
   return (
     <form onSubmit={handleFormSubmit} className="space-y-6">
-      <PhoneInput value={phoneNumber} onChange={setPhoneNumber} />
+      <div className="">
+        <label className="block mb-2">
+          <div className="flex items-center gap-1">
+            <Paragraph1 className="text-sm font-medium text-gray-800">
+              Phone Number
+            </Paragraph1>
+            <ToolInfo content="Your primary contact number used for verification and notifications." />
+          </div>
+        </label>
+        <PhoneInput value={phoneNumber} onChange={setPhoneNumber} />
+      </div>
 
       <div>
         <label className="block mb-2">
-          <Paragraph1 className="text-sm font-medium text-gray-800">
-            Address
-          </Paragraph1>
+          <div className="flex items-center gap-1">
+            <Paragraph1 className="text-sm font-medium text-gray-800">
+              Address
+            </Paragraph1>
+            <ToolInfo content="Your residential address used for identity verification and deliveries." />
+          </div>
         </label>
         <div className="relative">
           <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -89,21 +97,23 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
       <div className="flex gap-4">
         <div className="flex-1">
           <label className="block mb-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <Paragraph1 className="text-sm font-medium text-gray-800">
                 City
               </Paragraph1>
+              <ToolInfo content="City or local government area of residence." />
             </div>
           </label>
-
           <CityLGASelect value={cityLGA} onChange={setCityLGA} />
         </div>
+
         <div className="flex-1">
           <label className="block mb-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <Paragraph1 className="text-sm font-medium text-gray-800">
                 State
               </Paragraph1>
+              <ToolInfo content="State of residence used for compliance and regional services." />
             </div>
           </label>
           <StateSelect value={state} onChange={setState} />

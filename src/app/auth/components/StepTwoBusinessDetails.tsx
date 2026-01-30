@@ -8,6 +8,7 @@ import { CityLGASelect } from "./CityLGASelect";
 import { StateSelect } from "./StateSelect";
 import { useRouter } from "next/navigation";
 import { useCreateProfile } from "@/lib/queries/user/useCreateProfile";
+import { ToolInfo } from "@/common/ui/ToolInfo";
 
 interface StepTwoBusinessDetailsProps {
   onNext: () => void;
@@ -21,7 +22,6 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
   const businessInfo = useProfileStore((s) => s.businessInfo);
   const setProfile = useProfileStore((s) => s.setProfile);
 
-  // UI state hydrated from store
   const [businessName, setBusinessName] = useState(businessInfo.businessName);
   const [businessEmail, setBusinessEmail] = useState(
     businessInfo.businessEmail,
@@ -37,9 +37,6 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
   const createProfile = useCreateProfile();
   const isLoading = createProfile.isPending;
 
-  /**
-   * 🔁 Re-sync after persist hydration
-   */
   useEffect(() => {
     setBusinessName(businessInfo.businessName || "");
     setBusinessEmail(businessInfo.businessEmail || "");
@@ -81,9 +78,12 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
     <form onSubmit={handleFormSubmit} className="space-y-6">
       <div>
         <label className="block mb-2">
-          <Paragraph1 className="text-sm font-medium text-gray-800">
-            Username / Brand Name
-          </Paragraph1>
+          <div className="flex items-center gap-1">
+            <Paragraph1 className="text-sm font-medium text-gray-800">
+              Username / Brand Name
+            </Paragraph1>
+            <ToolInfo content="Your public business or brand name shown to customers." />
+          </div>
         </label>
         <div className="relative">
           <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -97,13 +97,12 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
 
       <div>
         <label className="block mb-2">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Paragraph1 className="text-sm font-medium text-gray-800">
               Business Email
             </Paragraph1>
-            <span className="text-xs text-gray-500 font-normal">
-              (Optional)
-            </span>
+            <ToolInfo content="Used for verification, payouts, and important business notifications." />
+            <span className="text-xs text-gray-500">(Optional)</span>
           </div>
         </label>
         <div className="relative">
@@ -119,13 +118,12 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
 
       <div>
         <label className="block mb-2">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Paragraph1 className="text-sm font-medium text-gray-800">
               Business Registration Number
             </Paragraph1>
-            <span className="text-xs text-gray-500 font-normal">
-              (Optional)
-            </span>
+            <ToolInfo content="Official registration or CAC number used to verify your business." />
+            <span className="text-xs text-gray-500">(Optional)</span>
           </div>
         </label>
         <div className="relative">
@@ -141,13 +139,12 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
 
       <div>
         <label className="block mb-2">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Paragraph1 className="text-sm font-medium text-gray-800">
               Business Address
             </Paragraph1>
-            <span className="text-xs text-gray-500 font-normal">
-              (Optional)
-            </span>
+            <ToolInfo content="Physical location used for logistics, pickups, or compliance." />
+            <span className="text-xs text-gray-500">(Optional)</span>
           </div>
         </label>
         <div className="relative">
@@ -164,27 +161,25 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
       <div className="flex gap-4">
         <div className="flex-1">
           <label className="block mb-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <Paragraph1 className="text-sm font-medium text-gray-800">
                 City
               </Paragraph1>
-              <span className="text-xs text-gray-500 font-normal">
-                (Optional)
-              </span>
+              <ToolInfo content="City or local government area where your business operates." />
+              <span className="text-xs text-gray-500">(Optional)</span>
             </div>
           </label>
-
           <CityLGASelect value={city} onChange={setCity} />
         </div>
+
         <div className="flex-1">
           <label className="block mb-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <Paragraph1 className="text-sm font-medium text-gray-800">
                 State
               </Paragraph1>
-              <span className="text-xs text-gray-500 font-normal">
-                (Optional)
-              </span>
+              <ToolInfo content="State used for regional compliance, taxes, and delivery calculations." />
+              <span className="text-xs text-gray-500">(Optional)</span>
             </div>
           </label>
           <StateSelect value={state} onChange={setState} />
