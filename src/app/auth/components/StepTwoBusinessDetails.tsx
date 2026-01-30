@@ -72,7 +72,7 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
 
     createProfile.mutate(undefined, {
       onSuccess: () => {
-        router.replace("/listers/dashboard");
+        router.replace("/listers/inventory");
       },
     });
   };
