@@ -93,9 +93,7 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
               <Paragraph1 className="text-sm font-medium text-gray-800">
                 City
               </Paragraph1>
-              <span className="text-xs text-gray-500 font-normal">
-                (Optional)
-              </span>
+             
             </div>
           </label>
 
@@ -107,9 +105,7 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
               <Paragraph1 className="text-sm font-medium text-gray-800">
                 State
               </Paragraph1>
-              <span className="text-xs text-gray-500 font-normal">
-                (Optional)
-              </span>
+              
             </div>
           </label>
           <StateSelect value={state} onChange={setState} />
