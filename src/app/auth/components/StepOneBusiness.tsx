@@ -99,7 +99,7 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
             </div>
           </label>
 
-          <CityLGASelect value={city} onChange={setCity} />
+          <CityLGASelect value={cityLGA} onChange={setCityLGA} />
         </div>
         <div className="flex-1">
           <label className="block mb-2">
@@ -115,6 +115,7 @@ const StepOnePersonal: React.FC<StepOnePersonalProps> = ({ onNext }) => {
           <StateSelect value={state} onChange={setState} />
         </div>
       </div>
+
 
       {error && (
         <Paragraph1 className="text-sm text-red-600 text-center">
