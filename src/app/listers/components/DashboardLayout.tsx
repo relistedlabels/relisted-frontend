@@ -2,7 +2,7 @@
 
 import React, { useState, ReactNode } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
   Bell,
@@ -20,6 +20,7 @@ import {
   LucideIcon,
   ChevronDown,
 } from "lucide-react";
+import { useUserStore } from "@/store/useUserStore";
 import {
   Header2Plus,
   HeaderAny,
@@ -81,31 +82,36 @@ const SidebarNav: React.FC<{
 // --------------------
 // Sidebar Footer
 // --------------------
-const SidebarFooter = () => (
-  <div className="mt-8 space-y-2 border-t border-gray-800 pt-6">
-    {/* <Link
-      href="/listers/settings"
-      className="flex items-center p-3 rounded-xl text-gray-300 hover:bg-gray-800"
-    >
-      <Settings className="w-5 h-5 mr-3" />
-      <Paragraph1 className="text-sm">Settings</Paragraph1>
-    </Link> */}
-    <Link
-      href="#logout"
-      className="flex items-center p-3 rounded-xl text-gray-300 hover:bg-gray-800"
-    >
-      <LogOut className="w-5 h-5 mr-3" />
-      <Paragraph1 className="text-sm">Log Out</Paragraph1>
-    </Link>
-    <Link
-      href="/contact-us"
-      className="flex items-center p-3 text-gray-500 text-xs mt-4"
-    >
-      <HelpCircle className="w-4 h-4 mr-2" />
-      <Paragraph1 className="text-xs">Help & Support</Paragraph1>
-    </Link>
-  </div>
-);
+const SidebarFooter = () => {
+  const router = useRouter();
+  const clearUser = useUserStore((s) => s.clearUser);
+
+  const handleLogout = () => {
+    if (!window.confirm("Are you sure you want to log out?")) return;
+    clearUser();
+    router.push("/auth/sign-in");
+  };
+
+  return (
+    <div className="mt-8 space-y-2 border-t border-gray-800 pt-6">
+      <button
+        type="button"
+        onClick={handleLogout}
+        className="flex items-center w-full p-3 rounded-xl text-gray-300 hover:bg-gray-800 transition duration-150"
+      >
+        <LogOut className="w-5 h-5 mr-3" />
+        <Paragraph1 className="text-sm">Log Out</Paragraph1>
+      </button>
+      <Link
+        href="/contact-us"
+        className="flex items-center p-3 text-gray-500 text-xs mt-4"
+      >
+        <HelpCircle className="w-4 h-4 mr-2" />
+        <Paragraph1 className="text-xs">Help & Support</Paragraph1>
+      </Link>
+    </div>
+  );
+};
 
 // --------------------
 // Main Layout
