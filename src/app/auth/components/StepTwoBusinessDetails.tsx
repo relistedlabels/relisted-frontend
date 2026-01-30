@@ -163,11 +163,30 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
 
       <div className="flex gap-4">
         <div className="flex-1">
-          
+          <label className="block mb-2">
+            <div className="flex items-center gap-2">
+              <Paragraph1 className="text-sm font-medium text-gray-800">
+                City
+              </Paragraph1>
+              <span className="text-xs text-gray-500 font-normal">
+                (Optional)
+              </span>
+            </div>
+          </label>
+
           <CityLGASelect value={city} onChange={setCity} />
         </div>
         <div className="flex-1">
-          
+          <label className="block mb-2">
+            <div className="flex items-center gap-2">
+              <Paragraph1 className="text-sm font-medium text-gray-800">
+                State
+              </Paragraph1>
+              <span className="text-xs text-gray-500 font-normal">
+                (Optional)
+              </span>
+            </div>
+          </label>
           <StateSelect value={state} onChange={setState} />
         </div>
       </div>
