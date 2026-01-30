@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { useParams, usePathname } from "next/navigation";
+import React, { useState } from "react";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { Paragraph1 } from "@/common/ui/Text";
 import BackHeader from "@/common/ui/BackHeader";
 import { useCreateProduct } from "@/lib/queries/product/useCreateProduct";
@@ -20,6 +20,7 @@ const UploadItemHeader: React.FC<UploadItemHeaderProps> = ({
 }) => {
   const pathname = usePathname();
   const params = useParams();
+  const router = useRouter();
   const isEditing = pathname.includes("product-edit");
   const productId = params.id as string;
 
@@ -28,10 +29,25 @@ const UploadItemHeader: React.FC<UploadItemHeaderProps> = ({
   const updateProduct = useUpdateProduct(productId);
 
   const mutation = isEditing ? updateProduct : createProduct;
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleSubmit = () => {
     if (mutation.isPending) return;
-    mutation.mutate(data);
+
+    setErrorMessage("");
+
+    mutation.mutate(data, {
+      onSuccess: () => {
+        router.push("/listers/inventory");
+      },
+      onError: (error: any) => {
+        const message =
+          error?.response?.data?.message ||
+          error?.message ||
+          "Failed to save product. Please try again.";
+        setErrorMessage(message);
+      },
+    });
   };
 
   const isPending = mutation.isPending;
@@ -43,7 +59,10 @@ const UploadItemHeader: React.FC<UploadItemHeaderProps> = ({
         subtitle={isEditing ? `Updating product` : subtitle}
       />
 
-      <div className="flex items-center space-x-3">
+      <div className="flex flex-col items-end gap-2">
+        {errorMessage && (
+          <p className="text-xs text-red-600 font-medium">{errorMessage}</p>
+        )}
         <button
           onClick={handleSubmit}
           disabled={isPending}

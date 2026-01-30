@@ -1,14 +1,5 @@
 // lib/api/product.ts
 import { apiFetch } from "./http";
-type Attachment = {
-  id: string;
-  url: string;
-  name: string;
-  progress:number
-  type?:string
-  slotId?:string
-};
-
 
 export type UserProduct = {
   id: string;
@@ -25,7 +16,6 @@ export type UserProduct = {
   }[];
 };
 
-
 export type ProductPayload = {
   name: string;
   subText: string;
@@ -34,20 +24,26 @@ export type ProductPayload = {
   composition: string;
   measurement: string;
   originalValue: number;
-  color: string[];
+  dailyPrice: number; // ✅ Correct field name (not pricePerDay)
+  quantity: number; // ✅ Added missing field
+  color: string; // ✅ String, not array
   warning: string;
-  size :string
   careInstruction: string;
-  careSteps: string[];
+  careSteps: string; // ✅ String, not array
   stylingTip: string;
-  attachments: Attachment[];
-  categoryId: string;
+  attachments: string[]; // ✅ Array of IDs (strings)
+  categoryId: string; // ✅ Category ID only
+  tagId: string; // ✅ Tag ID separate
   brandId: string;
+};
+
+export type ProductResponse = {
+  message: string; // ✅ Backend returns message, not id
 };
 
 export const productApi = {
   create: (data: ProductPayload) =>
-    apiFetch<{ id: string }>("/product", {
+    apiFetch<ProductResponse>("/product", {
       method: "POST",
       body: JSON.stringify(data),
     }),
@@ -58,13 +54,13 @@ export const productApi = {
     }),
 
   update: (id: string, data: Partial<ProductPayload>) =>
-    apiFetch<void>(`/product/${id}`, {
+    apiFetch<ProductResponse>(`/product/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),
     }),
 
   remove: (id: string) =>
-    apiFetch<void>(`/product/${id}`, {
+    apiFetch<ProductResponse>(`/product/${id}`, {
       method: "DELETE",
     }),
 
@@ -73,5 +69,3 @@ export const productApi = {
       method: "GET",
     }),
 };
-
-

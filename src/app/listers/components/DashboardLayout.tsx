@@ -83,13 +83,13 @@ const SidebarNav: React.FC<{
 // --------------------
 const SidebarFooter = () => (
   <div className="mt-8 space-y-2 border-t border-gray-800 pt-6">
-    <Link
+    {/* <Link
       href="/listers/settings"
       className="flex items-center p-3 rounded-xl text-gray-300 hover:bg-gray-800"
     >
       <Settings className="w-5 h-5 mr-3" />
       <Paragraph1 className="text-sm">Settings</Paragraph1>
-    </Link>
+    </Link> */}
     <Link
       href="#logout"
       className="flex items-center p-3 rounded-xl text-gray-300 hover:bg-gray-800"
@@ -125,37 +125,37 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   // Centralized navigation (NOT passed from parents)
   const navItems: NavItem[] = [
-    {
-      name: "Overview",
-      href: "/listers/dashboard",
-      icon: LayoutDashboard,
-      isActive: pathname === "/listers/dashboard",
-    },
+    // {
+    //   name: "Overview",
+    //   href: "/listers/dashboard",
+    //   icon: LayoutDashboard,
+    //   isActive: pathname === "/listers/dashboard",
+    // },
     {
       name: "Inventory",
       href: "/listers/inventory",
       icon: Package,
       isActive: pathname.startsWith("/listers/inventory"),
     },
-    {
-      name: "Orders",
-      href: "/listers/orders",
-      icon: ShoppingCart,
-      isActive: pathname.startsWith("/listers/orders"),
-    },
-    {
-      name: "Wallet",
-      href: "/listers/wallet",
-      icon: Wallet,
-      isActive: pathname.startsWith("/listers/wallet"),
-    },
+    // {
+    //   name: "Orders",
+    //   href: "/listers/orders",
+    //   icon: ShoppingCart,
+    //   isActive: pathname.startsWith("/listers/orders"),
+    // },
+    // {
+    //   name: "Wallet",
+    //   href: "/listers/wallet",
+    //   icon: Wallet,
+    //   isActive: pathname.startsWith("/listers/wallet"),
+    // },
 
-    {
-      name: "Dispute",
-      href: "/listers/dispute",
-      icon: FileText,
-      isActive: pathname.startsWith("/listers/dispute"),
-    },
+    // {
+    //   name: "Dispute",
+    //   href: "/listers/dispute",
+    //   icon: FileText,
+    //   isActive: pathname.startsWith("/listers/dispute"),
+    // },
   ];
 
   const [mobileOpen, setMobileOpen] = useState(false);

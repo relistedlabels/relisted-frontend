@@ -58,7 +58,7 @@ const CompleteBusinessProfileFlow: React.FC = () => {
   // Titles for each step
   const stepTitles = [
     "Personal Information",
-    "Business Profile(For Brands)",
+    "Business Profile",
     // "Emergency Contact",
     // "Bank Account Details",
   ];
