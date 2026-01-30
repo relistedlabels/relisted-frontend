@@ -46,7 +46,7 @@ export default function UserProfileOverview({
 }: UserProfileOverviewProps) {
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   return (
-    <>
+    <div className=" flex flex-col gap-4">
       <DocumentModal
         isOpen={isDocumentModalOpen}
         onClose={() => setIsDocumentModalOpen(false)}
@@ -293,6 +293,6 @@ export default function UserProfileOverview({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
