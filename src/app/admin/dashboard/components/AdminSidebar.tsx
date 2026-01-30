@@ -169,7 +169,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       {/* Logout */}
       <div className="px-4 mb-4">
         <button
-          onClick={onLogout}
+          onClick={() => {
+            if (window.confirm("Are you sure you want to log out?")) {
+              onLogout();
+            }
+          }}
           className={`${linkBaseClasses} ${inactiveLinkClasses} hover:bg-red-50 hover:text-red-600 ${
             !isMobileExpanded ? "justify-center lg:justify-start" : ""
           }`}

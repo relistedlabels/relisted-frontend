@@ -1,21 +1,37 @@
-
 import { useUserStore } from "@/store/useUserStore";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const USER_STORE_KEY = "user-store";
 
 if (!BASE_URL) {
   throw new Error("NEXT_PUBLIC_API_BASE_URL is not defined");
 }
 
-export async function apiFetch<T>(
+/** Token from store, or from localStorage if store not yet rehydrated */
+export function getAuthToken(): string | null {
+  const fromStore = useUserStore.getState().token;
+  if (fromStore) return fromStore;
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(USER_STORE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as
+      | { state?: { token?: string | null }; token?: string | null }
+      | null;
+    if (!parsed) return null;
+    return parsed?.state?.token ?? parsed?.token ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function doFetch<T>(
   path: string,
-  options: RequestInit = {},
-): Promise<T> {
-  const token = useUserStore.getState().token;
-
-  const isFormData = options.body instanceof FormData;
-
-  const res = await fetch(`${BASE_URL}${path}`, {
+  options: RequestInit,
+  token: string | null,
+  isFormData: boolean,
+): Promise<Response> {
+  return fetch(`${BASE_URL}${path}`, {
     ...options,
     headers: {
       ...(isFormData ? {} : { "Content-Type": "application/json" }),
@@ -23,6 +39,24 @@ export async function apiFetch<T>(
       ...(options.headers || {}),
     },
   });
+}
+
+export async function apiFetch<T>(
+  path: string,
+  options: RequestInit = {},
+): Promise<T> {
+  const token = getAuthToken();
+  const isFormData = options.body instanceof FormData;
+
+  let res = await doFetch(path, options, token, isFormData);
+
+  // Retry once with token from localStorage if 401 (handles rehydration race)
+  if (res.status === 401 && token === null && typeof window !== "undefined") {
+    const retryToken = getAuthToken();
+    if (retryToken) {
+      res = await doFetch(path, options, retryToken, isFormData);
+    }
+  }
 
   if (!res.ok) {
     let errorMessage = "Request failed";
@@ -31,7 +65,6 @@ export async function apiFetch<T>(
       errorMessage = error?.message ?? errorMessage;
     } catch {}
 
-    // 🔐 Auto logout on 401 (optional but recommended)
     if (res.status === 401) {
       useUserStore.getState().clearUser();
     }

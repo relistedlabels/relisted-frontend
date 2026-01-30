@@ -1,13 +1,8 @@
-
-import { useUserStore } from "@/store/useUserStore";
-import { apiFetch } from "./http";
-
-
-
+import { apiFetch, getAuthToken } from "./http";
 import axios from "axios";
 
-
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export const uploadFile = async ({
   file,
   id,
@@ -19,13 +14,13 @@ export const uploadFile = async ({
 }) => {
   const formData = new FormData();
   formData.append("file", file);
-const token = useUserStore.getState().token;
+  const token = getAuthToken();
   const response = await axios.post(
     `${BASE_URL}/upload/${id}`,
     formData,
     {
-       headers: {
-        Authorization: `Bearer ${token}`,
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       // withCredentials: true, 
       onUploadProgress: (progressEvent) => {
