@@ -56,31 +56,30 @@ type ProductDraftStore = {
 };
 
 const initialState: ProductDraft = {
-  name: "",
-  subText: "",
-  description: "",
-  condition: "",
-  composition: "Cotton", // ✅ Default to Cotton
-  measurement: "",
+  name: "Untitled Item",
+  subText: "Add a subtitle",
+  description: "Describe your item",
+  condition: "Like New",
+  composition: "Cotton",
+  measurement: "M",
 
-  originalValue: 0,
-  dailyRentalPrice: 0,
+  originalValue: 100,
+  dailyRentalPrice: 10,
   quantity: 1,
 
-  color: "",
-  warning: "",
-  size: "",
+  color: "Black",
+  warning: "Handle with care",
+  size: "M",
 
-  careInstruction: "",
-  careSteps: "",
-  stylingTip: "",
+  careInstruction: "Dry clean only",
+  careSteps: "Professional care recommended",
+  stylingTip: "Perfect for casual wear",
 
-  tagId: "",
+  tagId: "trending",
   attachments: [],
   categoryId: "",
   brandId: "",
 };
-
 
 export const useProductDraftStore = create<ProductDraftStore>()(
   persist(
@@ -116,7 +115,7 @@ export const useProductDraftStore = create<ProductDraftStore>()(
             careSteps: product.careSteps,
             stylingTip: product.stylingTip,
             tagId: product.tagId || "",
-            attachments: product.attachments.map((url, idx) => ({
+            attachments: (product.attachments || []).map((url, idx) => ({
               id: `${idx}`,
               url,
               name: `Image ${idx + 1}`,

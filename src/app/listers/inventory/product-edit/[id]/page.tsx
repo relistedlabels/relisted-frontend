@@ -11,6 +11,7 @@ import { ItemImageUploader } from "@/app/listers/components/ItemImageUploader";
 import { BasicInformationForm } from "@/app/listers/components/BasicInformationForm";
 import { TagSelector } from "@/app/listers/components/TagSelector";
 import { ItemDescription } from "@/app/listers/components/ItemDescription";
+import UploadItemHeader from "@/app/listers/components/UploadItemHeader";
 
 export default function Page() {
   const params = useParams();
@@ -78,48 +79,22 @@ export default function Page() {
 
   return (
     <DashboardLayout>
-      <div className="mb-4">
+      <div className="mb-4  ">
         <Breadcrumbs items={path} />
       </div>
-
-      {isPending ? (
-        <div className="flex items-center justify-center h-96">
-          <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-black mb-4"></div>
-            <p className="text-gray-600">Loading product details...</p>
-          </div>
+      <div>
+        <UploadItemHeader />
+      </div>
+      <div>
+        <ItemImageUploader />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+        <BasicInformationForm />
+        <div className="space-y-4">
+          <TagSelector />
+          <ItemDescription />
         </div>
-      ) : product ? (
-        <>
-          {/* Product Header with Save Button */}
-          <div>
-            <EditProductHeader productName={product?.name} />
-          </div>
-
-          {/* Image Upload Section */}
-          <div className="mt-6">
-            <ItemImageUploader />
-          </div>
-
-          {/* Form Sections - Two Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-            {/* Left Column - Main Info */}
-            <div className="lg:col-span-2">
-              <BasicInformationForm />
-            </div>
-
-            {/* Right Column - Tags & Description */}
-            <div className="space-y-4">
-              <TagSelector />
-              <ItemDescription />
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="flex items-center justify-center h-96">
-          <p className="text-gray-500">No product data available</p>
-        </div>
-      )}
+      </div>
     </DashboardLayout>
   );
 }

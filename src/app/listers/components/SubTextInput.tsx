@@ -25,7 +25,7 @@ export const SubTextInput: React.FC = () => {
         className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none transition-colors focus:border-black focus:ring-1 focus:ring-black"
       />
       <p className="mt-1 text-xs text-gray-500">
-        {data.subText.length}/100 characters
+        {(data.subText || "").length}/100 characters
       </p>
     </div>
   );
