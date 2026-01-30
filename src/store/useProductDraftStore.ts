@@ -84,6 +84,7 @@ const initialState: ProductDraft = {
   brandId: "",
 };
 
+
 export const useProductDraftStore = create<ProductDraftStore>()(
   persist(
     (set) => ({
@@ -111,15 +112,13 @@ export const useProductDraftStore = create<ProductDraftStore>()(
             originalValue: product.originalValue,
             dailyRentalPrice: product.dailyPrice,
             quantity: product.quantity,
-            color: product.color.split(", ").filter(Boolean),
+            color: product.color,
             warning: product.warning,
             size: product.measurement,
             careInstruction: product.careInstruction,
-            careSteps: product.careSteps.split(", ").filter(Boolean),
+            careSteps: product.careSteps,
             stylingTip: product.stylingTip,
-            tags: product.tagId
-              ? [{ id: product.tagId, value: product.tagId }]
-              : [],
+            tagId: product.tagId,
             attachments: product.attachments.map((url, idx) => ({
               id: `${idx}`,
               url,
