@@ -4,12 +4,17 @@ import { apiFetch } from "./http";
 export type UserProduct = {
   id: string;
   name: string;
-  size: string;
+   measurement: string;
+   dailyPrice:string,
+   isAvailable:"AVAILABLE"|
+ "RENTED"|
+ "MAINTENANCE"|
+  "RESERVED",
   color: string;
   pricePerDay: number;
   originalValue: number;
   createdAt: string;
-  status: "ACTIVE" | "DISABLED";
+  isActive: "ACTIVE" | "DISABLED";
   isRented: boolean;
   attachments: {
     url: string;
@@ -41,6 +46,11 @@ export type ProductResponse = {
   message: string; // ✅ Backend returns message, not id
 };
 
+type ProductsResponse = {
+  product: UserProduct[];
+};
+
+
 export const productApi = {
   create: (data: ProductPayload) =>
     apiFetch<ProductResponse>("/product", {
@@ -65,7 +75,7 @@ export const productApi = {
     }),
 
   getUserProducts: () =>
-    apiFetch<UserProduct[]>("/product/user-products", {
+    apiFetch<ProductsResponse>("/product/user-products", {
       method: "GET",
     }),
 };
