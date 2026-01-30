@@ -7,6 +7,7 @@ import BackHeader from "@/common/ui/BackHeader";
 import { useCreateProduct } from "@/lib/queries/product/useCreateProduct";
 import { useUpdateProduct } from "@/lib/queries/product/useUpdateProduct";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
+import { toast } from "sonner";
 
 interface UploadItemHeaderProps {
   title?: string;
@@ -38,7 +39,17 @@ const UploadItemHeader: React.FC<UploadItemHeaderProps> = ({
 
     mutation.mutate(data, {
       onSuccess: () => {
-        router.push("/listers/inventory");
+        // ✅ Show success toast
+        if (isEditing) {
+          toast.success("Product updated successfully!");
+        } else {
+          toast.success("Product created successfully!");
+        }
+
+        // ✅ Route to inventory after brief delay for toast visibility
+        setTimeout(() => {
+          router.push("/listers/inventory");
+        }, 1000);
       },
       onError: (error: any) => {
         const message =
@@ -46,6 +57,9 @@ const UploadItemHeader: React.FC<UploadItemHeaderProps> = ({
           error?.message ||
           "Failed to save product. Please try again.";
         setErrorMessage(message);
+
+        // ✅ Also show error toast
+        toast.error(message);
       },
     });
   };

@@ -7,6 +7,7 @@ import QueryProvider from "@/lib/providers/query-provider";
 import DevGuard from "@/common/layer/DevGuard";
 import { Header } from "./Header";
 import { UploaderProvider } from "@/context/UploaderProvider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title:
@@ -70,7 +71,10 @@ export default function RootLayout({
               <DesktopNavbar />
               <MobileNavbar />
               <Header />
+
               {children}
+              <Toaster position="top-right" />
+
               <Footer />
             </UploaderProvider>
           </QueryProvider>
