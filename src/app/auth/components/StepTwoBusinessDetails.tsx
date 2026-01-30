@@ -9,6 +9,7 @@ import { StateSelect } from "./StateSelect";
 import { useRouter } from "next/navigation";
 import { useCreateProfile } from "@/lib/queries/user/useCreateProfile";
 import { ToolInfo } from "@/common/ui/ToolInfo";
+import { toast } from "sonner";
 
 interface StepTwoBusinessDetailsProps {
   onNext: () => void;
@@ -69,7 +70,28 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
 
     createProfile.mutate(undefined, {
       onSuccess: () => {
-        router.replace("/listers/inventory");
+        // ✅ Show friendly success toast
+        toast.success(`Welcome, ${businessName}! 🎉`, {
+          description: "Your business profile is all set. Let's get started!",
+          duration: 4000,
+        });
+
+        // ✅ Route to inventory after brief delay for toast visibility
+        setTimeout(() => {
+          router.replace("/listers/inventory");
+        }, 1500);
+      },
+      onError: (error: any) => {
+        // ✅ Show error toast
+        const errorMessage =
+          error?.response?.data?.message ||
+          error?.message ||
+          "Failed to create profile. Please try again.";
+
+        toast.error("Oops! Something went wrong", {
+          description: errorMessage,
+          duration: 4000,
+        });
       },
     });
   };
@@ -91,6 +113,7 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
             value={businessName}
             onChange={(e) => setBusinessName(e.target.value)}
             className="w-full p-4 pl-12 border rounded-lg"
+            required
           />
         </div>
       </div>
@@ -190,7 +213,7 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
         <button
           type="button"
           onClick={onBack}
-          className="w-1/2 py-3 border rounded-lg"
+          className="w-1/2 py-3 border rounded-lg hover:bg-gray-50 transition"
         >
           <Paragraph1>Previous</Paragraph1>
         </button>
@@ -198,14 +221,16 @@ const StepTwoBusinessDetails: React.FC<StepTwoBusinessDetailsProps> = ({
         <button
           type="submit"
           disabled={isLoading}
-          className={`w-full py-3 rounded-lg text-white flex items-center justify-center gap-2 ${
+          className={`w-full py-3 rounded-lg text-white flex items-center justify-center gap-2 transition ${
             isLoading
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-black hover:bg-gray-800"
           }`}
         >
           {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-          <Paragraph1>{isLoading ? "Submitting..." : "Submit"}</Paragraph1>
+          <Paragraph1>
+            {isLoading ? "Setting up your profile..." : "Complete Setup"}
+          </Paragraph1>
         </button>
       </div>
     </form>

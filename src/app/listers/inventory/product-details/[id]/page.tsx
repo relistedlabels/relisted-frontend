@@ -68,9 +68,9 @@ export default function Page() {
           <ProductInfoTabs />
         </div>
       </div>
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <RentalsHistory />
-      </div>
+      </div> */}
     </DashboardLayout>
   );
 }

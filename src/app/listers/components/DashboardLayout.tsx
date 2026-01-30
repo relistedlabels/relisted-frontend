@@ -83,13 +83,13 @@ const SidebarNav: React.FC<{
 // --------------------
 const SidebarFooter = () => (
   <div className="mt-8 space-y-2 border-t border-gray-800 pt-6">
-    {/* <Link
+    <Link
       href="/listers/settings"
       className="flex items-center p-3 rounded-xl text-gray-300 hover:bg-gray-800"
     >
       <Settings className="w-5 h-5 mr-3" />
       <Paragraph1 className="text-sm">Settings</Paragraph1>
-    </Link> */}
+    </Link>
     <Link
       href="#logout"
       className="flex items-center p-3 rounded-xl text-gray-300 hover:bg-gray-800"
