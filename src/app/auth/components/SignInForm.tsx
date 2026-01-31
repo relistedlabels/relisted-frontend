@@ -13,6 +13,7 @@ import Link from "next/link";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useLogin } from "@/lib/queries/auth/useLogin";
+import { useResendOtp } from "@/lib/queries/auth/useResendOtp";
 import { useRouter } from "next/navigation";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 
@@ -23,9 +24,14 @@ const LoginSchema = Yup.object({
 
 const SignInForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [emailForResend, setEmailForResend] = useState("");
   const login = useLogin();
+  const resendOtp = useResendOtp();
   const router = useRouter();
   const authRedirect = useAuthRedirect();
+
+  const isVerificationError = (msg: string) =>
+    /verify|verification|inbox/i.test(msg);
 
   return (
     <div className="font-sans-">
@@ -47,10 +53,10 @@ const SignInForm: React.FC = () => {
           initialValues={{ email: "", password: "" }}
           validationSchema={LoginSchema}
           onSubmit={(values) => {
+            setEmailForResend(values.email);
             login.mutate(values, {
               onSuccess: () => {
-                router.push("/listers/inventory")
-                // authRedirect.redirect();
+                router.push("/listers/inventory");
               },
             });
           }}
@@ -135,9 +141,31 @@ const SignInForm: React.FC = () => {
               </button>
 
               {login.error && (
-                <p className="text-sm text-red-500">
-                  {(login.error as Error).message}
-                </p>
+                <div className="space-y-2">
+                  <p className="text-sm text-red-500">
+                    {(login.error as Error).message}
+                  </p>
+                  {isVerificationError((login.error as Error).message) &&
+                    emailForResend && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          resendOtp.mutate({ email: emailForResend })
+                        }
+                        disabled={resendOtp.isPending}
+                        className="text-sm font-medium text-black underline hover:no-underline disabled:opacity-50"
+                      >
+                        {resendOtp.isPending
+                          ? "Sending…"
+                          : "Resend verification link"}
+                      </button>
+                    )}
+                  {resendOtp.isSuccess && (
+                    <p className="text-sm text-green-600">
+                      A new link has been sent. Check your inbox.
+                    </p>
+                  )}
+                </div>
               )}
             </Form>
           )}
