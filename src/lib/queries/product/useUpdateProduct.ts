@@ -29,7 +29,7 @@ export const useUpdateProduct = (productId: string) => {
         color: draft.color, // ✅ String, not array
         warning: draft.warning.trim(),
         careInstruction: draft.careInstruction.trim(),
-        careSteps: draft.careSteps.trim(), // ✅ String, not array
+        careSteps: draft.careSteps?.trim() ?? "",
         stylingTip: draft.stylingTip.trim(),
         attachments: attachmentIds, // ✅ Array of ID strings
         categoryId: draft.categoryId,

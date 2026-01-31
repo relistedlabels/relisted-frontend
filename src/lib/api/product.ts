@@ -1,11 +1,15 @@
 // lib/api/product.ts
 import { apiFetch } from "./http";
 
+export type ProductUpload = {
+  id: string;
+  url: string;
+};
+
 export type ProductAttachment = {
   id: string;
-  productId: string;
-  disputeId: string | null;
-};
+  uploads: ProductUpload[];
+} | null;
 
 export type ProductCurator = {
   name: string;
@@ -40,7 +44,7 @@ export type UserProduct = {
   stylingTip: string;
   createdAt: string;
   updatedAt: string;
-  attachments: ProductAttachment;
+  attachments: ProductAttachment | null;
   curator: ProductCurator;
 };
 
@@ -57,7 +61,7 @@ export type ProductPayload = {
   color: string;
   warning: string;
   careInstruction: string;
-  careSteps: string;
+  careSteps?: string;
   stylingTip: string;
   attachments: string[];
   categoryId: string;
