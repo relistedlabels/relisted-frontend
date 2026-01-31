@@ -3,7 +3,7 @@
 import React from "react";
 import ActionConfirmModal from "@/common/layer/ActionConfirmModal";
 
-interface ApproveListing ModalProps {
+interface ApproveListingModalProps {
   isOpen: boolean;
   onClose: () => void;
   listingName?: string;
