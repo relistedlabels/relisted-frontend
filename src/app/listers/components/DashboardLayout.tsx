@@ -93,7 +93,9 @@ const SidebarFooter = ({ onLogoutClick }: { onLogoutClick: () => void }) => {
         className="flex items-center w-full p-3 rounded-xl text-gray-300 hover:bg-gray-800 transition duration-150"
       >
         <LogOut className="w-5 h-5 mr-3" />
-        <Paragraph1 className="text-sm">Log Out</Paragraph1>
+        <Paragraph1 className="text-sm">
+          {logout.isPending ? "Logging out..." : "Log Out"}
+        </Paragraph1>
       </button>
       <Link
         href="/contact-us"
