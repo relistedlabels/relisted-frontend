@@ -22,6 +22,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useUserStore } from "@/store/useUserStore";
+import { useLogout } from "@/lib/queries/auth/useLogout";
 import {
   Header2Plus,
   HeaderAny,
@@ -115,12 +116,20 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const pathname = usePathname();
   const router = useRouter();
   const clearUser = useUserStore((s) => s.clearUser);
+  const logout = useLogout();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleConfirmLogout = () => {
-    clearUser();
-    setShowLogoutModal(false);
-    router.push("/auth/sign-in");
+    logout.mutate(undefined, {
+      onSuccess: () => {
+        clearUser();
+        setShowLogoutModal(false);
+        router.push("/auth/sign-in");
+      },
+      onError: () => {
+        setShowLogoutModal(false);
+      },
+    });
   };
 
   const handleCancelLogout = () => {
@@ -276,8 +285,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               style={{ zIndex: 9999 }}
               className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-2xl p-6 max-w-sm w-full mx-4"
             >
-             
-
               <Paragraph3 className="text-lg font-semibold text-gray-900 mb-2">
                 Confirm Logout
               </Paragraph3>
@@ -302,9 +309,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   whileTap={{ scale: 0.98 }}
                   type="button"
                   onClick={handleConfirmLogout}
-                  className="flex-1 px-4 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition"
+                  disabled={logout.isPending}
+                  className="flex-1 px-4 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Logout
+                  {logout.isPending ? "Logging out..." : "Logout"}
                 </motion.button>
               </div>
             </motion.div>

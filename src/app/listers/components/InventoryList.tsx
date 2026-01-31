@@ -193,7 +193,8 @@ const InventoryList: React.FC = () => {
       }),
       status: product.status,
       isActive: product.isActive,
-      imageUrl: "/images/placeholder.png", // TODO: Get actual image URL from attachments
+      imageUrl:
+        product.attachments?.uploads?.[0]?.url ?? "/images/placeholder.png",
       curatorName: product.curator.name,
     }),
   );

@@ -7,6 +7,22 @@ import { ToolInfo } from "@/common/ui/ToolInfo";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
 import { useTags, useCreateTag } from "@/lib/queries/tag/useTags";
 
+// Tags that show in the box (first 12 when no search)
+const BOX_TAG_NAMES = [
+  "New season",
+  "Date night",
+  "Brunch outfit",
+  "Night out",
+  "Wedding guest",
+  "Mini dress",
+  "Midi dress",
+  "Classy",
+  "Vacation",
+  "Party",
+  "Luxury",
+  "Formal wear",
+];
+
 export const TagSelector: React.FC = () => {
   const [query, setQuery] = useState("");
   const { data, setField } = useProductDraftStore();
@@ -15,11 +31,31 @@ export const TagSelector: React.FC = () => {
   const { data: tags = [] } = useTags();
   const { mutate: createTag } = useCreateTag();
 
+  const sortedTags = useMemo(() => {
+    const boxOrderMap = new Map(
+      BOX_TAG_NAMES.map((n, i) => [n.toLowerCase(), i])
+    );
+    const boxSet = new Set(BOX_TAG_NAMES.map((n) => n.toLowerCase()));
+    const inBox: typeof tags = [];
+    const rest: typeof tags = [];
+    for (const t of tags) {
+      if (boxSet.has(t.name.toLowerCase())) inBox.push(t);
+      else rest.push(t);
+    }
+    inBox.sort(
+      (a, b) =>
+        (boxOrderMap.get(a.name.toLowerCase()) ?? 999) -
+          (boxOrderMap.get(b.name.toLowerCase()) ?? 999) ||
+        a.name.localeCompare(b.name)
+    );
+    return [...inBox, ...rest];
+  }, [tags]);
+
   const visibleTags = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return tags.slice(0, 10);
-    return tags.filter((t) => t.name.toLowerCase().includes(q));
-  }, [tags, query]);
+    if (!q) return sortedTags.slice(0, 12);
+    return sortedTags.filter((t) => t.name.toLowerCase().includes(q));
+  }, [sortedTags, query]);
 
   return (
     <div className="rounded-xl border border-gray-200 p-4">

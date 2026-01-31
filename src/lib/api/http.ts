@@ -50,7 +50,7 @@ export async function apiFetch<T>(
 
   let res = await doFetch(path, options, token, isFormData);
 
-  // Retry once with token from localStorage if 401 (handles rehydration race)
+  // Retry once with token from localStorage if 401 (to handle rehydration race)
   if (res.status === 401 && token === null && typeof window !== "undefined") {
     const retryToken = getAuthToken();
     if (retryToken) {

@@ -15,14 +15,14 @@ const ProductMediaGallery: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const product = useProductDetailsStore((state) => state.product);
 
-  if (!product || !product.attachments || product.attachments.length === 0) {
+  const uploads = product?.attachments?.uploads ?? [];
+  if (!product || uploads.length === 0) {
     return <div className="text-center py-8">No media available</div>;
   }
 
-  // Convert attachments to media items (assume all are images for now)
-  const media: MediaItem[] = product.attachments.map((url) => ({
+  const media: MediaItem[] = uploads.map((u) => ({
     type: "image" as const,
-    src: url,
+    src: u.url,
   }));
 
   const nextMedia = () => {
