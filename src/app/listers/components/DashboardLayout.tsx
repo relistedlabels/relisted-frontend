@@ -3,6 +3,7 @@
 import React, { useState, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 import {
   Bell,
@@ -83,24 +84,13 @@ const SidebarNav: React.FC<{
 // --------------------
 // Sidebar Footer
 // --------------------
-const SidebarFooter = () => {
-  const router = useRouter();
-  const logout = useLogout();
-
-  const handleLogout = () => {
-    if (!window.confirm("Are you sure you want to log out?")) return;
-    logout.mutate(undefined, {
-      onSettled: () => router.push("/auth/sign-in"),
-    });
-  };
-
+const SidebarFooter = ({ onLogoutClick }: { onLogoutClick: () => void }) => {
   return (
     <div className="mt-8 space-y-2 border-t border-gray-800 pt-6">
       <button
         type="button"
-        onClick={handleLogout}
-        disabled={logout.isPending}
-        className="flex items-center w-full p-3 rounded-xl text-gray-300 hover:bg-gray-800 transition duration-150 disabled:opacity-50"
+        onClick={onLogoutClick}
+        className="flex items-center w-full p-3 rounded-xl text-gray-300 hover:bg-gray-800 transition duration-150"
       >
         <LogOut className="w-5 h-5 mr-3" />
         <Paragraph1 className="text-sm">
@@ -126,6 +116,27 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   brand = "DASHBOARD",
 }) => {
   const pathname = usePathname();
+  const router = useRouter();
+  const clearUser = useUserStore((s) => s.clearUser);
+  const logout = useLogout();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const handleConfirmLogout = () => {
+    logout.mutate(undefined, {
+      onSuccess: () => {
+        clearUser();
+        setShowLogoutModal(false);
+        router.push("/auth/sign-in");
+      },
+      onError: () => {
+        setShowLogoutModal(false);
+      },
+    });
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutModal(false);
+  };
 
   // TODO: replace this mock with real auth/user hook (Supabase, Firebase, API, etc.)
   const user: UserProfile = {
@@ -192,7 +203,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <SidebarNav navItems={navItems} />
         </div>
 
-        <SidebarFooter />
+        <SidebarFooter onLogoutClick={() => setShowLogoutModal(true)} />
       </aside>
 
       {/* Mobile Sidebar */}
@@ -215,7 +226,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <UserProfileBadge />
         </div>
         <SidebarNav navItems={navItems} onItemClick={toggleMobile} />
-        <SidebarFooter />
+        <SidebarFooter onLogoutClick={() => setShowLogoutModal(true)} />
       </aside>
 
       {mobileOpen && (
@@ -239,7 +250,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
           <Paragraph3 className=" text-white"> Early Access</Paragraph3>
 
-          <div className="flex items-center gap-4">
+          <div className="flex- hidden items-center gap-4">
             <Mail className="w-5 h-5 text-white cursor-pointer" />
             <Bell className="w-5 h-5 text-white cursor-pointer" />
 
@@ -252,6 +263,64 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           {children}
         </main>
       </div>
+
+      {/* Motion Popup Modal - Rendered at top level */}
+      <AnimatePresence>
+        {showLogoutModal && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleCancelLogout}
+              style={{ zIndex: 9998 }}
+              className="fixed inset-0 bg-black/50"
+            />
+
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: -20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -20 }}
+              transition={{ type: "spring", damping: 20, stiffness: 300 }}
+              style={{ zIndex: 9999 }}
+              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-2xl p-6 max-w-sm w-full mx-4"
+            >
+              <Paragraph3 className="text-lg font-semibold text-gray-900 mb-2">
+                Confirm Logout
+              </Paragraph3>
+              <Paragraph1 className="text-gray-600 text-sm mb-6">
+                Are you sure you want to log out? You'll need to sign in again
+                to access your account.{" "}
+              </Paragraph1>
+
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  type="button"
+                  onClick={handleCancelLogout}
+                  className="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition"
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  type="button"
+                  onClick={handleConfirmLogout}
+                  disabled={logout.isPending}
+                  className="flex-1 px-4 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {logout.isPending ? "Logging out..." : "Logout"}
+                </motion.button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -26,7 +26,8 @@ export default function Page() {
   }, [product, setProduct]);
 
   const path = [
-    { label: "Dashboard", href: "/listers/dashboard" },
+    // { label: "Dashboard", href: "/listers/dashboard" },
+    { label: "Dashboard", href: "#" },
     { label: "Inventory", href: "/listers/inventory" },
     { label: "Product", href: null },
   ];

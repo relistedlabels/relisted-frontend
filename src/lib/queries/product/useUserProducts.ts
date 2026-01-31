@@ -7,6 +7,8 @@ export const useUserProducts = () =>
     queryKey: ["user-products"],
     queryFn: async () => {
       const response = await productApi.getUserProducts();
+      console.log("API Response:", response);
+      console.log("Response Data:", response.data);
       // ✅ Extract data array from response wrapper
       return response.data;
     },

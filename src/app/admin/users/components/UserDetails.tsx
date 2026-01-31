@@ -15,6 +15,7 @@ import WalletTopUpForm from "@/app/shop/cart/checkout/components/WalletTopUpForm
 import { FaPlus } from "react-icons/fa";
 import { HiOutlineArrowDownRight } from "react-icons/hi2";
 import UserDetailsCard from "./UserDetailsCard";
+import SuspendUserButton from "./SuspendUserButton";
 
 // --------------------
 // Slide-in Filter Panel
@@ -24,7 +25,10 @@ interface UserDetailsPanelProps {
   onClose: () => void;
 }
 
-const UserDetailsPanel: React.FC<UserDetailsPanelProps> = ({ isOpen, onClose }) => {
+const UserDetailsPanel: React.FC<UserDetailsPanelProps> = ({
+  isOpen,
+  onClose,
+}) => {
   const minPrice = 50000;
   const maxPrice = 200000;
 
@@ -41,6 +45,7 @@ const UserDetailsPanel: React.FC<UserDetailsPanelProps> = ({ isOpen, onClose }) 
   };
 
   const user = {
+    id: "user_001",
     name: "John Doe",
     role: "Renter",
     status: "Active",
@@ -103,13 +108,11 @@ const UserDetailsPanel: React.FC<UserDetailsPanelProps> = ({ isOpen, onClose }) 
             </div>
 
             {/* Footer */}
-            <div className="mt-auto py-2 text-black bg-white flex justify-between gap-4 sticky bottom-0">
-              <button className="flex-1  px-4 py-3  font-semibold border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-                <Paragraph1>Cancel </Paragraph1>
-              </button>
+            <div className="mt-auto py-3 bg-white sticky bottom-0 flex flex-col gap-3">
+              <SuspendUserButton />
 
-              <button className="flex-1  px-4 py-3  font-semibold border bg-black text-white rounded-lg hover:bg-gray-900 transition">
-                <Paragraph1>Proceed </Paragraph1>
+              <button className="w-full px-4 py-3 border border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition">
+                <Paragraph1>Close Panel</Paragraph1>
               </button>
             </div>
           </motion.div>

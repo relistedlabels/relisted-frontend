@@ -133,7 +133,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       <nav className="flex-1 px-4 overflow-y-auto hide-scrollbar">
         <ul>
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive =
+              pathname === item.href || pathname.startsWith(item.href + "/");
 
             return (
               <li key={item.id}>

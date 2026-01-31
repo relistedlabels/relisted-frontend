@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Upload, X } from "lucide-react";
 import { Paragraph3, Paragraph1 } from "@/common/ui/Text";
+import { ToolInfo } from "@/common/ui/ToolInfo";
 import { Attachment, useProductDraftStore } from "@/store/useProductDraftStore";
 import { useUploader } from "@/context/UploaderContext";
 
@@ -74,6 +75,17 @@ export const ItemImageUploader: React.FC = () => {
     (file: File, slotId: string) => {
       console.log(`🚀 Starting upload for slot: ${slotId}, file: ${file.name}`);
 
+      // Validate file size (7MB max)
+      const maxFileSize = 7 * 1024 * 1024; // 7MB in bytes
+      if (file.size > maxFileSize) {
+        console.error("❌ File size exceeds 7MB limit");
+        setUploadStatus((prev) => ({
+          ...prev,
+          [slotId]: "error: file too large (max 7MB)",
+        }));
+        return;
+      }
+
       const previewUrl = URL.createObjectURL(file);
       setTempPreviews((prev) => ({ ...prev, [slotId]: previewUrl }));
       setUploadStatus((prev) => ({ ...prev, [slotId]: "uploading..." }));
@@ -132,13 +144,16 @@ export const ItemImageUploader: React.FC = () => {
 
   return (
     <div className="w-full rounded-xl border border-gray-200 p-4">
-      <div className="mb-4">
-        <Paragraph3 className="text-sm font-semibold text-black">
-          Item Image
-        </Paragraph3>
-        <Paragraph1 className="text-xs text-gray-500">
-          Upload at least 5 high quality images and videos of your item
-        </Paragraph1>
+      <div className="mb-4 flex items-center justify-between">
+        <div>
+          <Paragraph3 className="text-sm font-semibold text-black">
+            Item Image
+          </Paragraph3>
+          <Paragraph1 className="text-xs text-gray-500">
+            Upload at least 5 high quality images and videos of your item
+          </Paragraph1>
+        </div>
+        <ToolInfo content="Upload clear, high-quality photos of your item from different angles. This helps potential buyers understand what they're getting." />
       </div>
 
       <div className="grid grid-cols-5 gap-4">

@@ -2,6 +2,7 @@
 
 import React, { useMemo } from "react";
 import { Paragraph3, Paragraph1 } from "@/common/ui/Text";
+import { ToolInfo } from "@/common/ui/ToolInfo";
 import { BrandSelector } from "./BrandSelector";
 import { SizeSelector } from "./SizeSelector";
 import { ColorSelector } from "./ColorSelector";
@@ -33,9 +34,12 @@ export const BasicInformationForm: React.FC = () => {
 
       <div className="space-y-4">
         <div>
-          <Paragraph1 className="mb-1 text-xs font-medium text-gray-700">
-            Item Name
-          </Paragraph1>
+          <div className="flex items-center gap-2 mb-1">
+            <Paragraph1 className="text-xs font-medium text-gray-700">
+              Item Name
+            </Paragraph1>
+            <ToolInfo content="Enter a clear, descriptive name for your item. Be specific about brand and key features." />
+          </div>
           <input
             type="text"
             placeholder="eg. Fendi Arco Boots"
@@ -57,12 +61,10 @@ export const BasicInformationForm: React.FC = () => {
         </div>
 
         <ConditionSelector />
-<div className="grid grid-cols-2 gap-4  ">
-
- <QuantityInput />
-        <CategorySelector />
-</div>
-       
+        <div className="grid grid-cols-2 gap-4  ">
+          <QuantityInput />
+          <CategorySelector />
+        </div>
       </div>
     </div>
   );

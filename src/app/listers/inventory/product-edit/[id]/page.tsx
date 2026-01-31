@@ -72,7 +72,8 @@ export default function Page() {
   }
 
   const path = [
-    { label: "Dashboard", href: "/listers/dashboard" },
+    // { label: "Dashboard", href: "/listers/dashboard" },
+    { label: "Dashboard", href: "#" },
     { label: "Inventory", href: "/listers/inventory" },
     { label: "Edit Item", href: null },
   ];

@@ -112,16 +112,19 @@ export const useProductDraftStore = create<ProductDraftStore>()(
             warning: product.warning,
             size: product.measurement,
             careInstruction: product.careInstruction,
-            careSteps: product.careSteps,
+            careSteps: product.careSteps || "",
             stylingTip: product.stylingTip,
             tagId: product.tagId || "",
-            attachments: (product.attachments || []).map((url, idx) => ({
-              id: `${idx}`,
-              url,
-              name: `Image ${idx + 1}`,
-              progress: 100,
-              type: "image",
-            })),
+            attachments:
+              product.attachments?.uploads?.map(
+                (upload: { id: string; url: string }, idx: number) => ({
+                  id: upload.id,
+                  url: upload.url,
+                  name: `Image ${idx + 1}`,
+                  progress: 100,
+                  type: "image",
+                }),
+              ) || [],
             categoryId: product.categoryId,
             brandId: product.brandId,
           },

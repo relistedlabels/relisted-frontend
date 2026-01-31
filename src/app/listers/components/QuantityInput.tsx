@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Paragraph1 } from "@/common/ui/Text";
+import { ToolInfo } from "@/common/ui/ToolInfo";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
 
 export const QuantityInput: React.FC = () => {
@@ -26,9 +27,12 @@ export const QuantityInput: React.FC = () => {
 
   return (
     <div className="w-full">
-      <Paragraph1 className="mb-2 text-xs font-medium text-gray-700">
-        Quantity Available
-      </Paragraph1>
+      <div className="flex items-center gap-2 mb-2">
+        <Paragraph1 className="text-xs font-medium text-gray-700">
+          Quantity Available
+        </Paragraph1>
+        <ToolInfo content="How many copies of this item do you have available for rent?" />
+      </div>
       <div className="flex items-center gap-2">
         <button
           type="button"

@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { Plus } from "lucide-react";
 import { Paragraph1 } from "@/common/ui/Text";
+import { ToolInfo } from "@/common/ui/ToolInfo";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
 import { useTags, useCreateTag } from "@/lib/queries/tag/useTags";
 
@@ -58,7 +59,10 @@ export const TagSelector: React.FC = () => {
 
   return (
     <div className="rounded-xl border border-gray-200 p-4">
-      <Paragraph1 className="mb-1 text-xs font-bold text-black">Tag</Paragraph1>
+      <div className="flex items-center gap-2 mb-1">
+        <Paragraph1 className="text-xs font-bold text-black">Tag</Paragraph1>
+        <ToolInfo content="Select a tag to categorize your item or add a new tag if one doesn't exist." />
+      </div>
 
       <input
         value={query}
