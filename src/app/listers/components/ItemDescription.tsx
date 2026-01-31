@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Paragraph1 } from "@/common/ui/Text";
+import { ToolInfo } from "@/common/ui/ToolInfo";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
 
 export const ItemDescription: React.FC = () => {
@@ -15,9 +16,12 @@ export const ItemDescription: React.FC = () => {
   return (
     <div className="w-full rounded-xl border border-gray-200 p-4 space-y-4">
       <div>
-        <Paragraph1 className="mb-2 text-xs font-medium text-gray-700">
-          Description
-        </Paragraph1>
+        <div className="flex items-center gap-2 mb-2">
+          <Paragraph1 className="text-xs font-medium text-gray-700">
+            Description
+          </Paragraph1>
+          <ToolInfo content="Write a detailed description of your item including its condition, features, and any notable details." />
+        </div>
         <textarea
           value={data.description}
           onChange={(e) => setField("description", e.target.value)}
@@ -27,9 +31,12 @@ export const ItemDescription: React.FC = () => {
       </div>
 
       <div>
-        <Paragraph1 className="mb-2 text-xs font-medium text-gray-700">
-          Care Instructions
-        </Paragraph1>
+        <div className="flex items-center gap-2 mb-2">
+          <Paragraph1 className="text-xs font-medium text-gray-700">
+            Care Instructions
+          </Paragraph1>
+          <ToolInfo content="Provide general care instructions to help renters maintain the item properly." />
+        </div>
         <textarea
           value={data.careInstruction}
           onChange={(e) => setField("careInstruction", e.target.value)}
@@ -39,9 +46,12 @@ export const ItemDescription: React.FC = () => {
       </div>
 
       <div>
-        <Paragraph1 className="mb-2 text-xs font-medium text-gray-700">
-          Care Steps
-        </Paragraph1>
+        <div className="flex items-center gap-2 mb-2">
+          <Paragraph1 className="text-xs font-medium text-gray-700">
+            Care Steps
+          </Paragraph1>
+          <ToolInfo content="List step-by-step instructions for caring for or cleaning this item." />
+        </div>
         <textarea
           value={typeof data.careSteps === "string" ? data.careSteps : ""}
           onChange={handleCareStepsChange}
@@ -51,9 +61,12 @@ export const ItemDescription: React.FC = () => {
       </div>
 
       <div>
-        <Paragraph1 className="mb-2 text-xs font-medium text-gray-700">
-          Styling Tips
-        </Paragraph1>
+        <div className="flex items-center gap-2 mb-2">
+          <Paragraph1 className="text-xs font-medium text-gray-700">
+            Styling Tips
+          </Paragraph1>
+          <ToolInfo content="Share ideas on how to style or use this item to inspire potential renters." />
+        </div>
         <textarea
           value={data.stylingTip}
           onChange={(e) => setField("stylingTip", e.target.value)}

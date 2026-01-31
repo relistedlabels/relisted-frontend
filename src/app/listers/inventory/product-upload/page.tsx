@@ -8,7 +8,8 @@ import { ItemDescription } from "../../components/ItemDescription";
 
 export default function Page() {
   const path = [
-    { label: "Dashboard", href: "/listers/dashboard" },
+    // { label: "Dashboard", href: "/listers/dashboard" },
+    { label: "Dashboard", href: "#" },
     { label: "Inventory", href: "/listers/inventory" },
     { label: "New Item", href: null },
   ];

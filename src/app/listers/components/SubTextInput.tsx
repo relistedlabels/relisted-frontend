@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Paragraph1 } from "@/common/ui/Text";
+import { ToolInfo } from "@/common/ui/ToolInfo";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
 
 export const SubTextInput: React.FC = () => {
@@ -13,9 +14,12 @@ export const SubTextInput: React.FC = () => {
 
   return (
     <div className="w-full">
-      <Paragraph1 className="mb-2 text-xs font-medium text-gray-700">
-        Sub Text
-      </Paragraph1>
+      <div className="flex items-center gap-2 mb-2">
+        <Paragraph1 className="text-xs font-medium text-gray-700">
+          Sub Text
+        </Paragraph1>
+        <ToolInfo content="Add a brief subtitle or secondary description that highlights key details or style." />
+      </div>
       <input
         type="text"
         value={data.subText}

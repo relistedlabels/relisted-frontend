@@ -5,9 +5,11 @@ import InventoryList from "../components/InventoryList";
 
 export default function Page() {
     const path = [
-      { label: "Dashboard", href: "/curators/dashboard" },
-      { label: "Inventory", href: null }, 
+      // { label: "Dashboard", href: "/listers/dashboard" },
+      { label: "Dashboard", href: "#" },
+      { label: "Inventory", href: null },
     ];
+  
   return (
     <DashboardLayout>
       <div className=" mb-4  ">
