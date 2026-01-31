@@ -84,17 +84,24 @@ const SidebarNav: React.FC<{
 // --------------------
 // Sidebar Footer
 // --------------------
-const SidebarFooter = ({ onLogoutClick }: { onLogoutClick: () => void }) => {
+const SidebarFooter = ({
+  onLogoutClick,
+  isLoggingOut = false,
+}: {
+  onLogoutClick: () => void;
+  isLoggingOut?: boolean;
+}) => {
   return (
     <div className="mt-8 space-y-2 border-t border-gray-800 pt-6">
       <button
         type="button"
         onClick={onLogoutClick}
-        className="flex items-center w-full p-3 rounded-xl text-gray-300 hover:bg-gray-800 transition duration-150"
+        disabled={isLoggingOut}
+        className="flex items-center w-full p-3 rounded-xl text-gray-300 hover:bg-gray-800 transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <LogOut className="w-5 h-5 mr-3" />
         <Paragraph1 className="text-sm">
-          {logout.isPending ? "Logging out..." : "Log Out"}
+          {isLoggingOut ? "Logging out..." : "Log Out"}
         </Paragraph1>
       </button>
       <Link
@@ -203,7 +210,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <SidebarNav navItems={navItems} />
         </div>
 
-        <SidebarFooter onLogoutClick={() => setShowLogoutModal(true)} />
+        <SidebarFooter
+          onLogoutClick={() => setShowLogoutModal(true)}
+          isLoggingOut={logout.isPending}
+        />
       </aside>
 
       {/* Mobile Sidebar */}
@@ -226,7 +236,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <UserProfileBadge />
         </div>
         <SidebarNav navItems={navItems} onItemClick={toggleMobile} />
-        <SidebarFooter onLogoutClick={() => setShowLogoutModal(true)} />
+        <SidebarFooter
+          onLogoutClick={() => setShowLogoutModal(true)}
+          isLoggingOut={logout.isPending}
+        />
       </aside>
 
       {mobileOpen && (
