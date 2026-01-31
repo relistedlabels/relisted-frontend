@@ -1,16 +1,23 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import AdminSidebar from "./dashboard/components/AdminSidebar";
 import AdminTopNavbar from "./components/AdminTopNavbar";
+import { useLogout } from "@/lib/queries/auth/useLogout";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
+  const router = useRouter();
+  const logout = useLogout();
+
   const handleLogout = () => {
-    console.log("Logging out...");
+    logout.mutate(undefined, {
+      onSettled: () => router.push("/auth/sign-in"),
+    });
   };
 
   return (

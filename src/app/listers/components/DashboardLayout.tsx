@@ -21,6 +21,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useUserStore } from "@/store/useUserStore";
+import { useLogout } from "@/lib/queries/auth/useLogout";
 import {
   Header2Plus,
   HeaderAny,
@@ -84,12 +85,13 @@ const SidebarNav: React.FC<{
 // --------------------
 const SidebarFooter = () => {
   const router = useRouter();
-  const clearUser = useUserStore((s) => s.clearUser);
+  const logout = useLogout();
 
   const handleLogout = () => {
     if (!window.confirm("Are you sure you want to log out?")) return;
-    clearUser();
-    router.push("/auth/sign-in");
+    logout.mutate(undefined, {
+      onSettled: () => router.push("/auth/sign-in"),
+    });
   };
 
   return (
@@ -97,10 +99,13 @@ const SidebarFooter = () => {
       <button
         type="button"
         onClick={handleLogout}
-        className="flex items-center w-full p-3 rounded-xl text-gray-300 hover:bg-gray-800 transition duration-150"
+        disabled={logout.isPending}
+        className="flex items-center w-full p-3 rounded-xl text-gray-300 hover:bg-gray-800 transition duration-150 disabled:opacity-50"
       >
         <LogOut className="w-5 h-5 mr-3" />
-        <Paragraph1 className="text-sm">Log Out</Paragraph1>
+        <Paragraph1 className="text-sm">
+          {logout.isPending ? "Logging out..." : "Log Out"}
+        </Paragraph1>
       </button>
       <Link
         href="/contact-us"

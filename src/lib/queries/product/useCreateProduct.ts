@@ -36,7 +36,7 @@ export const useCreateProduct = () => {
         color: draft.color,
         warning: draft.warning.trim(),
         careInstruction: draft.careInstruction.trim(),
-        careSteps: draft.careSteps.trim(),
+        careSteps: draft.careSteps?.trim() ?? "",
         stylingTip: draft.stylingTip.trim(),
         attachments: attachmentIds,
         categoryId: draft.categoryId,
