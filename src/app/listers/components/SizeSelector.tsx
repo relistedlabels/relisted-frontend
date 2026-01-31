@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { ChevronDown } from "lucide-react";
 import { Paragraph1 } from "@/common/ui/Text";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
@@ -19,15 +19,20 @@ export const SizeSelector: React.FC = () => {
 
   const { data, setField } = useProductDraftStore();
 
-  // 👇 extract from store
+  // 👇 extract from store (measurement format: "size-unit", e.g. "38-EU")
   const parsed = useMemo(() => {
-    if (!data.measurement) return { size: null, unit: "UK" as Unit };
-
+    if (!data.measurement?.includes("-")) {
+      return { size: null, unit: "UK" as Unit };
+    }
     const [size, unit] = data.measurement.split("-");
-    return { size, unit: unit as Unit };
+    const validUnit = unit && UNITS.includes(unit as Unit) ? (unit as Unit) : "UK";
+    return { size: size || null, unit: validUnit };
   }, [data.measurement]);
 
-  const sizes = useMemo(() => SIZE_MAP[parsed.unit], [parsed.unit]);
+  const sizes = useMemo(
+    () => SIZE_MAP[parsed.unit] ?? SIZE_MAP["UK"],
+    [parsed.unit]
+  );
 
   const commit = (size: string, unit: Unit) => {
     setField("measurement", `${size}-${unit}`);
