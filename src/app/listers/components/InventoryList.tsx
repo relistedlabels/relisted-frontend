@@ -1,13 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Paragraph1, Paragraph3 } from "@/common/ui/Text";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUserProducts } from "@/lib/queries/product/useUserProducts";
+import { useProfile } from "@/lib/queries/user/useProfile";
 import { useRouter } from "next/navigation";
 import { ToolInfo } from "@/common/ui/ToolInfo";
+import ProfileImageUploadModal from "./ProfileImageUploadModal";
+import FirstListingModal from "./FirstListingModal";
 import type { UserProduct } from "@/lib/api/product";
 
 // --- Frontend Inventory Item type ---
@@ -171,11 +174,18 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
 
 // --- Main Inventory List Component ---
 const InventoryList: React.FC = () => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<
     "AVAILABLE" | "RENTED" | "MAINTENANCE" | "RESERVED" | "All"
   >("All");
 
+  // Modal states
+  const [showProfileImageModal, setShowProfileImageModal] = useState(false);
+  const [showFirstListingModal, setShowFirstListingModal] = useState(false);
+
+  // Queries
   const { data: products, isLoading, error } = useUserProducts();
+  const { data: profile } = useProfile();
 
   // ✅ Map backend products to frontend InventoryItem
   const mappedInventory: InventoryItem[] = (products || []).map(
@@ -198,6 +208,45 @@ const InventoryList: React.FC = () => {
       curatorName: product.curator.name,
     }),
   );
+
+  // ✅ Auto-show onboarding modals based on profile state
+  useEffect(() => {
+    // Don't show if still loading profile
+    if (!profile) return;
+
+    // Check if user has a profile image
+    const hasProfileImage = profile.avatar || profile.avatarUploadId;
+
+    // Check if user has any products
+    const hasProducts = mappedInventory.length > 0;
+
+    if (!hasProfileImage) {
+      // Always show profile image modal first
+      setShowProfileImageModal(true);
+      setShowFirstListingModal(false);
+    } else if (!hasProducts && hasProfileImage) {
+      // Show first listing modal if they have profile image but no products
+      setShowProfileImageModal(false);
+      setShowFirstListingModal(true);
+    } else {
+      // Hide all modals if they have both
+      setShowProfileImageModal(false);
+      setShowFirstListingModal(false);
+    }
+  }, [profile, mappedInventory.length]);
+
+  const handleProfileImageNext = () => {
+    setShowProfileImageModal(false);
+    // Small delay before showing next modal for smooth transition
+    setTimeout(() => {
+      setShowFirstListingModal(true);
+    }, 300);
+  };
+
+  const handleFirstListingStart = () => {
+    setShowFirstListingModal(false);
+    router.push("/listers/inventory/product-upload");
+  };
 
   // ✅ Filter by status
   const filteredInventory =
@@ -225,6 +274,24 @@ const InventoryList: React.FC = () => {
 
   return (
     <div className="w-full">
+      {/* Profile Image Upload Modal */}
+      <ProfileImageUploadModal
+        isOpen={showProfileImageModal}
+        onClose={() => {
+          // Allow skipping, but keep modal available if they navigate away
+          setShowProfileImageModal(false);
+        }}
+        onNext={handleProfileImageNext}
+        profileName={profile?.name || "Lister"}
+      />
+
+      {/* First Listing Modal */}
+      <FirstListingModal
+        isOpen={showFirstListingModal}
+        onClose={() => setShowFirstListingModal(false)}
+        onGetStarted={handleFirstListingStart}
+      />
+
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-2">

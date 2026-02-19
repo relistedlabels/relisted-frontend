@@ -2,9 +2,12 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { ChevronDown, Check } from "lucide-react";
+import { ChevronDown, Check, Plus } from "lucide-react";
 import { Paragraph1 } from "@/common/ui/Text";
-import { useCategory } from "@/lib/queries/category/useCategories";
+import {
+  useCategory,
+  useCreateCategory,
+} from "@/lib/queries/category/useCategories";
 import { useProductDraftStore } from "@/store/useProductDraftStore";
 
 // Match your backend schema
@@ -18,24 +21,39 @@ interface Category {
 export const CategorySelector: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
 
   // fetch categories from backend
   const { data: categories = [] } = useCategory();
-  const { data, setField } = useProductDraftStore(); 
+  const createMutation = useCreateCategory();
+  const { data, setField } = useProductDraftStore();
 
   // filter by search
   const filtered = useMemo(
     () =>
       (categories as Category[]).filter((c) =>
-        c.name.toLowerCase().includes(query.toLowerCase())
+        c.name.toLowerCase().includes(query.toLowerCase()),
       ),
-    [categories, query]
+    [categories, query],
   );
 
   // find currently selected category in store
   const selectedCategory = (categories as Category[]).find(
-    (c) => c.id === data.categoryId
+    (c) => c.id === data.categoryId,
   );
+
+  const handleAddCategory = async () => {
+    if (!query.trim()) return;
+    setIsCreating(true);
+    try {
+      const result = await createMutation.mutateAsync({ name: query.trim() });
+      setField("categoryId", result.id);
+      setOpen(false);
+      setQuery("");
+    } finally {
+      setIsCreating(false);
+    }
+  };
 
   return (
     <div className="relative w-full">
@@ -65,7 +83,19 @@ export const CategorySelector: React.FC = () => {
           />
 
           <div className="max-h-48 overflow-y-auto">
-            {filtered.length === 0 && (
+            {filtered.length === 0 && query && (
+              <button
+                type="button"
+                onClick={handleAddCategory}
+                disabled={isCreating}
+                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 disabled:opacity-50"
+              >
+                <Plus className="h-4 w-4" />
+                Add "{query}" as category
+              </button>
+            )}
+
+            {filtered.length === 0 && !query && (
               <p className="px-3 py-2 text-sm text-gray-400">
                 No categories found
               </p>

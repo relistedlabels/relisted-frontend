@@ -38,7 +38,7 @@ export type ProductDraft = {
   careSteps: string;
   stylingTip: string;
 
-  tagId: string;
+  tagIds: string[];
   attachments: Attachment[];
   categoryId: string;
   brandId: string;
@@ -75,7 +75,7 @@ const initialState: ProductDraft = {
   careSteps: "Professional care recommended",
   stylingTip: "Perfect for casual wear",
 
-  tagId: "trending",
+  tagIds: [],
   attachments: [],
   categoryId: "",
   brandId: "",
@@ -114,7 +114,7 @@ export const useProductDraftStore = create<ProductDraftStore>()(
             careInstruction: product.careInstruction,
             careSteps: product.careSteps || "",
             stylingTip: product.stylingTip,
-            tagId: product.tagId || "",
+            tagIds: product.tagIds || [],
             attachments:
               product.attachments?.uploads?.map(
                 (upload: { id: string; url: string }, idx: number) => ({
