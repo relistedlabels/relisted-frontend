@@ -18,14 +18,14 @@ export const ItemDescription: React.FC = () => {
       <div>
         <div className="flex items-center gap-2 mb-2">
           <Paragraph1 className="text-xs font-medium text-gray-700">
-            Description
+            Item condition
           </Paragraph1>
           <ToolInfo content="Write a detailed description of your item including its condition, features, and any notable details." />
         </div>
         <textarea
           value={data.description}
           onChange={(e) => setField("description", e.target.value)}
-          placeholder="Describe your item..."
+          placeholder="Describe your item condition..."
           className="w-full h-24 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black resize-none"
         />
       </div>
@@ -70,7 +70,7 @@ export const ItemDescription: React.FC = () => {
         <textarea
           value={data.stylingTip}
           onChange={(e) => setField("stylingTip", e.target.value)}
-          placeholder="How to style this item..."
+          placeholder="How to style this item (eg: )..."
           className="w-full h-24 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black resize-none"
         />
       </div>

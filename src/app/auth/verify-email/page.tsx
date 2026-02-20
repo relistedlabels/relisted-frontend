@@ -71,8 +71,14 @@ export default function VerifyEmailPage() {
                       : "Verifying…"}
             </Paragraph3>
             <Paragraph1 className="text-sm text-gray-600 max-w-[320px]">
-              {!token &&
-                "We’ve sent a verification link to your email. Click the link to verify your account."}
+              {!token && (
+                <>
+                  We’ve sent a verification link to your email. Click the link to verify your account.<br />
+                  <span className="block mt-2 text-xs text-gray-500">
+                    If you don’t see the email in your inbox, please check your spam or junk folder for the magic link.
+                  </span>
+                </>
+              )}
               {token &&
                 verifyOtp.isPending &&
                 "Please wait while we verify your email."}
