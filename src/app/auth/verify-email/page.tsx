@@ -24,7 +24,7 @@ export default function VerifyEmailPage() {
       {
         onSuccess: () => setVerified(true),
         onSettled: () => {},
-      }
+      },
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps -- run once when token is present
   }, [token]);
@@ -73,22 +73,25 @@ export default function VerifyEmailPage() {
             <Paragraph1 className="text-sm text-gray-600 max-w-[320px]">
               {!token && (
                 <>
-                  We’ve sent a verification link to your email. Click the link to verify your account.<br />
+                  We’ve sent a verification link to your email. Click the link
+                  to verify your account.
+                  <br />
                   <span className="block mt-2 text-xs text-gray-500">
-                    If you don’t see the email in your inbox, please check your spam or junk folder for the magic link.
+                    If you don’t see the email in your inbox, please check your
+                    spam or junk folder for the magic link.
                   </span>
                 </>
               )}
               {token &&
                 verifyOtp.isPending &&
                 "Please wait while we verify your email."}
-              {token && verified &&
+              {token &&
+                verified &&
                 "Your email is verified. Redirecting you to sign in…"}
               {token && verifyOtp.isError && (
                 <>
-                  {(verifyOtp.error as Error).message}
-                  {" "}
-                  The link may have expired. You can request a new one from the sign-in page.
+                  {(verifyOtp.error as Error).message} The link may have
+                  expired. You can request a new one from the sign-in page.
                 </>
               )}
             </Paragraph1>
