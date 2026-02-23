@@ -121,10 +121,10 @@ export default function ProfileImageUploadModal({
                   )}
                 </div>
                 <Paragraph3 className="text-xl font-bold text-black mb-1">
-                  Add Your Photo
+                  Add Your Profile Photo
                 </Paragraph3>
                 <Paragraph1 className="text-gray-600 text-sm">
-                  Help renters get to know you
+                  This is required for your verification process
                 </Paragraph1>
               </div>
 
@@ -165,7 +165,7 @@ export default function ProfileImageUploadModal({
                         <Upload size={32} className="text-gray-400" />
                       </div>
                       <Paragraph1 className="font-medium text-sm text-gray-900">
-                        Upload your photo
+                        Upload your Profile Photo
                       </Paragraph1>
                       <Paragraph3 className="text-xs text-gray-600">
                         Drag & drop or click to browse

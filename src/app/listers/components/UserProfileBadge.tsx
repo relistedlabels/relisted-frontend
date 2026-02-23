@@ -2,13 +2,14 @@
 
 import { User } from "lucide-react";
 import { Paragraph1 } from "@/common/ui/Text";
-import { useProfileStore } from "@/store/profileStore";
+import { useProfile } from "@/lib/queries/user/useProfile";
 
 export function UserProfileBadge() {
-  const profile = useProfileStore((s) => s.profile);
+  const { data: profile } = useProfile();
 
   const name = profile?.data?.user?.name?.trim() || "New user";
   const role = profile?.data?.user?.role;
+  // Use avatarUrl if available, otherwise fall back to placeholder
   const avatar = profile?.data?.avatarUrl || null;
 
   return (

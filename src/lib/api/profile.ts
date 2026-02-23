@@ -16,7 +16,7 @@ export const getProfile = async (userId: string) => {
       method: "GET",
     },
   );
-  return response.data;
+  return response;
 };
 
 /** Create profile */

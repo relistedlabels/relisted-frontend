@@ -22,13 +22,7 @@ interface InventoryItem {
   pricePerDay: string;
   itemValue: string;
   listedDate: string;
-  status:
-    | "AVAILABLE"
-    | "RENTED"
-    | "MAINTENANCE"
-    | "RESERVED"
-    | "PENDING"
-    | "REJECTED";
+  status: "AVAILABLE" | "RENTED" | "RESERVED" | "PENDING" | "REJECTED";
   isActive: boolean;
   imageUrl: string;
   curatorName: string;
@@ -36,14 +30,7 @@ interface InventoryItem {
 
 // ✅ Helper to convert ALL_CAPS status to Initial Caps for display
 const formatStatusLabel = (
-  status:
-    | "AVAILABLE"
-    | "RENTED"
-    | "MAINTENANCE"
-    | "RESERVED"
-    | "PENDING"
-    | "REJECTED"
-    | "All",
+  status: "AVAILABLE" | "RENTED" | "RESERVED" | "PENDING" | "REJECTED" | "All",
 ): string => {
   if (status === "All") return "All Items";
   return status
@@ -81,11 +68,6 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
       dot: "bg-blue-600",
       text: "text-blue-600",
       badge: "text-blue-800 bg-blue-100",
-    },
-    MAINTENANCE: {
-      dot: "bg-yellow-600",
-      text: "text-yellow-600",
-      badge: "text-yellow-800 bg-yellow-100",
     },
     RESERVED: {
       dot: "bg-purple-600",
@@ -199,7 +181,7 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
 const InventoryList: React.FC = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<
-    "AVAILABLE" | "RENTED" | "MAINTENANCE" | "RESERVED" | "All"
+    "AVAILABLE" | "RENTED" | "RESERVED" | "All"
   >("All");
 
   // Modal states
@@ -234,11 +216,12 @@ const InventoryList: React.FC = () => {
 
   // ✅ Auto-show onboarding modals based on profile state
   useEffect(() => {
-    // Don't show if still loading profile
-    if (!profile) return;
+    // Don't show if still loading profile or profile data not confirmed
+    if (!profile || isProfileLoading) return;
+    if (!profile?.data) return;
 
     // Check if user has a profile image - avatarUploadId must be a non-empty string
-    const hasProfileImage = !!profile.avatarUploadId;
+    const hasProfileImage = !!profile?.data?.avatarUploadId;
 
     // Check if user has any products
     const hasProducts = mappedInventory.length > 0;
@@ -256,7 +239,7 @@ const InventoryList: React.FC = () => {
       setShowProfileImageModal(false);
       setShowFirstListingModal(false);
     }
-  }, [profile, mappedInventory.length]);
+  }, [profile, isProfileLoading, mappedInventory.length]);
 
   const handleProfileImageNext = () => {
     setShowProfileImageModal(false);
@@ -314,7 +297,7 @@ const InventoryList: React.FC = () => {
           setShowProfileImageModal(false);
         }}
         onNext={handleProfileImageNext}
-        profileName={profile?.name || "Lister"}
+        profileName={profile?.data?.user?.name?.trim() || "Lister"}
       />
 
       {/* First Listing Modal */}
@@ -345,9 +328,7 @@ const InventoryList: React.FC = () => {
       {/* Tab Switcher - Scrollable on mobile, wrapping on desktop */}
       <div className="mb-6 overflow-x-auto  w-[330px]  sm:w-fit">
         <div className="p-1 bg-white rounded-xl shadow-sm inline-flex border border-gray-200 relative gap-1 min-w-max">
-          {(
-            ["All", "AVAILABLE", "RENTED", "MAINTENANCE", "RESERVED"] as const
-          ).map((tab) => (
+          {(["All", "AVAILABLE", "RENTED", "RESERVED"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}

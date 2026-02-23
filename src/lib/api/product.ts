@@ -29,7 +29,6 @@ export type UserProduct = {
   status:
     | "AVAILABLE"
     | "RENTED"
-    | "MAINTENANCE"
     | "RESERVED"
     | "PENDING"
     | "REJECTED";

@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useUserStore } from "@/store/useUserStore";
 import { useLogout } from "@/lib/queries/auth/useLogout";
+import { useProfile } from "@/lib/queries/user/useProfile";
 import {
   Header2Plus,
   HeaderAny,
@@ -40,12 +41,6 @@ export type NavItem = {
   href: string;
   icon: LucideIcon;
   isActive?: boolean;
-};
-
-export type UserProfile = {
-  name: string;
-  role?: string;
-  avatarUrl?: string;
 };
 
 interface DashboardLayoutProps {
@@ -128,6 +123,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const logout = useLogout();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
+  // Fetch the current user's profile
+  const { data: profile, isLoading } = useProfile();
+
   const handleConfirmLogout = () => {
     logout.mutate(undefined, {
       onSuccess: () => {
@@ -143,13 +141,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   const handleCancelLogout = () => {
     setShowLogoutModal(false);
-  };
-
-  // TODO: replace this mock with real auth/user hook (Supabase, Firebase, API, etc.)
-  const user: UserProfile = {
-    name: "Jane Graham",
-    role: "- CURATOR -",
-    avatarUrl: "https://i.pravatar.cc/150?u=jane",
   };
 
   // Centralized navigation (NOT passed from parents)
