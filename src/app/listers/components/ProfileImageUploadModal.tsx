@@ -5,9 +5,7 @@ import type { JSX } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Upload, Loader } from "lucide-react";
 import { Paragraph1, Paragraph3 } from "@/common/ui/Text";
-import { useUpdateProfile } from "@/lib/queries/user/useUpdateProfile";
-import { useUpload } from "@/lib/queries/useUpload";
-import { v4 as uuid } from "uuid";
+import { useUploadAvatar } from "@/lib/queries/user/useUploadAvatar";
 
 interface ProfileImageUploadModalProps {
   isOpen: boolean;
@@ -25,10 +23,8 @@ export default function ProfileImageUploadModal({
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadedAvatarId, setUploadedAvatarId] = useState<string | null>(null);
 
-  const uploadMutation = useUpload();
-  const updateProfileMutation = useUpdateProfile();
+  const uploadAvatarMutation = useUploadAvatar();
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -65,43 +61,25 @@ export default function ProfileImageUploadModal({
     setPreview(previewUrl);
 
     setIsUploading(true);
-    uploadMutation.mutate(
-      {
-        file,
-        id: uuid(),
-        onProgress: (percent: number) => {
-          console.log("Upload progress:", percent);
-        },
+    uploadAvatarMutation.mutate(file, {
+      onSuccess: () => {
+        setIsUploading(false);
       },
-      {
-        onSuccess: (data: any) => {
-          setUploadedAvatarId(data.id);
-          setIsUploading(false);
-        },
-        onError: (error: any) => {
-          console.error("Upload failed:", error);
-          setIsUploading(false);
-          alert("Failed to upload image. Please try again.");
-        },
+      onError: (error: any) => {
+        console.error("Upload failed:", error);
+        setIsUploading(false);
+        alert("Failed to upload image. Please try again.");
       },
-    );
+    });
   };
 
-  const handleNext = async () => {
-    if (!uploadedAvatarId) {
+  const handleNext = () => {
+    if (!preview || isUploading) {
       alert("Please upload a profile image first");
       return;
     }
 
-    updateProfileMutation.mutate(undefined, {
-      onSuccess: () => {
-        onNext();
-      },
-      onError: (error: any) => {
-        console.error("Failed to update profile:", error);
-        alert("Failed to save profile image. Please try again.");
-      },
-    });
+    onNext();
   };
 
   return (
@@ -124,7 +102,7 @@ export default function ProfileImageUploadModal({
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
           >
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[85vh] overflow-y-auto flex flex-col">
+            <div className="bg-white hide-scrollbar rounded-2xl shadow-2xl w-full max-w-md max-h-[85vh] overflow-y-auto flex flex-col">
               {/* Header */}
               <div className="bg-white border-b border-gray-100 p-6 sticky top-0 z-10">
                 <div className="flex items-center justify-between mb-4">
@@ -142,12 +120,12 @@ export default function ProfileImageUploadModal({
                     </button>
                   )}
                 </div>
-                <h2 className="text-xl font-bold text-black mb-1">
+                <Paragraph3 className="text-xl font-bold text-black mb-1">
                   Add Your Photo
-                </h2>
-                <Paragraph3 className="text-gray-600 text-sm">
-                  Help renters get to know you
                 </Paragraph3>
+                <Paragraph1 className="text-gray-600 text-sm">
+                  Help renters get to know you
+                </Paragraph1>
               </div>
 
               {/* Content */}
@@ -211,32 +189,30 @@ export default function ProfileImageUploadModal({
 
                 {/* Quick Tip */}
                 <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                  <Paragraph3 className="text-xs text-gray-700">
+                  <Paragraph1 className="text-xs text-gray-700">
                     <span className="font-semibold">Pro tip:</span> Clear photos
                     with good lighting help boost your listing ratings.
-                  </Paragraph3>
+                  </Paragraph1>
                 </div>
               </div>
 
               {/* Footer */}
               <div className="bg-gray-50 border-t border-gray-100 px-6 py-4 flex gap-3 sticky bottom-0">
-                {onClose && (
+                {/* {onClose && (
                   <button
                     onClick={onClose}
-                    disabled={isUploading || updateProfileMutation.isPending}
+                    disabled={isUploading}
                     className="flex-1 px-4 py-2.5 rounded-lg font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     Skip
                   </button>
-                )}
+                )} */}
                 <button
                   onClick={handleNext}
-                  disabled={
-                    !preview || isUploading || updateProfileMutation.isPending
-                  }
+                  disabled={!preview || isUploading}
                   className="flex-1 px-4 py-2.5 rounded-lg font-medium text-white bg-black hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
                 >
-                  {isUploading || updateProfileMutation.isPending ? (
+                  {isUploading ? (
                     <>
                       <Loader size={16} className="animate-spin" />
                       Uploading

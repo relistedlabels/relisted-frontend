@@ -58,7 +58,7 @@ type ProductDraftStore = {
 const initialState: ProductDraft = {
   name: "Untitled Item",
   subText: "Add a subtitle",
-  description: "Describe your item",
+  description: "Describe the story behind this piece and its current condition.",
   condition: "Like New",
   composition: "Cotton",
   measurement: "M",
@@ -71,9 +71,9 @@ const initialState: ProductDraft = {
   warning: "Handle with care",
   size: "M",
 
-  careInstruction: "Dry clean only",
+  careInstruction: "eg. Keep away from fire and out of children's reach ",
   careSteps: "Professional care recommended",
-  stylingTip: "Perfect for casual wear",
+  stylingTip: "Recommend wearing with gold jewelry",
 
   tagIds: [],
   attachments: [],
@@ -114,7 +114,7 @@ export const useProductDraftStore = create<ProductDraftStore>()(
             careInstruction: product.careInstruction,
             careSteps: product.careSteps || "",
             stylingTip: product.stylingTip,
-            tagIds: product.tagIds || [],
+            tagIds: product.tagId ? [product.tagId] : [],
             attachments:
               product.attachments?.uploads?.map(
                 (upload: { id: string; url: string }, idx: number) => ({

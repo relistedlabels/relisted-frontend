@@ -40,7 +40,7 @@ export const useCreateProduct = () => {
         stylingTip: draft.stylingTip.trim(),
         attachments: attachmentIds,
         categoryId: draft.categoryId,
-        tagId: draft.tagId,
+        tagIds: draft.tagIds,
         brandId: draft.brandId,
       };
 
@@ -54,7 +54,7 @@ export const useCreateProduct = () => {
         originalValue: payload.originalValue,
         attachmentCount: payload.attachments.length,
         categoryId: payload.categoryId,
-        tagId: payload.tagId,
+        tagIds: payload.tagIds,
         brandId: payload.brandId,
         condition: payload.condition,
         measurement: payload.measurement,

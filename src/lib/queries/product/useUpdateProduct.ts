@@ -33,7 +33,7 @@ export const useUpdateProduct = (productId: string) => {
         stylingTip: draft.stylingTip.trim(),
         attachments: attachmentIds, // ✅ Array of ID strings
         categoryId: draft.categoryId,
-        tagId: draft.tagId, // ✅ Separate from categoryId
+        tagIds: draft.tagIds, // ✅ Separate from categoryId
         brandId: draft.brandId,
       };
 

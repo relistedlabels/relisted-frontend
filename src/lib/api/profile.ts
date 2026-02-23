@@ -2,11 +2,22 @@
 import { apiFetch } from "./http";
 import { FullProfile, UpdateProfilePayload } from "../../types/profile";
 
-/** Get profile by id */
-export const getProfile = () =>
-  apiFetch<FullProfile>(`/profile/user-profile`, {
+/** Get all users profile */
+export const getAllProfiles = () =>
+  apiFetch<FullProfile>(`/users/profile`, {
     method: "GET",
   });
+
+/** Get user profile by id */
+export const getProfile = async (userId: string) => {
+  const response = await apiFetch<{ data: FullProfile }>(
+    `/users/profile/${userId}`,
+    {
+      method: "GET",
+    },
+  );
+  return response.data;
+};
 
 /** Create profile */
 export const createProfile = (data: UpdateProfilePayload) =>
@@ -21,3 +32,13 @@ export const updateProfile = (data: UpdateProfilePayload) =>
     method: "PUT",
     body: JSON.stringify(data),
   });
+
+/** Upload avatar image */
+export const uploadAvatar = (file: File) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  return apiFetch<FullProfile>("/users/profile/avatar", {
+    method: "POST",
+    body: formData,
+  });
+};

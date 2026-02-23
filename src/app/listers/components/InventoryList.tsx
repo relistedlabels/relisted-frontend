@@ -22,7 +22,13 @@ interface InventoryItem {
   pricePerDay: string;
   itemValue: string;
   listedDate: string;
-  status: "AVAILABLE" | "RENTED" | "MAINTENANCE" | "RESERVED";
+  status:
+    | "AVAILABLE"
+    | "RENTED"
+    | "MAINTENANCE"
+    | "RESERVED"
+    | "PENDING"
+    | "REJECTED";
   isActive: boolean;
   imageUrl: string;
   curatorName: string;
@@ -30,7 +36,14 @@ interface InventoryItem {
 
 // ✅ Helper to convert ALL_CAPS status to Initial Caps for display
 const formatStatusLabel = (
-  status: "AVAILABLE" | "RENTED" | "MAINTENANCE" | "RESERVED" | "All",
+  status:
+    | "AVAILABLE"
+    | "RENTED"
+    | "MAINTENANCE"
+    | "RESERVED"
+    | "PENDING"
+    | "REJECTED"
+    | "All",
 ): string => {
   if (status === "All") return "All Items";
   return status
@@ -78,6 +91,16 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
       dot: "bg-purple-600",
       text: "text-purple-600",
       badge: "text-purple-800 bg-purple-100",
+    },
+    PENDING: {
+      dot: "bg-amber-600",
+      text: "text-amber-600",
+      badge: "text-amber-800 bg-amber-100",
+    },
+    REJECTED: {
+      dot: "bg-red-600",
+      text: "text-red-600",
+      badge: "text-red-800 bg-red-100",
     },
   };
 
@@ -185,7 +208,7 @@ const InventoryList: React.FC = () => {
 
   // Queries
   const { data: products, isLoading, error } = useUserProducts();
-  const { data: profile } = useProfile();
+  const { data: profile, isLoading: isProfileLoading } = useProfile();
 
   // ✅ Map backend products to frontend InventoryItem
   const mappedInventory: InventoryItem[] = (products || []).map(
@@ -214,8 +237,8 @@ const InventoryList: React.FC = () => {
     // Don't show if still loading profile
     if (!profile) return;
 
-    // Check if user has a profile image
-    const hasProfileImage = profile.avatar || profile.avatarUploadId;
+    // Check if user has a profile image - avatarUploadId must be a non-empty string
+    const hasProfileImage = !!profile.avatarUploadId;
 
     // Check if user has any products
     const hasProducts = mappedInventory.length > 0;
@@ -258,6 +281,15 @@ const InventoryList: React.FC = () => {
     return (
       <div className="flex items-center justify-center p-8">
         <Paragraph1 className="text-gray-500">Loading inventory...</Paragraph1>
+      </div>
+    );
+  }
+
+  // Show loader while profile is being fetched
+  if (isProfileLoading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <Paragraph1 className="text-gray-500">Loading profile...</Paragraph1>
       </div>
     );
   }

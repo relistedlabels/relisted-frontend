@@ -18,7 +18,7 @@ export const ItemDescription: React.FC = () => {
       <div>
         <div className="flex items-center gap-2 mb-2">
           <Paragraph1 className="text-xs font-medium text-gray-700">
-            Item condition
+            Description/Item condition
           </Paragraph1>
           <ToolInfo content="Write a detailed description of your item including its condition, features, and any notable details." />
         </div>
@@ -45,7 +45,7 @@ export const ItemDescription: React.FC = () => {
         />
       </div>
 
-      <div>
+      {/* <div>
         <div className="flex items-center gap-2 mb-2">
           <Paragraph1 className="text-xs font-medium text-gray-700">
             Care Steps
@@ -58,7 +58,7 @@ export const ItemDescription: React.FC = () => {
           placeholder="Step-by-step care instructions..."
           className="w-full h-24 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black resize-none"
         />
-      </div>
+      </div> */}
 
       <div>
         <div className="flex items-center gap-2 mb-2">
