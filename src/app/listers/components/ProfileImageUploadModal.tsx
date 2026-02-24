@@ -111,14 +111,14 @@ export default function ProfileImageUploadModal({
                     alt="RELISTED"
                     className="h-8 w-8"
                   />
-                  {onClose && (
+                  {/* {onClose && (
                     <button
                       onClick={onClose}
                       className="p-1 hover:bg-gray-100 rounded-full transition-colors"
                     >
                       <X size={20} className="text-gray-600" />
                     </button>
-                  )}
+                  )} */}
                 </div>
                 <Paragraph3 className="text-xl font-bold text-black mb-1">
                   Add Your Profile Photo

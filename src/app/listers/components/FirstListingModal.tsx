@@ -46,14 +46,14 @@ export default function FirstListingModal({
                     alt="RELISTED"
                     className="h-8 w-8"
                   />
-                  {onClose && (
+                  {/* {onClose && (
                     <button
                       onClick={onClose}
                       className="p-1 hover:bg-gray-100 rounded-full transition-colors"
                     >
                       <X size={20} className="text-gray-600" />
                     </button>
-                  )}
+                  )} */}
                 </div>
                 <h2 className="text-xl font-bold text-black mb-1">
                   Create Your First Listing
@@ -121,14 +121,14 @@ export default function FirstListingModal({
 
               {/* Footer */}
               <div className="bg-gray-50 border-t border-gray-100 px-6 py-4 flex gap-3 sticky bottom-0">
-                {onClose && (
+                {/* {onClose && (
                   <button
                     onClick={onClose}
                     className="flex-1 px-4 py-2.5 rounded-lg font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors text-sm"
                   >
                     Later
                   </button>
-                )}
+                )} */}
                 <button
                   onClick={onGetStarted}
                   className="flex-1 px-4 py-2.5 rounded-lg font-medium text-white bg-black hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 text-sm"
