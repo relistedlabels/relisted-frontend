@@ -218,7 +218,10 @@ const InventoryList: React.FC = () => {
   useEffect(() => {
     // Don't show if still loading profile or profile data not confirmed
     if (!profile || isProfileLoading) return;
-    if (!profile?.data) return;
+      if (!profile?.data) {
+        router.replace("/auth/profile-setup");
+        return;
+      }
 
     // Check if user has a profile image - avatarUploadId must be a non-empty string
     const hasProfileImage = !!profile?.data?.avatarUploadId;

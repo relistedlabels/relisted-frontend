@@ -31,7 +31,7 @@ export default function VerifyEmailPage() {
 
   useEffect(() => {
     if (!verified) return;
-    const t = setTimeout(() => router.replace("/auth/sign-in"), 3000);
+    const t = setTimeout(() => router.replace("/auth/profile-setup"), 3000);
     return () => clearTimeout(t);
   }, [verified, router]);
 
@@ -106,7 +106,7 @@ export default function VerifyEmailPage() {
           {verifyOtp.isError && (
             <div className="mt-6 text-center">
               <Link
-                href="/auth/sign-in"
+                href="/auth/profile-setup"
                 className="inline-block py-3 px-6 font-semibold text-white bg-black rounded-lg hover:opacity-90"
               >
                 Go to sign in
@@ -117,7 +117,7 @@ export default function VerifyEmailPage() {
           {!token && (
             <div className="mt-6 text-center">
               <Link
-                href="/auth/sign-in"
+                href="/auth/profile-setup"
                 className="inline-block py-3 px-6 font-semibold text-white bg-black rounded-lg hover:opacity-90"
               >
                 Back to sign in
