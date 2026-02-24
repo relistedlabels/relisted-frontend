@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { ReactNode, useEffect } from "react";
@@ -14,7 +12,6 @@ export default function CuratorsLayout({ children }: { children: ReactNode }) {
 
   const { data: user, isLoading: userLoading } = useMe();
   const { data: profile, isLoading: profileLoading } = useProfile();
-
 
   useEffect(() => {
     if (!userLoading && !profileLoading) {
