@@ -165,13 +165,14 @@ const InventoryItemCard: React.FC<InventoryItem> = ({
         </div>
 
         {/* Manage Button */}
-        <button
+        <div> </div>
+        {/* <button
           type="button"
           onClick={handleManage}
           className="px-4 py-2 w-full  text-sm font-semibold whitespace-nowrap text-white bg-black rounded-lg hover:bg-gray-800 transition duration-150"
         >
           Manage
-        </button>
+        </button> */}
       </div>
     </motion.div>
   );
