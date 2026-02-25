@@ -20,8 +20,8 @@ export const getProfile = async (userId: string) => {
 };
 
 /** Create profile */
-export const createProfile = (data: UpdateProfilePayload) =>
-  apiFetch<FullProfile>("/profile", {
+export const createProfile = (data: any) =>
+  apiFetch<FullProfile>("/users/profile", {
     method: "POST",
     body: JSON.stringify(data),
   });

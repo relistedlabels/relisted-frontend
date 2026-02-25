@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Upload, Loader } from "lucide-react";
 import { Paragraph1, Paragraph3 } from "@/common/ui/Text";
 import { useUploadAvatar } from "@/lib/queries/user/useUploadAvatar";
+import { useProfile } from "@/lib/queries/user/useProfile";
 
 interface ProfileImageUploadModalProps {
   isOpen: boolean;
@@ -25,6 +26,7 @@ export default function ProfileImageUploadModal({
   const [isUploading, setIsUploading] = useState(false);
 
   const uploadAvatarMutation = useUploadAvatar();
+  const { refetch } = useProfile();
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -63,7 +65,11 @@ export default function ProfileImageUploadModal({
     setIsUploading(true);
     uploadAvatarMutation.mutate(file, {
       onSuccess: () => {
-        setIsUploading(false);
+        // Show loading for 3 seconds, then refetch profile and set isUploading to false
+        setTimeout(() => {
+          refetch();
+          setIsUploading(false);
+        }, 3000);
       },
       onError: (error: any) => {
         console.error("Upload failed:", error);
