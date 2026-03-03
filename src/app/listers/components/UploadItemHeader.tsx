@@ -25,7 +25,7 @@ const UploadItemHeader: React.FC<UploadItemHeaderProps> = ({
   const isEditing = pathname.includes("product-edit");
   const productId = params.id as string;
 
-  const { data } = useProductDraftStore();
+  const { data, reset } = useProductDraftStore();
   const createProduct = useCreateProduct();
   const updateProduct = useUpdateProduct(productId);
 
@@ -39,6 +39,11 @@ const UploadItemHeader: React.FC<UploadItemHeaderProps> = ({
 
     mutation.mutate(data, {
       onSuccess: () => {
+        // ✅ Clear store for new products only (not on edit)
+        if (!isEditing) {
+          reset();
+        }
+
         // ✅ Show success toast
         if (isEditing) {
           toast.success("Product updated successfully!");

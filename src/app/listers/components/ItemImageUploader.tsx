@@ -75,13 +75,15 @@ export const ItemImageUploader: React.FC = () => {
     (file: File, slotId: string) => {
       console.log(`🚀 Starting upload for slot: ${slotId}, file: ${file.name}`);
 
-      // Validate file size (7MB max)
-      const maxFileSize = 7 * 1024 * 1024; // 7MB in bytes
+      // Validate file size (30MB for videos, 7MB for images)
+      const maxFileSize =
+        slotId === "video" ? 30 * 1024 * 1024 : 7 * 1024 * 1024;
+      const maxMB = slotId === "video" ? 30 : 7;
       if (file.size > maxFileSize) {
-        console.error("❌ File size exceeds 7MB limit");
+        console.error(`❌ File size exceeds ${maxMB}MB limit`);
         setUploadStatus((prev) => ({
           ...prev,
-          [slotId]: "error: file too large (max 7MB)",
+          [slotId]: `error: file too large (max ${maxMB}MB)`,
         }));
         return;
       }
