@@ -56,24 +56,24 @@ type ProductDraftStore = {
 };
 
 const initialState: ProductDraft = {
-  name: "Untitled Item",
-  subText: "Add a subtitle",
-  description: "Describe the story behind this piece and its current condition.",
+  name: "",
+  subText: "",
+  description: "",
   condition: "Like New",
-  composition: "Cotton",
-  measurement: "M",
+  composition: "90% Cotton, 10% Silk ",
+  measurement: "16m",
 
-  originalValue: 100,
-  dailyRentalPrice: 10,
+  originalValue: 0,
+  dailyRentalPrice: 0,
   quantity: 1,
 
   color: "Black",
   warning: "Handle with care",
   size: "M",
 
-  careInstruction: "eg. Keep away from fire and out of children's reach ",
+  careInstruction: "",
   careSteps: "Professional care recommended",
-  stylingTip: "Recommend wearing with gold jewelry",
+  stylingTip: "",
 
   tagIds: [],
   attachments: [],

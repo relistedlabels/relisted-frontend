@@ -25,7 +25,7 @@ export const ItemDescription: React.FC = () => {
         <textarea
           value={data.description}
           onChange={(e) => setField("description", e.target.value)}
-          placeholder="Describe your item condition..."
+          placeholder="E.g., Gently used, minor scuff on left side, original tags attached, authentic designer piece..."
           className="w-full h-24 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black resize-none"
         />
       </div>
@@ -40,7 +40,7 @@ export const ItemDescription: React.FC = () => {
         <textarea
           value={data.careInstruction}
           onChange={(e) => setField("careInstruction", e.target.value)}
-          placeholder="How to care for this item..."
+          placeholder="E.g., Do not dry clean or hand wash with cold water, avoid direct sunlight, iron on low heat, store in cool dry place..."
           className="w-full h-24 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black resize-none"
         />
       </div>
@@ -70,7 +70,7 @@ export const ItemDescription: React.FC = () => {
         <textarea
           value={data.stylingTip}
           onChange={(e) => setField("stylingTip", e.target.value)}
-          placeholder="How to style this item (eg: )..."
+          placeholder="E.g., Perfect for formal events, pairs well with gold earrings and bracelets, great for a sophisticated date night look..."
           className="w-full h-24 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black resize-none"
         />
       </div>
