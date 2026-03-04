@@ -37,8 +37,6 @@ export const CategorySelector: React.FC = () => {
     (c) => c.id === data.categoryId,
   );
 
-
-
   return (
     <div className="relative w-full">
       <Paragraph1 className="mb-1 text-xs font-medium text-gray-700">
