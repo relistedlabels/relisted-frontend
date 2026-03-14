@@ -18,10 +18,9 @@ const SIZE_MAP: Record<string, string[]> = {
     const size = 2 + Math.floor(i / 2);
     return i % 2 === 0 ? String(size) : String(size) + ".5";
   }),
-  International: ["XS", "S", "M", "L", "XL", "XXL", "XXXL", "4XL", "5XL"],
 };
 
-const UNITS = ["EU", "UK", "US", "International"] as const;
+const UNITS = ["EU", "UK", "US"] as const;
 type Unit = (typeof UNITS)[number];
 
 export const SizeSelector: React.FC = () => {
@@ -32,11 +31,11 @@ export const SizeSelector: React.FC = () => {
   // 👇 extract from store (measurement format: "size-unit", e.g. "38-EU")
   const parsed = useMemo(() => {
     if (!data.measurement?.includes("-")) {
-      return { size: null, unit: "International" as Unit };
+      return { size: null, unit: "EU" as Unit };
     }
     const [size, unit] = data.measurement.split("-");
     const validUnit =
-      unit && UNITS.includes(unit as Unit) ? (unit as Unit) : "International";
+      unit && UNITS.includes(unit as Unit) ? (unit as Unit) : "EU";
     return { size: size || null, unit: validUnit };
   }, [data.measurement]);
 
@@ -52,20 +51,14 @@ export const SizeSelector: React.FC = () => {
 
   return (
     <div className="relative w-full">
-      <Paragraph1 className="mb-2 text-xs  ">
-        Size
-      </Paragraph1>
+      <Paragraph1 className="mb-2 text-xs  ">Size</Paragraph1>
 
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm  transition-all duration-200 hover:border-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
       >
-        <span
-          className={
-            parsed.size ? "text-gray-900 " : "text-gray-500"
-          }
-        >
+        <span className={parsed.size ? "text-gray-900 " : "text-gray-500"}>
           {parsed.size ? `${parsed.size} (${parsed.unit})` : "Select size"}
         </span>
         <ChevronDown
